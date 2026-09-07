@@ -4,98 +4,715 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ViTube — Global Video Platform</title>
+
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f7f8fa;color:#171717}
-header{height:64px;background:#fff;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;gap:18px;padding:0 18px;position:sticky;top:0;z-index:10}
-.logo{font-size:25px;font-weight:800;color:#e60023}.logo span{color:#111}
-.search{flex:1;max-width:620px;margin:auto;display:flex}.search input{width:100%;padding:12px 16px;border:1px solid #ddd;border-radius:24px 0 0 24px;font-size:15px}.search button{border:1px solid #ddd;border-left:0;background:#f3f3f3;border-radius:0 24px 24px 0;padding:0 20px}
-.btn{border:0;border-radius:22px;padding:10px 17px;font-weight:700;cursor:pointer}.login{background:#111;color:#fff}.upload{background:#e60023;color:white}
-.layout{display:flex;min-height:calc(100vh - 64px)}aside{width:220px;background:#fff;border-right:1px solid #eee;padding:18px 12px;position:sticky;top:64px;height:calc(100vh - 64px)}
-nav button{display:block;width:100%;text-align:left;border:0;background:transparent;padding:13px 15px;border-radius:10px;font-size:15px;cursor:pointer}nav button:hover,nav button.active{background:#f3f3f3;font-weight:700}
-main{flex:1;padding:24px;max-width:1400px;margin:auto}.chips{display:flex;gap:9px;overflow:auto;margin-bottom:22px}.chip{border:0;background:#eee;padding:9px 15px;border-radius:18px;white-space:nowrap}
-h2{margin:10px 0 16px}.section{margin-bottom:32px}.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}.card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px #00000012}.thumb{height:145px;background:linear-gradient(135deg,#222,#777);display:flex;align-items:center;justify-content:center;color:#fff;font-size:42px}.card-body{padding:12px}.title{font-weight:700;line-height:1.3}.meta{font-size:13px;color:#666;margin-top:7px}
-.shorts{display:flex;gap:15px;overflow:auto}.short{min-width:165px;width:165px}.short .thumb{height:285px;border-radius:10px}.live{display:flex;gap:15px;overflow:auto}.live .card{min-width:270px}.badge{display:inline-block;background:#e60023;color:white;padding:4px 7px;border-radius:5px;font-size:11px;font-weight:bold;margin-bottom:5px}
-.modal{display:none;position:fixed;inset:0;background:#0008;z-index:30;align-items:center;justify-content:center}.modal.show{display:flex}.box{background:#fff;width:min(520px,92%);border-radius:16px;padding:24px}.box input,.box textarea,.box select{width:100%;padding:11px;margin:7px 0 12px;border:1px solid #ddd;border-radius:9px}.close{float:right;border:0;background:none;font-size:24px}
-@media(max-width:750px){aside{display:none}main{padding:15px}.search{max-width:none}.login{display:none}.cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.thumb{height:110px}.short{min-width:145px;width:145px}.short .thumb{height:250px}header{gap:8px}.logo{font-size:21px}}
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:Arial,Helvetica,sans-serif;
+background:#f7f8fa;
+color:#171717
+}
+
+header{
+height:64px;
+background:#fff;
+border-bottom:1px solid #e8e8e8;
+display:flex;
+align-items:center;
+gap:18px;
+padding:0 18px;
+position:sticky;
+top:0;
+z-index:10
+}
+
+.logo{
+font-size:25px;
+font-weight:800;
+color:#e60023
+}
+
+.logo span{
+color:#111
+}
+
+.search{
+flex:1;
+max-width:620px;
+margin:auto;
+display:flex
+}
+
+.search input{
+width:100%;
+padding:12px 16px;
+border:1px solid #ddd;
+border-radius:24px 0 0 24px;
+font-size:15px
+}
+
+.search button{
+border:1px solid #ddd;
+border-left:0;
+background:#f3f3f3;
+border-radius:0 24px 24px 0;
+padding:0 20px
+}
+
+.btn{
+border:0;
+border-radius:22px;
+padding:10px 17px;
+font-weight:700;
+cursor:pointer
+}
+
+.login{
+background:#111;
+color:#fff
+}
+
+.upload{
+background:#e60023;
+color:white
+}
+
+.layout{
+display:flex;
+min-height:calc(100vh - 64px)
+}
+
+aside{
+width:220px;
+background:#fff;
+border-right:1px solid #eee;
+padding:18px 12px;
+position:sticky;
+top:64px;
+height:calc(100vh - 64px)
+}
+
+nav button{
+display:block;
+width:100%;
+text-align:left;
+border:0;
+background:transparent;
+padding:13px 15px;
+border-radius:10px;
+font-size:15px;
+cursor:pointer
+}
+
+nav button:hover,
+nav button.active{
+background:#f3f3f3;
+font-weight:700
+}
+
+main{
+flex:1;
+padding:24px;
+max-width:1400px;
+margin:auto
+}
+
+.chips{
+display:flex;
+gap:9px;
+overflow:auto;
+margin-bottom:22px
+}
+
+.chip{
+border:0;
+background:#eee;
+padding:9px 15px;
+border-radius:18px;
+white-space:nowrap
+}
+
+h2{
+margin:10px 0 16px
+}
+
+.section{
+margin-bottom:32px
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+gap:20px
+}
+
+.card{
+background:#fff;
+border-radius:12px;
+overflow:hidden;
+box-shadow:0 1px 4px #00000012
+}
+
+.thumb{
+height:145px;
+background:linear-gradient(135deg,#222,#777);
+display:flex;
+align-items:center;
+justify-content:center;
+color:#fff;
+font-size:42px
+}
+
+.card-body{
+padding:12px
+}
+
+.title{
+font-weight:700;
+line-height:1.3
+}
+
+.meta{
+font-size:13px;
+color:#666;
+margin-top:7px
+}
+
+.shorts{
+display:flex;
+gap:15px;
+overflow:auto
+}
+
+.short{
+min-width:165px;
+width:165px
+}
+
+.short .thumb{
+height:285px;
+border-radius:10px
+}
+
+.live{
+display:flex;
+gap:15px;
+overflow:auto
+}
+
+.live .card{
+min-width:270px
+}
+
+.badge{
+display:inline-block;
+background:#e60023;
+color:white;
+padding:4px 7px;
+border-radius:5px;
+font-size:11px;
+font-weight:bold;
+margin-bottom:5px
+}
+
+.modal{
+display:none;
+position:fixed;
+inset:0;
+background:#0008;
+z-index:30;
+align-items:center;
+justify-content:center
+}
+
+.modal.show{
+display:flex
+}
+
+.box{
+background:#fff;
+width:min(520px,92%);
+border-radius:16px;
+padding:24px
+}
+
+.box input,
+.box textarea,
+.box select{
+width:100%;
+padding:11px;
+margin:7px 0 12px;
+border:1px solid #ddd;
+border-radius:9px
+}
+
+.close{
+float:right;
+border:0;
+background:none;
+font-size:24px
+}
+
+@media(max-width:750px){
+
+aside{
+display:none
+}
+
+main{
+padding:15px
+}
+
+.search{
+max-width:none
+}
+
+.login{
+display:none
+}
+
+.cards{
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:12px
+}
+
+.thumb{
+height:110px
+}
+
+.short{
+min-width:145px;
+width:145px
+}
+
+.short .thumb{
+height:250px
+}
+
+header{
+gap:8px
+}
+
+.logo{
+font-size:21px
+}
+
+}
 </style>
 </head>
+
 <body>
+
 <header>
-  <div class="logo">Vi<span>Tube</span></div>
-  <div class="search"><input id="search" placeholder="Search videos, creators..."><button onclick="searchVideos()">🔍</button></div>
-  <button class="btn upload" onclick="openModal('uploadModal')">＋ Upload</button>
-  <button class="btn login" onclick="openModal('loginModal')">Sign in</button>
+
+<div class="logo">
+Vi<span>Tube</span>
+</div>
+
+<div class="search">
+<input id="search" placeholder="Search videos, creators...">
+<button onclick="searchVideos()">🔍</button>
+</div>
+
+<button class="btn upload" onclick="openModal('uploadModal')">
+＋ Upload
+</button>
+
+<button class="btn login" onclick="openModal('loginModal')">
+Sign in
+</button>
+
 </header>
 
+
 <div class="layout">
+
 <aside>
+
 <nav>
-<button class="active">🏠 Home</button><button>⚡ Shorts</button><button>🔴 Live</button>
-<button>🔥 Trending</button><button>👥 Subscriptions</button><hr>
-<button>📚 Library</button><button>🕘 History</button><button>👍 Liked videos</button>
+
+<button class="active">🏠 Home</button>
+<button>⚡ Shorts</button>
+<button>🔴 Live</button>
+<button>🔥 Trending</button>
+<button>👥 Subscriptions</button>
+
+<hr>
+
+<button>📚 Library</button>
+<button>🕘 History</button>
+<button>👍 Liked videos</button>
+
 </nav>
+
 </aside>
 
+
 <main>
+
 <div class="chips">
-<button class="chip">All</button><button class="chip">Music</button><button class="chip">Gaming</button><button class="chip">News</button><button class="chip">Technology</button><button class="chip">Education</button><button class="chip">Travel</button><button class="chip">Food</button>
+
+<button class="chip">All</button>
+<button class="chip">Music</button>
+<button class="chip">Gaming</button>
+<button class="chip">News</button>
+<button class="chip">Technology</button>
+<button class="chip">Education</button>
+<button class="chip">Travel</button>
+<button class="chip">Food</button>
+
 </div>
 
+
 <section class="section">
+
 <h2>🌎 Trending Worldwide</h2>
+
 <div class="cards" id="videos">
-<div class="card"><div class="thumb">▶</div><div class="card-body"><div class="title">Amazing Places Around the World</div><div class="meta">ViTube Travel • 1.2M views • 2 hours ago</div></div></div>
-<div class="card"><div class="thumb">▶</div><div class="card-body"><div class="title">The Future of Technology</div><div class="meta">Tech World • 845K views • 5 hours ago</div></div></div>
-<div class="card"><div class="thumb">▶</div><div class="card-body"><div class="title">Street Food You Must Try</div><div class="meta">Food Explorer • 620K views • 1 day ago</div></div></div>
-<div class="card"><div class="thumb">▶</div><div class="card-body"><div class="title">10 Incredible Facts About Earth</div><div class="meta">Global Facts • 510K views • 1 day ago</div></div></div>
+
+<div class="card">
+<div class="thumb">▶</div>
+<div class="card-body">
+<div class="title">Amazing Places Around the World</div>
+<div class="meta">ViTube Travel • 1.2M views • 2 hours ago</div>
 </div>
+</div>
+
+<div class="card">
+<div class="thumb">▶</div>
+<div class="card-body">
+<div class="title">The Future of Technology</div>
+<div class="meta">Tech World • 845K views • 5 hours ago</div>
+</div>
+</div>
+
+<div class="card">
+<div class="thumb">▶</div>
+<div class="card-body">
+<div class="title">Street Food You Must Try</div>
+<div class="meta">Food Explorer • 620K views • 1 day ago</div>
+</div>
+</div>
+
+<div class="card">
+<div class="thumb">▶</div>
+<div class="card-body">
+<div class="title">10 Incredible Facts About Earth</div>
+<div class="meta">Global Facts • 510K views • 1 day ago</div>
+</div>
+</div>
+
+</div>
+
 </section>
 
+
 <section class="section">
+
 <h2>⚡ Shorts</h2>
+
 <div class="shorts">
-<div class="short"><div class="thumb">▶</div><div class="title">Amazing sunset 🌅</div><div class="meta">2.4M views</div></div>
-<div class="short"><div class="thumb">▶</div><div class="title">Quick cooking idea 🍳</div><div class="meta">1.8M views</div></div>
-<div class="short"><div class="thumb">▶</div><div class="title">Did you know? 🌎</div><div class="meta">980K views</div></div>
-<div class="short"><div class="thumb">▶</div><div class="title">Tech trick 📱</div><div class="meta">750K views</div></div>
+
+<div class="short">
+<div class="thumb">▶</div>
+<div class="title">Amazing sunset 🌅</div>
+<div class="meta">2.4M views</div>
 </div>
+
+<div class="short">
+<div class="thumb">▶</div>
+<div class="title">Quick cooking idea 🍳</div>
+<div class="meta">1.8M views</div>
+</div>
+
+<div class="short">
+<div class="thumb">▶</div>
+<div class="title">Did you know? 🌎</div>
+<div class="meta">980K views</div>
+</div>
+
+<div class="short">
+<div class="thumb">▶</div>
+<div class="title">Tech trick 📱</div>
+<div class="meta">750K views</div>
+</div>
+
+</div>
+
 </section>
+
 
 <section class="section">
+
 <h2>🔴 Live Now</h2>
+
 <div class="live">
-<div class="card"><div class="thumb"><span class="badge">LIVE</span> 🎥</div><div class="card-body"><div class="title">Live from New York</div><div class="meta">12.4K watching</div></div></div>
-<div class="card"><div class="thumb"><span class="badge">LIVE</span> 🎮</div><div class="card-body"><div class="title">Gaming Live</div><div class="meta">8.1K watching</div></div></div>
+
+<div class="card">
+<div class="thumb">
+<span class="badge">LIVE</span> 🎥
 </div>
+<div class="card-body">
+<div class="title">Live from New York</div>
+<div class="meta">12.4K watching</div>
+</div>
+</div>
+
+<div class="card">
+<div class="thumb">
+<span class="badge">LIVE</span> 🎮
+</div>
+<div class="card-body">
+<div class="title">Gaming Live</div>
+<div class="meta">8.1K watching</div>
+</div>
+</div>
+
+</div>
+
 </section>
+
 </main>
+
 </div>
 
-<div class="modal" id="loginModal"><div class="box"><button class="close" onclick="closeModal('loginModal')">×</button><h2>Sign in to ViTube</h2><input placeholder="Email"><input type="password" placeholder="Password"><button class="btn login" style="width:100%">Sign in</button><p style="color:#777;font-size:13px">Prototype only — authentication will be connected in the next version.</p></div></div>
 
-<div class="modal" id="uploadModal"><div class="box"><button class="close" onclick="closeModal('uploadModal')">×</button><h2>Upload to ViTube</h2><input type="file" accept="video/*"><input placeholder="Video title"><textarea rows="4" placeholder="Description"></textarea><select><option>Choose category</option><option>Entertainment</option><option>Education</option><option>Technology</option><option>News</option><option>Travel</option><option>Food</option></select><button class="btn upload" style="width:100%" onclick="alert('Upload UI ready. Real cloud upload will be connected in the next version.')">Publish Video</button></div></div>
+<!-- SIGN IN MODAL -->
+
+<div class="modal" id="loginModal">
+
+<div class="box">
+
+<button class="close" onclick="closeModal('loginModal')">
+×
+</button>
+
+<h2>Sign in to ViTube</h2>
+
+<input
+id="loginEmail"
+type="email"
+placeholder="Email">
+
+<input
+id="loginPassword"
+type="password"
+placeholder="Password">
+
+<button
+class="btn login"
+style="width:100%"
+onclick="signInUser()">
+
+Sign in
+
+</button>
+
+<p style="color:#777;font-size:13px">
+Use your ViTube account email and password.
+</p>
+
+</div>
+
+</div>
+
+
+<!-- UPLOAD MODAL -->
+
+<div class="modal" id="uploadModal">
+
+<div class="box">
+
+<button class="close" onclick="closeModal('uploadModal')">
+×
+</button>
+
+<h2>Upload to ViTube</h2>
+
+<input type="file" accept="video/*">
+
+<input placeholder="Video title">
+
+<textarea
+rows="4"
+placeholder="Description">
+</textarea>
+
+<select>
+
+<option>Choose category</option>
+<option>Entertainment</option>
+<option>Education</option>
+<option>Technology</option>
+<option>News</option>
+<option>Travel</option>
+<option>Food</option>
+
+</select>
+
+<button
+class="btn upload"
+style="width:100%"
+onclick="alert('Upload UI ready. Real cloud upload will be connected in the next version.')">
+
+Publish Video
+
+</button>
+
+</div>
+
+</div>
+
+
+<!-- BASIC UI SCRIPT -->
 
 <script>
-function openModal(id){document.getElementById(id).classList.add('show')}
-function closeModal(id){document.getElementById(id).classList.remove('show')}
-function searchVideos(){
- const q=document.getElementById('search').value.trim().toLowerCase();
- document.querySelectorAll('#videos .card').forEach(c=>{
-   c.style.display=(!q || c.innerText.toLowerCase().includes(q))?'block':'none';
- });
+
+function openModal(id){
+document.getElementById(id).classList.add('show');
 }
+
+function closeModal(id){
+document.getElementById(id).classList.remove('show');
+}
+
+function searchVideos(){
+
+const q =
+document.getElementById('search')
+.value
+.trim()
+.toLowerCase();
+
+document
+.querySelectorAll('#videos .card')
+.forEach(c=>{
+
+c.style.display =
+(!q || c.innerText.toLowerCase().includes(q))
+?
+'block'
+:
+'none';
+
+});
+
+}
+
 </script>
+
+
+<!-- SUPABASE LIBRARY -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<!-- SUPABASE CONNECTION -->
 
 <script>
-const SUPABASE_URL = 'PASTE_YOUR_SUPABASE_PROJECT_URL_HERE';
-const SUPABASE_PUBLISHABLE_KEY = 'PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE';
 
-const supabase = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
+const SUPABASE_URL =
+'PASTE_YOUR_SUPABASE_PROJECT_URL_HERE';
+
+const SUPABASE_PUBLISHABLE_KEY =
+'PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE';
+
+const supabase =
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_PUBLISHABLE_KEY
 );
+
 </script>
+
+
+<!-- AUTH FUNCTIONS -->
+
+<script>
+
+async function signUpUser(){
+
+const email =
+document.getElementById('signupEmail').value.trim();
+
+const password =
+document.getElementById('signupPassword').value;
+
+if(!email || !password){
+
+alert('Please enter your email and password.');
+
+return;
+
+}
+
+const { error } =
+await supabase.auth.signUp({
+
+email:email,
+password:password
+
+});
+
+if(error){
+
+alert(error.message);
+
+return;
+
+}
+
+alert(
+'Account created! Please check your email to confirm your account.'
+);
+
+}
+
+
+async function signInUser(){
+
+const email =
+document.getElementById('loginEmail').value.trim();
+
+const password =
+document.getElementById('loginPassword').value;
+
+if(!email || !password){
+
+alert('Please enter your email and password.');
+
+return;
+
+}
+
+const { error } =
+await supabase.auth.signInWithPassword({
+
+email:email,
+password:password
+
+});
+
+if(error){
+
+alert(error.message);
+
+return;
+
+}
+
+alert('Signed in successfully!');
+
+}
+
+</script>
+
+const SUPABASE_URL =
+'PASTE_YOUR_SUPABASE_PROJECT_URL_HERE';
+
+const SUPABASE_PUBLISHABLE_KEY =
+'PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE';
 </body>
 </html>
