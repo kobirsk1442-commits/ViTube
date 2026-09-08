@@ -819,13 +819,27 @@ Publish Video
 
 
 <!-- BASIC UI SCRIPT -->
-// =============================
-// ViTube Watch Page
-// =============================
+<script>
+
+function subscribeChannel(channelId){
+
+  const button = document.getElementById('watchSubscribeBtn');
+
+  if(!button) return;
+
+  if(button.classList.contains('subscribed')){
+    button.classList.remove('subscribed');
+    button.textContent = 'Subscribe';
+  }else{
+    button.classList.add('subscribed');
+    button.textContent = 'Subscribed';
+  }
+
+}
 
 function openWatchPage(title, channel, description){
 
-  const home = document.querySelector('.app');
+  const home = document.querySelector('.layout');
   const watchPage = document.getElementById('watchPage');
 
   if(!watchPage) return;
@@ -838,18 +852,20 @@ function openWatchPage(title, channel, description){
 
   document.getElementById('watchTitle').textContent = title;
   document.getElementById('watchChannelName').textContent = channel;
-  document.getElementById('watchDescription').textContent = description || 'No description available.';
+
+  document.getElementById('watchDescription').textContent =
+    description || 'No description available.';
 
   window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
+    top:0,
+    behavior:'smooth'
   });
-}
 
+}
 
 function closeWatchPage(){
 
-  const home = document.querySelector('.app');
+  const home = document.querySelector('.layout');
   const watchPage = document.getElementById('watchPage');
 
   if(watchPage){
@@ -861,12 +877,46 @@ function closeWatchPage(){
   }
 
   window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
+    top:0,
+    behavior:'smooth'
   });
-}
-<script>
 
+}
+
+function openModal(id){
+
+  document.getElementById(id).classList.add('show');
+
+}
+
+function closeModal(id){
+
+  document.getElementById(id).classList.remove('show');
+
+}
+
+function searchVideos(){
+
+  const q =
+    document.getElementById('search')
+    .value
+    .trim()
+    .toLowerCase();
+
+  document
+    .querySelectorAll('#videos .card')
+    .forEach(c => {
+
+      c.style.display =
+        (!q || c.innerText.toLowerCase().includes(q))
+        ? 'block'
+        : 'none';
+
+    });
+
+}
+
+</script>
 function subscribeChannel(channelId){
 
 const button = document.querySelector('.subscribe-btn');
