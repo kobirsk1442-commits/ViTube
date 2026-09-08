@@ -584,26 +584,41 @@ Publish Video
 <!-- BASIC UI SCRIPT -->
 
 <script>
-<script>
-function subscribeChannel(channelId){
-  const button = document.querySelector('.subscribe-btn');
 
-  if(button.classList.contains('subscribed')){
-    button.classList.remove('subscribed');
-    button.textContent = 'Subscribe';
-  }else{
-    button.classList.add('subscribed');
-    button.textContent = 'Subscribed';
-  }
+function subscribeChannel(channelId){
+
+const button = document.querySelector('.subscribe-btn');
+
+if(!button) return;
+
+if(button.classList.contains('subscribed')){
+
+button.classList.remove('subscribed');
+button.textContent = 'Subscribe';
+
+}else{
+
+button.classList.add('subscribed');
+button.textContent = 'Subscribed';
+
 }
-</script>
+
+}
+
+
 function openModal(id){
+
 document.getElementById(id).classList.add('show');
+
 }
+
 
 function closeModal(id){
+
 document.getElementById(id).classList.remove('show');
+
 }
+
 
 function searchVideos(){
 
@@ -615,7 +630,7 @@ document.getElementById('search')
 
 document
 .querySelectorAll('#videos .card')
-.forEach(c=>{
+.forEach(c => {
 
 c.style.display =
 (!q || c.innerText.toLowerCase().includes(q))
@@ -629,10 +644,7 @@ c.style.display =
 }
 
 </script>
-
-
 <!-- SUPABASE LIBRARY -->
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
@@ -736,10 +748,6 @@ alert('Signed in successfully!');
 
 </script>
 
-const SUPABASE_URL =
-'PASTE_YOUR_SUPABASE_PROJECT_URL_HERE';
 
-const SUPABASE_PUBLISHABLE_KEY =
-'PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE';
 </body>
 </html>
