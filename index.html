@@ -77,6 +77,21 @@ color:#fff
 .upload{
 background:#e60023;
 color:white
+.subscribe-btn{
+background:#e60023;
+color:white;
+border:0;
+padding:8px 14px;
+border-radius:18px;
+font-weight:700;
+cursor:pointer;
+margin-top:8px;
+}
+
+.subscribe-btn.subscribed{
+background:#eee;
+color:#111;
+}
 }
 
 .layout{
@@ -569,7 +584,19 @@ Publish Video
 <!-- BASIC UI SCRIPT -->
 
 <script>
+<script>
+function subscribeChannel(channelId){
+  const button = document.querySelector('.subscribe-btn');
 
+  if(button.classList.contains('subscribed')){
+    button.classList.remove('subscribed');
+    button.textContent = 'Subscribe';
+  }else{
+    button.classList.add('subscribed');
+    button.textContent = 'Subscribed';
+  }
+}
+</script>
 function openModal(id){
 document.getElementById(id).classList.add('show');
 }
