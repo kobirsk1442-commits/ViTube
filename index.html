@@ -313,7 +313,127 @@ gap:8px
 .logo{
 font-size:21px
 }
+/* ============================= */
+/* ViTube Watch Page */
+/* ============================= */
 
+.watch-page{
+  display:none;
+  padding:20px;
+  max-width:1400px;
+  margin:auto;
+}
+
+.watch-layout{
+  display:grid;
+  grid-template-columns:1fr 360px;
+  gap:24px;
+}
+
+.video-player{
+  width:100%;
+  aspect-ratio:16/9;
+  background:#000;
+  border-radius:12px;
+  overflow:hidden;
+}
+
+.video-player video{
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+.watch-title{
+  font-size:22px;
+  font-weight:700;
+  margin:16px 0 12px;
+}
+
+.watch-channel{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:12px 0;
+  border-bottom:1px solid #ddd;
+}
+
+.channel-info{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.channel-avatar{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  background:#ddd;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+}
+
+.watch-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin:14px 0;
+}
+
+.watch-action-btn{
+  border:0;
+  background:#f1f1f1;
+  padding:10px 15px;
+  border-radius:20px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.watch-description{
+  background:#f5f5f5;
+  padding:16px;
+  border-radius:12px;
+  margin-top:15px;
+}
+
+.recommended-title{
+  font-size:20px;
+  font-weight:700;
+  margin-bottom:12px;
+}
+
+.recommended-card{
+  display:flex;
+  gap:10px;
+  margin-bottom:15px;
+  cursor:pointer;
+}
+
+.recommended-thumb{
+  width:150px;
+  height:85px;
+  background:#ddd;
+  border-radius:8px;
+}
+
+@media(max-width:900px){
+
+  .watch-layout{
+    grid-template-columns:1fr;
+  }
+
+  .watch-page{
+    padding:12px;
+  }
+
+  .watch-title{
+    font-size:18px;
+  }
+
+}
 }
 </style>
 </head>
@@ -386,7 +506,7 @@ Sign in
 <h2>🌎 Trending Worldwide</h2>
 
 <div class="cards" id="videos">
-
+<div class="card" onclick="openWatchPage('Amazing Places Around the World','ViTube Travel','Explore amazing places around the world with ViTube Travel.')">
 <div class="card">
 <div class="thumb">▶</div>
 <div class="card-body">
@@ -493,7 +613,123 @@ Sign in
 
 </div>
 
+<!-- WATCH PAGE -->
 
+<section class="watch-page" id="watchPage">
+
+  <button onclick="closeWatchPage()">← Back</button>
+
+  <div class="watch-layout">
+
+    <div>
+
+      <div class="video-player">
+        <video id="watchVideo" controls playsinline></video>
+      </div>
+
+      <div class="watch-title" id="watchTitle">
+        Video title
+      </div>
+
+      <div class="watch-channel">
+
+        <div class="channel-info">
+
+          <div class="channel-avatar" id="watchAvatar">
+            V
+          </div>
+
+          <div>
+            <strong id="watchChannelName">
+              ViTube Channel
+            </strong>
+
+            <div class="meta" id="watchSubscribers">
+              0 subscribers
+            </div>
+          </div>
+
+        </div>
+
+        <button
+          class="subscribe-btn"
+          id="watchSubscribeBtn">
+          Subscribe
+        </button>
+
+      </div>
+
+      <div class="watch-actions">
+
+        <button class="watch-action-btn">
+          👍 Like
+        </button>
+
+        <button class="watch-action-btn">
+          👎 Dislike
+        </button>
+
+        <button class="watch-action-btn">
+          💬 Comment
+        </button>
+
+        <button class="watch-action-btn">
+          ↗ Share
+        </button>
+
+        <button class="watch-action-btn">
+          🔗 Copy link
+        </button>
+
+      </div>
+
+      <div
+        class="watch-description"
+        id="watchDescription">
+
+        Video description will appear here.
+
+      </div>
+
+      <div style="margin-top:25px;">
+
+        <h3>Comments</h3>
+
+        <p class="meta">
+          Sign in to leave a comment.
+        </p>
+
+      </div>
+
+    </div>
+
+    <aside>
+
+      <div class="recommended-title">
+        Recommended videos
+      </div>
+
+      <div class="recommended-card">
+
+        <div class="recommended-thumb"></div>
+
+        <div>
+          <strong>
+            More videos coming soon
+          </strong>
+
+          <div class="meta">
+            ViTube
+          </div>
+        </div>
+
+      </div>
+
+    </aside>
+
+  </div>
+
+</section>
 <!-- SIGN IN MODAL -->
 
 <div class="modal" id="loginModal">
@@ -582,7 +818,52 @@ Publish Video
 
 
 <!-- BASIC UI SCRIPT -->
+// =============================
+// ViTube Watch Page
+// =============================
 
+function openWatchPage(title, channel, description){
+
+  const home = document.querySelector('.app');
+  const watchPage = document.getElementById('watchPage');
+
+  if(!watchPage) return;
+
+  if(home){
+    home.style.display = 'none';
+  }
+
+  watchPage.style.display = 'block';
+
+  document.getElementById('watchTitle').textContent = title;
+  document.getElementById('watchChannelName').textContent = channel;
+  document.getElementById('watchDescription').textContent = description || 'No description available.';
+
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}
+
+
+function closeWatchPage(){
+
+  const home = document.querySelector('.app');
+  const watchPage = document.getElementById('watchPage');
+
+  if(watchPage){
+    watchPage.style.display = 'none';
+  }
+
+  if(home){
+    home.style.display = '';
+  }
+
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}
 <script>
 
 function subscribeChannel(channelId){
