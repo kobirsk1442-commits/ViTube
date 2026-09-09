@@ -2,1068 +2,1618 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ViTube — Global Video Platform</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#ffffff">
+<title>ViTube</title>
 
 <style>
-*{box-sizing:border-box}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#111}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
 
-body{
-margin:0;
-font-family:Arial,Helvetica,sans-serif;
-background:#f7f8fa;
-color:#171717
+.header{
+height:60px;border-bottom:1px solid #eee;display:flex;align-items:center;
+padding:0 18px;gap:18px;position:sticky;top:0;background:#fff;z-index:1000
+}
+.logo{font-size:25px;font-weight:800;color:#e60023;white-space:nowrap}
+.menu-btn,.icon-btn{
+border:0;background:#f5f5f5;border-radius:50%;width:40px;height:40px
+}
+.search-box{display:flex;flex:1;max-width:650px;margin:auto}
+.search-box input{
+width:100%;height:40px;border:1px solid #ccc;border-radius:22px 0 0 22px;
+padding:0 17px;outline:none
+}
+.search-box button{
+width:55px;border:1px solid #ccc;border-left:0;border-radius:0 22px 22px 0;background:#f5f5f5
+}
+.header-right{display:flex;align-items:center;gap:8px}
+.avatar{
+width:38px;height:38px;border-radius:50%;background:#e60023;color:white;
+display:flex;align-items:center;justify-content:center;font-weight:bold
 }
 
-header{
-height:64px;
-background:#fff;
-border-bottom:1px solid #e8e8e8;
-display:flex;
-align-items:center;
-gap:18px;
-padding:0 18px;
-position:sticky;
-top:0;
-z-index:10
+.layout{display:flex;min-height:calc(100vh - 60px)}
+.sidebar{
+width:220px;border-right:1px solid #eee;padding:15px 10px;flex-shrink:0
 }
+.side-item{
+display:block;width:100%;padding:12px;border:0;background:white;text-align:left;
+border-radius:10px;margin-bottom:4px
+}
+.side-item:hover{background:#f3f3f3}
+.main{flex:1;padding:20px;min-width:0}
 
-.logo{
-font-size:25px;
-font-weight:800;
-color:#e60023
+.categories{
+display:flex;gap:10px;overflow-x:auto;margin-bottom:20px;padding-bottom:5px
 }
-
-.logo span{
-color:#111
-}
-
-.search{
-flex:1;
-max-width:620px;
-margin:auto;
-display:flex
-}
-
-.search input{
-width:100%;
-padding:12px 16px;
-border:1px solid #ddd;
-border-radius:24px 0 0 24px;
-font-size:15px
-}
-
-.search button{
-border:1px solid #ddd;
-border-left:0;
-background:#f3f3f3;
-border-radius:0 24px 24px 0;
-padding:0 20px
-}
-
-.btn{
-border:0;
-border-radius:22px;
-padding:10px 17px;
-font-weight:700;
-cursor:pointer
-}
-
-.login{
-background:#111;
-color:#fff
-}
-
-.upload{
-background:#e60023;
-color:white
-.subscribe-btn{
-background:#e60023;
-color:white;
-border:0;
-padding:8px 14px;
-border-radius:18px;
-font-weight:700;
-cursor:pointer;
-margin-top:8px;
-}
-
-.subscribe-btn.subscribed{
-background:#eee;
-color:#111;
-}
-}
-
-.layout{
-display:flex;
-min-height:calc(100vh - 64px)
-}
-
-aside{
-width:220px;
-background:#fff;
-border-right:1px solid #eee;
-padding:18px 12px;
-position:sticky;
-top:64px;
-height:calc(100vh - 64px)
-}
-
-nav button{
-display:block;
-width:100%;
-text-align:left;
-border:0;
-background:transparent;
-padding:13px 15px;
-border-radius:10px;
-font-size:15px;
-cursor:pointer
-}
-
-nav button:hover,
-nav button.active{
-background:#f3f3f3;
-font-weight:700
-}
-
-main{
-flex:1;
-padding:24px;
-max-width:1400px;
-margin:auto
-}
-
-.chips{
-display:flex;
-gap:9px;
-overflow:auto;
-margin-bottom:22px
-}
-
 .chip{
-border:0;
-background:#eee;
-padding:9px 15px;
-border-radius:18px;
-white-space:nowrap
+border:0;background:#eee;border-radius:20px;padding:9px 16px;white-space:nowrap
 }
+.chip.active{background:#111;color:white}
 
-h2{
-margin:10px 0 16px
+.section-title{font-size:22px;margin:18px 0 14px}
+.video-grid{
+display:grid;grid-template-columns:repeat(4,1fr);gap:18px
 }
-
-.section{
-margin-bottom:32px
-}
-
-.cards{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
-gap:20px
-}
-
-.card{
-background:#fff;
-border-radius:12px;
-overflow:hidden;
-box-shadow:0 1px 4px #00000012
-}
-
+.video-card{cursor:pointer;min-width:0}
 .thumb{
-height:145px;
-background:linear-gradient(135deg,#222,#777);
-display:flex;
-align-items:center;
-justify-content:center;
-color:#fff;
-font-size:42px
+height:190px;background:linear-gradient(135deg,#e9e9e9,#cfcfcf);
+border-radius:12px;display:flex;align-items:center;justify-content:center;
+font-size:55px;overflow:hidden
+}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.video-title{
+font-size:15px;font-weight:700;line-height:1.35;margin-top:9px
+}
+.video-meta{font-size:13px;color:#666;margin-top:5px}
+
+.shorts-grid{
+display:grid;grid-template-columns:repeat(5,1fr);gap:15px
+}
+.short-card{cursor:pointer}
+.short-thumb{
+height:300px;background:#eee;border-radius:12px;display:flex;
+align-items:center;justify-content:center;font-size:55px
 }
 
-.card-body{
-padding:12px
+.live-card{
+border:1px solid #eee;border-radius:12px;padding:15px;display:flex;
+align-items:center;gap:15px;margin-bottom:10px
 }
+.live-dot{color:red;font-weight:bold}
 
-.title{
-font-weight:700;
-line-height:1.3
+.overlay{
+display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);
+z-index:3000;align-items:center;justify-content:center;padding:15px
 }
-
-.meta{
-font-size:13px;
-color:#666;
-margin-top:7px
-}
-
-.shorts{
-display:flex;
-gap:15px;
-overflow:auto
-}
-
-.short{
-min-width:165px;
-width:165px
-}
-
-.short .thumb{
-height:285px;
-border-radius:10px
-}
-
-.live{
-display:flex;
-gap:15px;
-overflow:auto
-}
-
-.live .card{
-min-width:270px
-}
-
-.badge{
-display:inline-block;
-background:#e60023;
-color:white;
-padding:4px 7px;
-border-radius:5px;
-font-size:11px;
-font-weight:bold;
-margin-bottom:5px
-}
-
 .modal{
-display:none;
-position:fixed;
-inset:0;
-background:#0008;
-z-index:30;
-align-items:center;
-justify-content:center
+background:white;width:100%;max-width:430px;border-radius:16px;padding:22px;
+max-height:90vh;overflow:auto
 }
-
-.modal.show{
-display:flex
-}
-
-.box{
-background:#fff;
-width:min(520px,92%);
-border-radius:16px;
-padding:24px
-}
-
-.box input,
-.box textarea,
-.box select{
-width:100%;
-padding:11px;
-margin:7px 0 12px;
-border:1px solid #ddd;
-border-radius:9px
-}
-
+.modal h2{margin-bottom:16px}
 .close{
-float:right;
-border:0;
-background:none;
-font-size:24px
+float:right;border:0;background:#eee;border-radius:50%;width:34px;height:34px
+}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:13px;font-weight:bold;margin-bottom:6px}
+.field input,.field textarea,.field select{
+width:100%;border:1px solid #ccc;border-radius:9px;padding:11px;outline:none
+}
+.field textarea{min-height:100px;resize:vertical}
+.primary{
+width:100%;border:0;border-radius:9px;background:#e60023;color:white;
+padding:12px;font-weight:bold
+}
+.secondary{
+width:100%;border:1px solid #ddd;border-radius:9px;background:white;
+padding:11px;margin-top:8px
 }
 
-@media(max-width:750px){
-
-aside{
-display:none
+.profile-menu{
+display:none;position:absolute;right:15px;top:58px;background:white;
+border:1px solid #ddd;border-radius:12px;width:230px;padding:10px;
+box-shadow:0 8px 30px rgba(0,0,0,.15);z-index:2000
 }
-
-main{
-padding:15px
+.profile-menu button{
+width:100%;padding:11px;border:0;background:white;text-align:left;border-radius:8px
 }
+.profile-menu button:hover{background:#f3f3f3}
 
-.search{
-max-width:none
+#watchPage{display:none}
+.watch-container{max-width:1100px;margin:auto}
+.player{
+width:100%;aspect-ratio:16/9;background:#111;border-radius:12px;
+display:flex;align-items:center;justify-content:center;color:white;font-size:70px;
+overflow:hidden
 }
-
-.login{
-display:none
-}
-
-.cards{
-grid-template-columns:repeat(2,minmax(0,1fr));
-gap:12px
-}
-
-.thumb{
-height:110px
-}
-
-.short{
-min-width:145px;
-width:145px
-}
-
-.short .thumb{
-height:250px
-}
-
-header{
-gap:8px
-}
-
-.logo{
-font-size:21px
-}
-/* ============================= */
-/* ViTube Watch Page */
-/* ============================= */
-
-.watch-page{
-  display:none;
-  padding:20px;
-  max-width:1400px;
-  margin:auto;
-}
-
-.watch-layout{
-  display:grid;
-  grid-template-columns:1fr 360px;
-  gap:24px;
-}
-
-.video-player{
-  width:100%;
-  aspect-ratio:16/9;
-  background:#000;
-  border-radius:12px;
-  overflow:hidden;
-}
-
-.video-player video{
-  width:100%;
-  height:100%;
-  display:block;
-}
-
-.watch-title{
-  font-size:22px;
-  font-weight:700;
-  margin:16px 0 12px;
-}
-
+.player video{width:100%;height:100%;object-fit:contain}
+.watch-title{font-size:23px;font-weight:700;margin:15px 0}
 .watch-channel{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
-  padding:12px 0;
-  border-bottom:1px solid #ddd;
+display:flex;align-items:center;gap:12px;border-bottom:1px solid #eee;padding-bottom:15px
 }
-
-.channel-info{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
 .channel-avatar{
-  width:44px;
-  height:44px;
-  border-radius:50%;
-  background:#ddd;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:700;
+width:45px;height:45px;border-radius:50%;background:#e60023;color:white;
+display:flex;align-items:center;justify-content:center;font-weight:bold
+}
+.channel-info{flex:1}
+.channel-name{font-weight:bold}
+.subscribe-btn{
+background:#e60023;color:white;border:0;padding:9px 17px;
+border-radius:20px;font-weight:bold
+}
+.subscribe-btn.subscribed{background:#eee;color:#111}
+.bell-btn{
+border:0;background:#f2f2f2;width:38px;height:38px;border-radius:50%;
+margin-left:5px
 }
 
 .watch-actions{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin:14px 0;
+display:flex;gap:8px;align-items:center;margin:15px 0;flex-wrap:wrap
 }
-
-.watch-actions{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin:14px 0;
+.action-btn{
+border:0;background:#eee;border-radius:20px;padding:9px 14px
 }
+.action-btn.active{background:#111;color:white}
 
-.watch-action-btn{
-    border:1px solid #ddd;
-    background:#f5f5f5;
-    color:#111;
-    padding:10px 16px;
-    border-radius:22px;
-    cursor:pointer;
-    font-weight:600;
-    font-size:14px;
-    transition:0.2s;
+.description{
+background:#f5f5f5;border-radius:12px;padding:15px;margin-bottom:20px;
+white-space:pre-wrap
 }
-
-.watch-action-btn:hover{
-    background:#e8e8e8;
-    transform:translateY(-1px);
+.comments-box{margin-top:20px}
+.comment-form{display:flex;gap:8px;margin:10px 0 18px}
+.comment-form input{
+flex:1;border:1px solid #ccc;border-radius:20px;padding:10px 15px
 }
-
-.watch-action-btn:active{
-    transform:scale(0.96);
-
+.comment-form button{
+border:0;background:#111;color:white;border-radius:20px;padding:0 16px
 }
-
-.watch-description{
-  background:#f5f5f5;
-  padding:16px;
-  border-radius:12px;
-  margin-top:15px;
+.comment{
+padding:10px 0;border-bottom:1px solid #eee
 }
+.comment-user{font-weight:bold;font-size:14px}
+.comment-text{margin-top:5px}
 
-.recommended-title{
-  font-size:20px;
-  font-weight:700;
-  margin-bottom:12px;
-}
-
+.recommended-section{margin-top:30px}
+.recommended-list{display:flex;flex-direction:column;gap:15px}
 .recommended-card{
-  display:flex;
-  gap:10px;
-  margin-bottom:15px;
-  cursor:pointer;
+display:flex;gap:15px;cursor:pointer;padding:8px;border-radius:10px
+}
+.recommended-card:hover{background:#f5f5f5}
+.recommended-thumb{
+width:260px;height:145px;background:#ddd;border-radius:10px;
+display:flex;align-items:center;justify-content:center;font-size:45px;flex-shrink:0
+}
+.recommended-info{padding-top:5px}
+.recommended-title{font-weight:bold;font-size:17px}
+.recommended-meta{color:#666;font-size:13px;margin-top:8px}
+
+.empty{
+padding:40px;text-align:center;color:#777;border:1px dashed #ccc;border-radius:12px
 }
 
-.recommended-thumb{
-  width:150px;
-  height:85px;
-  background:#ddd;
-  border-radius:8px;
+.account-header{
+display:flex;align-items:center;gap:12px;background:#f6f6f6;
+padding:15px;border-radius:12px;margin-bottom:15px
+}
+
+.toast{
+position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+background:#111;color:white;padding:12px 18px;border-radius:20px;
+display:none;z-index:5000
 }
 
 @media(max-width:900px){
-
-  .watch-layout{
-    grid-template-columns:1fr;
-  }
-
-  .watch-page{
-    padding:12px;
-  }
-
-  .watch-title{
-    font-size:18px;
-  }
-
+.video-grid{grid-template-columns:repeat(3,1fr)}
+.shorts-grid{grid-template-columns:repeat(4,1fr)}
+.sidebar{width:180px}
 }
+
+@media(max-width:700px){
+.header{padding:0 10px;gap:8px}
+.logo{font-size:21px}
+.menu-btn{display:none}
+.search-box{max-width:none}
+.header-right .upload-head{display:none}
+.sidebar{display:none}
+.main{padding:12px}
+.video-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+.thumb{height:125px;border-radius:9px}
+.shorts-grid{grid-template-columns:repeat(2,1fr)}
+.short-thumb{height:260px}
+.watch-title{font-size:18px}
+.player{border-radius:0}
+.watch-channel{flex-wrap:wrap}
+.recommended-thumb{width:145px;height:82px;font-size:30px}
+.recommended-title{font-size:14px}
+.recommended-meta{font-size:11px}
+.recommended-card{gap:10px}
+}
+
+@media(max-width:420px){
+.video-grid{grid-template-columns:1fr}
+.thumb{height:200px}
+.search-box input{padding-left:10px}
+.search-box button{width:45px}
+.header .icon-btn{width:34px;height:34px}
+.avatar{width:34px;height:34px}
 }
 </style>
 </head>
 
 <body>
 
-<header>
+<header class="header">
+<button class="menu-btn" onclick="toggleSidebar()">☰</button>
+<div class="logo" onclick="goHome()">ViTube</div>
 
-<div class="logo">
-Vi<span>Tube</span>
-</div>
-
-<div class="search">
-<input id="search" placeholder="Search videos, creators...">
+<div class="search-box">
+<input id="searchInput" type="search" placeholder="Search videos..." onkeydown="if(event.key==='Enter')searchVideos()">
 <button onclick="searchVideos()">🔍</button>
 </div>
 
-<button class="btn upload" onclick="openModal('uploadModal')">
-＋ Upload
-</button>
+<div class="header-right">
+<button class="icon-btn upload-head" onclick="openUpload()">＋</button>
+<button class="icon-btn" onclick="showNotifications()">🔔</button>
+<button class="avatar" id="headerAvatar" onclick="toggleProfileMenu()">G</button>
+</div>
 
-<button class="btn login" onclick="openModal('loginModal')">
-Sign in
-</button>
-
+<div class="profile-menu" id="profileMenu">
+<button id="accountMenuBtn" onclick="openAccount()">👤 Account</button>
+<button onclick="openUpload()">⬆️ Upload Video</button>
+<button onclick="showNotifications()">🔔 Notifications</button>
+<button onclick="signOutUser()">🚪 Sign out</button>
+</div>
 </header>
-
 
 <div class="layout">
 
-<aside>
-
-<nav>
-
-<button class="active">🏠 Home</button>
-<button>⚡ Shorts</button>
-<button>🔴 Live</button>
-<button>🔥 Trending</button>
-<button>👥 Subscriptions</button>
-
-<hr>
-
-<button>📚 Library</button>
-<button>🕘 History</button>
-<button>👍 Liked videos</button>
-
-</nav>
-
+<aside class="sidebar" id="sidebar">
+<button class="side-item" onclick="goHome()">🏠 Home</button>
+<button class="side-item" onclick="goHome()">🔥 Trending</button>
+<button class="side-item" onclick="goHome()">📺 Subscriptions</button>
+<button class="side-item" onclick="goHome()">🎬 Shorts</button>
+<button class="side-item" onclick="goHome()">🔴 Live</button>
+<button class="side-item" onclick="openAccount()">👤 Your channel</button>
+<button class="side-item" onclick="openUpload()">⬆️ Upload</button>
 </aside>
 
+<main class="main">
 
-<main>
+<section id="homePage">
 
-<div class="chips">
-
-<button class="chip">All</button>
-<button class="chip">Music</button>
-<button class="chip">Gaming</button>
-<button class="chip">News</button>
-<button class="chip">Technology</button>
-<button class="chip">Education</button>
-<button class="chip">Travel</button>
-<button class="chip">Food</button>
-
+<div class="categories">
+<button class="chip active" onclick="filterCategory('All',this)">All</button>
+<button class="chip" onclick="filterCategory('Music',this)">Music</button>
+<button class="chip" onclick="filterCategory('News',this)">News</button>
+<button class="chip" onclick="filterCategory('Gaming',this)">Gaming</button>
+<button class="chip" onclick="filterCategory('Education',this)">Education</button>
+<button class="chip" onclick="filterCategory('Technology',this)">Technology</button>
+<button class="chip" onclick="filterCategory('Entertainment',this)">Entertainment</button>
 </div>
 
+<h2 class="section-title">🌍 Trending Worldwide</h2>
+<div class="video-grid" id="homeVideos">
 
-<section class="section">
-
-<h2>🌎 Trending Worldwide</h2>
-
-<div class="cards" id="videos">
-<div class="card" onclick="openWatchPage('Amazing Places Around the World','ViTube Travel','Explore amazing places around the world with ViTube Travel.')">
-<div class="card">
-<div class="thumb">▶</div>
-<div class="card-body">
-<div class="title">Amazing Places Around the World</div>
-<div class="meta">ViTube Travel • 1.2M views • 2 hours ago</div>
-</div>
+<div class="video-card" onclick="openDemoWatch('The Future of Technology','ViTube Tech','💻')">
+<div class="thumb">💻</div>
+<div class="video-title">The Future of Technology</div>
+<div class="video-meta">ViTube Tech • 1.2M views • 2 days ago</div>
 </div>
 
-<div class="card">
-<div class="thumb">▶</div>
-<div class="card-body">
-<div class="title">The Future of Technology</div>
-<div class="meta">Tech World • 845K views • 5 hours ago</div>
-</div>
+<div class="video-card" onclick="openDemoWatch('Amazing World Facts','World Explorer','🌍')">
+<div class="thumb">🌍</div>
+<div class="video-title">Amazing World Facts You Didn't Know</div>
+<div class="video-meta">World Explorer • 850K views • 1 day ago</div>
 </div>
 
-<div class="card">
-<div class="thumb">▶</div>
-<div class="card-body">
-<div class="title">Street Food You Must Try</div>
-<div class="meta">Food Explorer • 620K views • 1 day ago</div>
-</div>
+<div class="video-card" onclick="openDemoWatch('Street Food Around The World','Food Planet','🍔')">
+<div class="thumb">🍔</div>
+<div class="video-title">Street Food Around The World</div>
+<div class="video-meta">Food Planet • 620K views • 4 days ago</div>
 </div>
 
-<div class="card">
-<div class="thumb">▶</div>
-<div class="card-body">
-<div class="title">10 Incredible Facts About Earth</div>
-<div class="meta">Global Facts • 510K views • 1 day ago</div>
-</div>
+<div class="video-card" onclick="openDemoWatch('Beautiful Places On Earth','Travel Vision','🌎')">
+<div class="thumb">🌎</div>
+<div class="video-title">10 Beautiful Places On Earth</div>
+<div class="video-meta">Travel Vision • 510K views • 3 days ago</div>
 </div>
 
 </div>
 
-</section>
+<div id="databaseVideos"></div>
 
-
-<section class="section">
-
-<h2>⚡ Shorts</h2>
-
-<div class="shorts">
-
-<div class="short">
-<div class="thumb">▶</div>
-<div class="title">Amazing sunset 🌅</div>
-<div class="meta">2.4M views</div>
+<h2 class="section-title">🎬 Shorts</h2>
+<div class="shorts-grid">
+<div class="short-card" onclick="openDemoWatch('Amazing Short Video','ViTube Creator','🚀')">
+<div class="short-thumb">🚀</div>
+</div>
+<div class="short-card" onclick="openDemoWatch('Funny Moment','Fun World','😂')">
+<div class="short-thumb">😂</div>
+</div>
+<div class="short-card" onclick="openDemoWatch('Amazing Nature','Nature World','🌲')">
+<div class="short-thumb">🌲</div>
+</div>
+<div class="short-card" onclick="openDemoWatch('Technology Short','Tech Daily','📱')">
+<div class="short-thumb">📱</div>
+</div>
 </div>
 
-<div class="short">
-<div class="thumb">▶</div>
-<div class="title">Quick cooking idea 🍳</div>
-<div class="meta">1.8M views</div>
-</div>
-
-<div class="short">
-<div class="thumb">▶</div>
-<div class="title">Did you know? 🌎</div>
-<div class="meta">980K views</div>
-</div>
-
-<div class="short">
-<div class="thumb">▶</div>
-<div class="title">Tech trick 📱</div>
-<div class="meta">750K views</div>
-</div>
-
+<h2 class="section-title">🔴 Live Now</h2>
+<div class="live-card">
+<div class="live-dot">🔴 LIVE</div>
+<div><b>ViTube Global Live</b><br><small>Live streaming will appear here.</small></div>
 </div>
 
 </section>
 
+<section id="watchPage">
 
-<section class="section">
+<div class="watch-container">
 
-<h2>🔴 Live Now</h2>
+<div class="player" id="watchPlayer">▶️</div>
 
-<div class="live">
+<h1 class="watch-title" id="watchTitle">Video Title</h1>
 
-<div class="card">
-<div class="thumb">
-<span class="badge">LIVE</span> 🎥
+<div class="watch-channel">
+<div class="channel-avatar" id="watchAvatar">V</div>
+<div class="channel-info">
+<div class="channel-name" id="watchChannel">ViTube</div>
+<div id="watchSubscribers">0 subscribers</div>
 </div>
-<div class="card-body">
-<div class="title">Live from New York</div>
-<div class="meta">12.4K watching</div>
-</div>
-</div>
-
-<div class="card">
-<div class="thumb">
-<span class="badge">LIVE</span> 🎮
-</div>
-<div class="card-body">
-<div class="title">Gaming Live</div>
-<div class="meta">8.1K watching</div>
-</div>
+<button class="subscribe-btn" id="watchSubscribeBtn" onclick="toggleSubscribe()">Subscribe</button>
+<button class="bell-btn" id="watchBellBtn" onclick="toggleBell()">🔔</button>
 </div>
 
+<div class="watch-actions">
+<button class="action-btn" id="likeBtn" onclick="toggleLike()">👍 <span id="likeCount">0</span></button>
+<button class="action-btn" id="dislikeBtn" onclick="toggleDislike()">👎 <span id="dislikeCount">0</span></button>
+<button class="action-btn" onclick="shareVideo()">↗️ Share</button>
+<button class="action-btn" onclick="copyVideoLink()">🔗 Copy link</button>
+<button class="action-btn" onclick="showMore()">⋮ More</button>
 </div>
 
+<div class="description" id="watchDescription">
+Welcome to ViTube.
+</div>
+
+<div class="comments-box">
+<h2>Comments</h2>
+
+<div class="comment-form">
+<input id="commentInput" placeholder="Add a comment...">
+<button onclick="addComment()">Comment</button>
+</div>
+
+<div id="commentsList">
+<div class="empty">Sign in to write comments.</div>
+</div>
+</div>
+
+<div class="recommended-section">
+<h2 class="section-title">Recommended videos</h2>
+<div class="recommended-list" id="recommendedList">
+
+<div class="recommended-card" onclick="openDemoWatch('Amazing World Facts You Didn’t Know','World Explorer','🌍')">
+<div class="recommended-thumb">🌍</div>
+<div class="recommended-info">
+<div class="recommended-title">Amazing World Facts You Didn’t Know</div>
+<div class="recommended-meta">World Explorer • 850K views</div>
+</div>
+</div>
+
+<div class="recommended-card" onclick="openDemoWatch('The Future of Technology','ViTube Tech','💻')">
+<div class="recommended-thumb">💻</div>
+<div class="recommended-info">
+<div class="recommended-title">The Future of Technology</div>
+<div class="recommended-meta">ViTube Tech • 1.2M views</div>
+</div>
+</div>
+
+<div class="recommended-card" onclick="openDemoWatch('Street Food Around The World','Food Planet','🍔')">
+<div class="recommended-thumb">🍔</div>
+<div class="recommended-info">
+<div class="recommended-title">Street Food Around The World</div>
+<div class="recommended-meta">Food Planet • 620K views</div>
+</div>
+</div>
+
+<div class="recommended-card" onclick="openDemoWatch('Beautiful Places On Earth','Travel Vision','🌎')">
+<div class="recommended-thumb">🌎</div>
+<div class="recommended-info">
+<div class="recommended-title">Beautiful Places On Earth</div>
+<div class="recommended-meta">Travel Vision • 510K views</div>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
 </section>
 
 </main>
-
 </div>
 
-<!-- WATCH PAGE -->
-
-<section class="watch-page" id="watchPage">
-
-  <button onclick="closeWatchPage()">← Back</button>
-
-  <div class="watch-layout">
-
-    <div>
-
-      <div class="video-player">
-        <video id="watchVideo" controls playsinline></video>
-      </div>
-
-      <div class="watch-title" id="watchTitle">
-        Video title
-      </div>
-
-      <div class="watch-channel">
-
-        <div class="channel-info">
-
-          <div class="channel-avatar" id="watchAvatar">
-            V
-          </div>
-
-          <div>
-            <strong id="watchChannelName">
-              ViTube Channel
-            </strong>
-
-            <div class="meta" id="watchSubscribers">
-              0 subscribers
-            </div>
-          </div>
-
-        </div>
-
-        <button
-  class="subscribe-btn"
-  id="watchSubscribeBtn"
-  onclick="subscribeChannel('watch')">
-  Subscribe
-</button>
-        
-      </div>
-
-      <div class="watch-actions">
-
-        <button class="watch-action-btn">
-          👍 Like
-        </button>
-
-        <button class="watch-action-btn">
-          👎 Dislike
-        </button>
-
-        <button class="watch-action-btn">
-          💬 Comment
-        </button>
-
-        <button class="watch-action-btn">
-          ↗ Share
-        </button>
-
-        <button class="watch-action-btn">
-          🔗 Copy link
-        </button>
-
-      </div>
-
-      <div
-        class="watch-description"
-        id="watchDescription">
-
-        Video description will appear here.
-
-      </div>
-
-      <div style="margin-top:25px;">
-
-        <h3>Comments</h3>
-
-        <p class="meta">
-          Sign in to leave a comment.
-        </p>
-
-      </div>
-
-    </div>
-
-     <div class="recommended-section">
-
-      <div class="recommended-title">
-        Recommended videos
-      </div>
-
-      <div class="recommended-card">
-      
-<div class="recommended-section">
-  <div class="recommended-title">Recommended videos</div>
-
-  <div class="recommended-card"
-       onclick="openWatchPage('Amazing Places Around the World','ViTube Travel','Explore amazing places around the world with ViTube Travel.')">
-    <div class="recommended-thumb"><span>🌍</span></div>
-    <div>
-      <strong>Amazing Places Around the World</strong>
-      <div class="meta">ViTube Travel • 1.2M views</div>
-    </div>
-  </div>
-
-  <div class="recommended-card"
-       onclick="openWatchPage('The Future of Technology','Tech World','Discover the future of technology and innovation.')">
-    <div class="recommended-thumb"><span>💻</span></div>
-    <div>
-      <strong>The Future of Technology</strong>
-      <div class="meta">Tech World • 845K views</div>
-    </div>
-  </div>
-
-  <div class="recommended-card"
-       onclick="openWatchPage('Street Food You Must Try','Food Explorer','Amazing street food from around the world.')">
-    <div class="recommended-thumb"><span>🍔</span></div>
-    <div>
-      <strong>Street Food You Must Try</strong>
-      <div class="meta">Food Explorer • 620K views</div>
-    </div>
-  </div>
-
-  <div class="recommended-card"
-       onclick="openWatchPage('10 Incredible Facts About Earth','Global Facts','Discover incredible facts about our planet Earth.')">
-    <div class="recommended-thumb"><span>🌎</span></div>
-    <div>
-      <strong>10 Incredible Facts About Earth</strong>
-      <div class="meta">Global Facts • 510K views</div>
-    </div>
-  </div>
-</div>
-</section>
-<!-- SIGN IN MODAL -->
-
-<div class="modal" id="loginModal">
-
-<div class="box">
-
-<button class="close" onclick="closeModal('loginModal')">
-×
-</button>
-
+<!-- LOGIN -->
+<div class="overlay" id="loginModal">
+<div class="modal">
+<button class="close" onclick="closeModal('loginModal')">×</button>
 <h2>Sign in to ViTube</h2>
 
-<input
-id="loginEmail"
-type="email"
-placeholder="Email">
-
-<input
-id="loginPassword"
-type="password"
-placeholder="Password">
-
-<button
-class="btn login"
-style="width:100%"
-onclick="signInUser()">
-
-Sign in
-
-</button>
-
-<p style="color:#777;font-size:13px">
-Use your ViTube account email and password.
-</p>
-
+<div class="field">
+<label>Email</label>
+<input id="loginEmail" type="email" placeholder="Enter your email">
 </div>
 
+<div class="field">
+<label>Password</label>
+<input id="loginPassword" type="password" placeholder="Enter your password">
 </div>
 
+<button class="primary" onclick="signInUser()">Sign in</button>
+<button class="secondary" onclick="openSignup()">Create new account</button>
+</div>
+</div>
 
-<!-- UPLOAD MODAL -->
+<!-- SIGNUP -->
+<div class="overlay" id="signupModal">
+<div class="modal">
+<button class="close" onclick="closeModal('signupModal')">×</button>
+<h2>Create ViTube Account</h2>
 
-<div class="modal" id="uploadModal">
+<div class="field">
+<label>Email</label>
+<input id="signupEmail" type="email" placeholder="Your email">
+</div>
 
-<div class="box">
+<div class="field">
+<label>Password</label>
+<input id="signupPassword" type="password" placeholder="At least 6 characters">
+</div>
 
-<button class="close" onclick="closeModal('uploadModal')">
-×
-</button>
+<div class="field">
+<label>Your name</label>
+<input id="signupName" type="text" placeholder="Display name">
+</div>
 
-<h2>Upload to ViTube</h2>
+<div class="field">
+<label>Country</label>
+<input id="signupCountry" type="text" placeholder="Country">
+</div>
 
-<input type="file" accept="video/*">
+<button class="primary" onclick="signUpUser()">Create account</button>
+<button class="secondary" onclick="openLogin()">Already have an account? Sign in</button>
+</div>
+</div>
 
-<input placeholder="Video title">
+<!-- UPLOAD -->
+<div class="overlay" id="uploadModal">
+<div class="modal">
+<button class="close" onclick="closeModal('uploadModal')">×</button>
+<h2>Upload Video</h2>
 
-<textarea
-rows="4"
-placeholder="Description">
-</textarea>
+<div class="field">
+<label>Video title</label>
+<input id="uploadTitle" placeholder="Enter video title">
+</div>
 
-<select>
+<div class="field">
+<label>Description</label>
+<textarea id="uploadDescription" placeholder="Tell viewers about your video"></textarea>
+</div>
 
-<option>Choose category</option>
+<div class="field">
+<label>Category</label>
+<select id="uploadCategory">
 <option>Entertainment</option>
 <option>Education</option>
 <option>Technology</option>
+<option>Gaming</option>
+<option>Music</option>
 <option>News</option>
 <option>Travel</option>
 <option>Food</option>
-
+<option>Other</option>
 </select>
-
-<button
-class="btn upload"
-style="width:100%"
-onclick="alert('Upload UI ready. Real cloud upload will be connected in the next version.')">
-
-Publish Video
-
-</button>
-
 </div>
 
+<div class="field">
+<label>Video file</label>
+<input id="videoFile" type="file" accept="video/*">
 </div>
 
+<button class="primary" onclick="uploadVideo()">Upload to ViTube</button>
+</div>
+</div>
 
-<!-- BASIC UI SCRIPT -->
+<!-- ACCOUNT -->
+<div class="overlay" id="accountModal">
+<div class="modal">
+<button class="close" onclick="closeModal('accountModal')">×</button>
+<h2>Your ViTube Account</h2>
+
+<div class="account-header">
+<div class="avatar" id="accountAvatar">G</div>
+<div>
+<b id="accountName">Guest</b>
+<div id="accountEmail">Not signed in</div>
+</div>
+</div>
+
+<div class="field">
+<label>Display name</label>
+<input id="accountDisplayName">
+</div>
+
+<div class="field">
+<label>Country</label>
+<input id="accountCountry">
+</div>
+
+<div class="field">
+<label>Bio</label>
+<textarea id="accountBio"></textarea>
+</div>
+
+<button class="primary" onclick="saveProfile()">Save profile</button>
+<button class="secondary" onclick="signOutUser()">Sign out</button>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
+/* =========================================================
+   ViTube Configuration
+   ONLY replace these TWO values.
+   Never put a Supabase Secret Key here.
+   ========================================================= */
 
-function subscribeChannel(channelId){
+const SUPABASE_URL='PASTE_YOUR_SUPABASE_PROJECT_URL_HERE';NEXT_PUBLIC_SUPABASE_URL=https://visiptpbssladdksqerv.supabase.co
+const SUPABASE_PUBLISHABLE_KEY='PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE';NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_2toqXCSHl0QiQQEBNI2Fzg_AbAN5v6-
 
-  const button = document.getElementById('watchSubscribeBtn');
+let supabase=null;
 
-  if(!button) return;
-
-  if(button.classList.contains('subscribed')){
-    button.classList.remove('subscribed');
-    button.textContent = 'Subscribe';
-  }else{
-    button.classList.add('subscribed');
-    button.textContent = 'Subscribed';
-  }
-
+if(
+SUPABASE_URL &&
+SUPABASE_PUBLISHABLE_KEY &&
+!SUPABASE_URL.includes('PASTE_') &&
+!SUPABASE_PUBLISHABLE_KEY.includes('PASTE_')
+){
+supabase=window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_PUBLISHABLE_KEY,
+{
+auth:{
+autoRefreshToken:true,
+persistSession:true,
+detectSessionInUrl:true
+}
+}
+);
 }
 
-function openWatchPage(title, channel, description){
+/* =========================================================
+   GLOBAL STATE
+   ========================================================= */
 
-  const home = document.querySelector('.layout');
-  const watchPage = document.getElementById('watchPage');
+let currentUser=null;
+let currentVideo=null;
+let currentCategory='All';
+let currentDemoVideo=null;
 
-  if(!watchPage) return;
+/* =========================================================
+   BASIC UI
+   ========================================================= */
 
-  if(home){
-    home.style.display = 'none';
-  }
-
-  watchPage.style.display = 'block';
-
-  document.getElementById('watchTitle').textContent = title;
-  document.getElementById('watchChannelName').textContent = channel;
-
-  document.getElementById('watchDescription').textContent =
-    description || 'No description available.';
-
-  window.scrollTo({
-    top:0,
-    behavior:'smooth'
-  });
-
-}
-
-function closeWatchPage(){
-
-  const home = document.querySelector('.layout');
-  const watchPage = document.getElementById('watchPage');
-
-  if(watchPage){
-    watchPage.style.display = 'none';
-  }
-
-  if(home){
-    home.style.display = '';
-  }
-
-  window.scrollTo({
-    top:0,
-    behavior:'smooth'
-  });
-
-}
-
-function openModal(id){
-
-  document.getElementById(id).classList.add('show');
-
+function toast(message){
+const el=document.getElementById('toast');
+el.textContent=message;
+el.style.display='block';
+clearTimeout(window.toastTimer);
+window.toastTimer=setTimeout(()=>el.style.display='none',3000);
 }
 
 function closeModal(id){
-
-  document.getElementById(id).classList.remove('show');
-
+document.getElementById(id).style.display='none';
 }
 
-function searchVideos(){
-
-  const q =
-    document.getElementById('search')
-    .value
-    .trim()
-    .toLowerCase();
-
-  document
-    .querySelectorAll('#videos .card')
-    .forEach(c => {
-
-      c.style.display =
-        (!q || c.innerText.toLowerCase().includes(q))
-        ? 'block'
-        : 'none';
-
-    });
-
+function openModal(id){
+document.getElementById(id).style.display='flex';
 }
 
-</script>
+function toggleProfileMenu(){
+const el=document.getElementById('profileMenu');
+el.style.display=el.style.display==='block'?'none':'block';
+}
 
+function toggleSidebar(){
+document.getElementById('sidebar').style.display=
+document.getElementById('sidebar').style.display==='none'?'block':'none';
+}
 
-<!-- SUPABASE LIBRARY -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+function goHome(){
+document.getElementById('homePage').style.display='block';
+document.getElementById('watchPage').style.display='none';
+window.scrollTo({top:0,behavior:'smooth'});
+}
 
+function openLogin(){
+closeModal('signupModal');
+openModal('loginModal');
+}
 
-<!-- SUPABASE CONNECTION -->
+function openSignup(){
+closeModal('loginModal');
+openModal('signupModal');
+}
 
-<script>
+function openUpload(){
+if(!currentUser){
+openLogin();
+toast('Please sign in first.');
+return;
+}
+openModal('uploadModal');
+}
 
-const SUPABASE_URL =
-'PASTE_YOUR_SUPABASE_PROJECT_URL_HERE';
+function openAccount(){
+document.getElementById('profileMenu').style.display='none';
 
-const SUPABASE_PUBLISHABLE_KEY =
-'PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE';
+if(!currentUser){
+openLogin();
+return;
+}
 
-const supabase =
-window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_PUBLISHABLE_KEY
-);
+loadAccountData();
+openModal('accountModal');
+}
 
-</script>
-
-
-<!-- AUTH FUNCTIONS -->
-
-<script>
+/* =========================================================
+   AUTH
+   ========================================================= */
 
 async function signUpUser(){
 
-const email =
-document.getElementById('signupEmail').value.trim();
-
-const password =
-document.getElementById('signupPassword').value;
-
-if(!email || !password){
-
-alert('Please enter your email and password.');
-
+if(!supabase){
+toast('Please add your Supabase URL and Publishable Key first.');
 return;
-
 }
 
-const { error } =
-await supabase.auth.signUp({
+const email=document.getElementById('signupEmail').value.trim();
+const password=document.getElementById('signupPassword').value;
+const name=document.getElementById('signupName').value.trim();
+const country=document.getElementById('signupCountry').value.trim();
 
+if(!email || !password){
+toast('Enter email and password.');
+return;
+}
+
+if(password.length<6){
+toast('Password must be at least 6 characters.');
+return;
+}
+
+const {data,error}=await supabase.auth.signUp({
 email:email,
-password:password
-
+password:password,
+options:{
+data:{
+display_name:name,
+country:country
+}
+}
 });
 
 if(error){
-
-alert(error.message);
-
+toast(error.message);
 return;
-
 }
 
-alert(
-'Account created! Please check your email to confirm your account.'
-);
+closeModal('signupModal');
 
+if(data.user){
+toast('Account created. Check your email if confirmation is required.');
 }
 
+}
 
 async function signInUser(){
 
-const email =
-document.getElementById('loginEmail').value.trim();
-
-const password =
-document.getElementById('loginPassword').value;
-
-if(!email || !password){
-
-alert('Please enter your email and password.');
-
+if(!supabase){
+toast('Add your Supabase Project URL and Publishable Key.');
 return;
-
 }
 
-const { error } =
-await supabase.auth.signInWithPassword({
+const email=document.getElementById('loginEmail').value.trim();
+const password=document.getElementById('loginPassword').value;
 
+if(!email || !password){
+toast('Enter email and password.');
+return;
+}
+
+const {data,error}=await supabase.auth.signInWithPassword({
 email:email,
 password:password
-
 });
 
 if(error){
-
-alert(error.message);
-
+toast(error.message);
 return;
+}
+
+currentUser=data.user;
+closeModal('loginModal');
+updateHeader();
+toast('Signed in successfully.');
+
+await ensureProfile();
+}
+
+async function signOutUser(){
+
+if(supabase){
+await supabase.auth.signOut();
+}
+
+currentUser=null;
+document.getElementById('profileMenu').style.display='none';
+updateHeader();
+goHome();
+toast('Signed out.');
+}
+
+function updateHeader(){
+
+const avatar=document.getElementById('headerAvatar');
+
+if(currentUser){
+
+const name=
+currentUser.user_metadata?.display_name ||
+currentUser.email?.charAt(0).toUpperCase() ||
+'V';
+
+avatar.textContent=name.charAt(0).toUpperCase();
+
+}else{
+
+avatar.textContent='G';
+
+}
+}
+
+async function ensureProfile(){
+
+if(!supabase || !currentUser)return;
+
+const {data}=await supabase
+.from('profiles')
+.select('*')
+.eq('id',currentUser.id)
+.maybeSingle();
+
+if(data)return;
+
+await supabase
+.from('profiles')
+.insert({
+id:currentUser.id,
+username:'user_'+currentUser.id.slice(0,8),
+display_name:
+currentUser.user_metadata?.display_name ||
+currentUser.email?.split('@')[0] ||
+'ViTube User',
+country:currentUser.user_metadata?.country || '',
+language:'en'
+});
+}
+
+/* =========================================================
+   ACCOUNT / PROFILE
+   ========================================================= */
+
+async function loadAccountData(){
+
+if(!currentUser)return;
+
+document.getElementById('accountEmail').textContent=currentUser.email||'';
+
+if(!supabase)return;
+
+const {data}=await supabase
+.from('profiles')
+.select('*')
+.eq('id',currentUser.id)
+.maybeSingle();
+
+if(data){
+
+document.getElementById('accountName').textContent=
+data.display_name || 'ViTube User';
+
+document.getElementById('accountDisplayName').value=
+data.display_name || '';
+
+document.getElementById('accountCountry').value=
+data.country || '';
+
+document.getElementById('accountBio').value=
+data.bio || '';
+
+const first=(data.display_name||'V').charAt(0).toUpperCase();
+document.getElementById('accountAvatar').textContent=first;
+
+}
+}
+
+async function saveProfile(){
+
+if(!supabase || !currentUser){
+toast('Please sign in.');
+return;
+}
+
+const display_name=document.getElementById('accountDisplayName').value.trim();
+const country=document.getElementById('accountCountry').value.trim();
+const bio=document.getElementById('accountBio').value.trim();
+
+const {error}=await supabase
+.from('profiles')
+.update({
+display_name,
+country,
+bio
+})
+.eq('id',currentUser.id);
+
+if(error){
+toast(error.message);
+return;
+}
+
+document.getElementById('accountName').textContent=display_name||'ViTube User';
+updateHeader();
+toast('Profile saved.');
+}
+
+/* =========================================================
+   WATCH PAGE
+   ========================================================= */
+
+function openDemoWatch(title,channel,emoji){
+
+currentDemoVideo={
+title:title,
+channel:channel,
+emoji:emoji,
+description:'This is a ViTube demo video. Real uploaded videos will appear here.',
+id:null
+};
+
+document.getElementById('homePage').style.display='none';
+document.getElementById('watchPage').style.display='block';
+
+document.getElementById('watchTitle').textContent=title;
+document.getElementById('watchChannel').textContent=channel;
+document.getElementById('watchDescription').textContent=
+'Welcome to ViTube.\n\n'+
+'This is a demonstration video page. Upload your own video to create a real video page.';
+
+document.getElementById('watchAvatar').textContent=
+channel.charAt(0).toUpperCase();
+
+document.getElementById('watchPlayer').innerHTML=
+'<div style="text-align:center">'+emoji+
+'<div style="font-size:16px;margin-top:15px">Demo Video</div></div>';
+
+document.getElementById('likeCount').textContent='0';
+document.getElementById('dislikeCount').textContent='0';
+
+document.getElementById('likeBtn').classList.remove('active');
+document.getElementById('dislikeBtn').classList.remove('active');
+
+document.getElementById('commentsList').innerHTML=
+'<div class="empty">Sign in to comment on this video.</div>';
+
+window.scrollTo({top:0,behavior:'smooth'});
+}
+
+async function openRealVideo(video){
+
+currentVideo=video;
+currentDemoVideo=null;
+
+document.getElementById('homePage').style.display='none';
+document.getElementById('watchPage').style.display='block';
+
+document.getElementById('watchTitle').textContent=video.title;
+document.getElementById('watchDescription').textContent=
+video.description || 'No description.';
+
+const channelName=
+video.channels?.name ||
+video.channel_name ||
+'ViTube Creator';
+
+document.getElementById('watchChannel').textContent=channelName;
+document.getElementById('watchAvatar').textContent=
+channelName.charAt(0).toUpperCase();
+
+document.getElementById('watchPlayer').innerHTML=
+'<video controls playsinline src="'+escapeAttr(video.video_url)+'"></video>';
+
+await loadVideoStats();
+await loadComments();
+
+window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function escapeAttr(value){
+return String(value)
+.replace(/&/g,'&amp;')
+.replace(/"/g,'&quot;')
+.replace(/</g,'&lt;')
+.replace(/>/g,'&gt;');
+}
+
+/* =========================================================
+   SUBSCRIBE + BELL
+   ========================================================= */
+
+async function toggleSubscribe(){
+
+if(!currentUser){
+openLogin();
+return;
+}
+
+if(!currentVideo){
+toast('Demo video: subscribe is available on real channels.');
+return;
+}
+
+const channelId=currentVideo.channel_id;
+
+const {data:existing}=await supabase
+.from('channel_followers')
+.select('*')
+.eq('channel_id',channelId)
+.eq('follower_id',currentUser.id)
+.maybeSingle();
+
+if(existing){
+
+const {error}=await supabase
+.from('channel_followers')
+.delete()
+.eq('channel_id',channelId)
+.eq('follower_id',currentUser.id);
+
+if(error){
+toast(error.message);
+return;
+}
+
+document.getElementById('watchSubscribeBtn').textContent='Subscribe';
+document.getElementById('watchSubscribeBtn').classList.remove('subscribed');
+
+}else{
+
+const {error}=await supabase
+.from('channel_followers')
+.insert({
+channel_id:channelId,
+follower_id:currentUser.id
+});
+
+if(error){
+toast(error.message);
+return;
+}
+
+document.getElementById('watchSubscribeBtn').textContent='Subscribed';
+document.getElementById('watchSubscribeBtn').classList.add('subscribed');
 
 }
 
-alert('Signed in successfully!');
-
 }
 
+function toggleBell(){
+
+if(!currentUser){
+openLogin();
+return;
+}
+
+if(!currentVideo){
+toast('Bell enabled for this demo channel.');
+return;
+}
+
+const key='vitube_bell_'+currentVideo.channel_id;
+const enabled=localStorage.getItem(key)==='1';
+
+if(enabled){
+localStorage.removeItem(key);
+document.getElementById('watchBellBtn').textContent='🔔';
+toast('Channel notifications off.');
+}else{
+localStorage.setItem(key,'1');
+document.getElementById('watchBellBtn').textContent='🔔✓';
+toast('Channel notifications on.');
+}
+}
+
+/* =========================================================
+   LIKE / DISLIKE
+   ========================================================= */
+
+async function toggleLike(){
+
+if(!currentUser){
+openLogin();
+return;
+}
+
+if(!currentVideo){
+toast('Demo video likes are not stored.');
+return;
+}
+
+const videoId=currentVideo.id;
+
+const {data:existing}=await supabase
+.from('video_likes')
+.select('*')
+.eq('video_id',videoId)
+.eq('user_id',currentUser.id)
+.maybeSingle();
+
+if(existing){
+
+await supabase
+.from('video_likes')
+.delete()
+.eq('video_id',videoId)
+.eq('user_id',currentUser.id);
+
+}else{
+
+await supabase
+.from('video_dislikes')
+.delete()
+.eq('video_id',videoId)
+.eq('user_id',currentUser.id);
+
+await supabase
+.from('video_likes')
+.insert({
+video_id:videoId,
+user_id:currentUser.id
+});
+}
+
+await loadVideoStats();
+}
+
+async function toggleDislike(){
+
+if(!currentUser){
+openLogin();
+return;
+}
+
+if(!currentVideo){
+toast('Demo video dislikes are not stored.');
+return;
+}
+
+const videoId=currentVideo.id;
+
+const {data:existing}=await supabase
+.from('video_dislikes')
+.select('*')
+.eq('video_id',videoId)
+.eq('user_id',currentUser.id)
+.maybeSingle();
+
+if(existing){
+
+await supabase
+.from('video_dislikes')
+.delete()
+.eq('video_id',videoId)
+.eq('user_id',currentUser.id);
+
+}else{
+
+await supabase
+.from('video_likes')
+.delete()
+.eq('video_id',videoId)
+.eq('user_id',currentUser.id);
+
+await supabase
+.from('video_dislikes')
+.insert({
+video_id:videoId,
+user_id:currentUser.id
+});
+}
+
+await loadVideoStats();
+}
+
+async function loadVideoStats(){
+
+if(!currentVideo || !supabase)return;
+
+const videoId=currentVideo.id;
+
+const {count:likes}=await supabase
+.from('video_likes')
+.select('*',{count:'exact',head:true})
+.eq('video_id',videoId);
+
+const {count:dislikes}=await supabase
+.from('video_dislikes')
+.select('*',{count:'exact',head:true})
+.eq('video_id',videoId);
+
+document.getElementById('likeCount').textContent=likes||0;
+document.getElementById('dislikeCount').textContent=dislikes||0;
+
+document.getElementById('likeBtn').classList.remove('active');
+document.getElementById('dislikeBtn').classList.remove('active');
+
+if(currentUser){
+
+const {data:l}=await supabase
+.from('video_likes')
+.select('video_id')
+.eq('video_id',videoId)
+.eq('user_id',currentUser.id)
+.maybeSingle();
+
+const {data:d}=await supabase
+.from('video_dislikes')
+.select('video_id')
+.eq('video_id',videoId)
+.eq('user_id',currentUser.id)
+.maybeSingle();
+
+if(l)document.getElementById('likeBtn').classList.add('active');
+if(d)document.getElementById('dislikeBtn').classList.add('active');
+}
+}
+
+/* =========================================================
+   COMMENTS
+   ========================================================= */
+
+async function addComment(){
+
+if(!currentUser){
+openLogin();
+return;
+}
+
+if(!currentVideo){
+toast('Demo comments are not stored.');
+return;
+}
+
+const input=document.getElementById('commentInput');
+const text=input.value.trim();
+
+if(!text)return;
+
+const {error}=await supabase
+.from('comments')
+.insert({
+video_id:currentVideo.id,
+user_id:currentUser.id,
+comment:text
+});
+
+if(error){
+toast(error.message);
+return;
+}
+
+input.value='';
+await loadComments();
+}
+
+async function loadComments(){
+
+if(!currentVideo || !supabase)return;
+
+const {data,error}=await supabase
+.from('comments')
+.select('id,comment,created_at,user_id')
+.eq('video_id',currentVideo.id)
+.order('created_at',{ascending:false});
+
+if(error){
+document.getElementById('commentsList').innerHTML=
+'<div class="empty">Could not load comments.</div>';
+return;
+}
+
+if(!data || !data.length){
+document.getElementById('commentsList').innerHTML=
+'<div class="empty">No comments yet.</div>';
+return;
+}
+
+document.getElementById('commentsList').innerHTML=data.map(c=>`
+<div class="comment">
+<div class="comment-user">ViTube User</div>
+<div class="comment-text">${escapeHTML(c.comment)}</div>
+</div>
+`).join('');
+}
+
+function escapeHTML(value){
+return String(value)
+.replace(/&/g,'&amp;')
+.replace(/</g,'&lt;')
+.replace(/>/g,'&gt;')
+.replace(/"/g,'&quot;')
+.replace(/'/g,'&#039;');
+}
+
+/* =========================================================
+   SHARE
+   ========================================================= */
+
+async function shareVideo(){
+
+const title=document.getElementById('watchTitle').textContent;
+const url=window.location.href;
+
+if(navigator.share){
+
+try{
+await navigator.share({
+title:title,
+text:'Watch this video on ViTube',
+url:url
+});
+}catch(e){}
+
+}else{
+
+await copyText(url);
+toast('Video link copied.');
+}
+}
+
+async function copyVideoLink(){
+
+await copyText(window.location.href);
+toast('Video link copied.');
+}
+
+async function copyText(text){
+
+try{
+await navigator.clipboard.writeText(text);
+}catch(e){
+
+const area=document.createElement('textarea');
+area.value=text;
+document.body.appendChild(area);
+area.select();
+document.execCommand('copy');
+area.remove();
+
+}
+}
+
+function showMore(){
+toast('More video options will be added soon.');
+}
+
+/* =========================================================
+   UPLOAD
+   ========================================================= */
+
+async function uploadVideo(){
+
+if(!currentUser){
+openLogin();
+return;
+}
+
+if(!supabase){
+toast('Supabase is not connected.');
+return;
+}
+
+const title=document.getElementById('uploadTitle').value.trim();
+const description=document.getElementById('uploadDescription').value.trim();
+const category=document.getElementById('uploadCategory').value;
+const file=document.getElementById('videoFile').files[0];
+
+if(!title || !file){
+toast('Enter a title and select a video.');
+return;
+}
+
+const {data:channel,error:channelError}=await supabase
+.from('channels')
+.select('*')
+.eq('owner_id',currentUser.id)
+.eq('is_default',true)
+.maybeSingle();
+
+if(channelError){
+toast(channelError.message);
+return;
+}
+
+let channelData=channel;
+
+if(!channelData){
+
+const base=
+(currentUser.user_metadata?.display_name ||
+'vitubeuser')
+.toLowerCase()
+.replace(/[^a-z0-9]+/g,'')
+.slice(0,20) || 'vitubeuser';
+
+const handle='@'+base+'_'+currentUser.id.slice(0,6);
+
+const {data:newChannel,error:newChannelError}=await supabase
+.from('channels')
+.insert({
+owner_id:currentUser.id,
+name:currentUser.user_metadata?.display_name || 'ViTube Creator',
+handle:handle,
+description:'',
+is_default:true
+})
+.select()
+.single();
+
+if(newChannelError){
+toast(newChannelError.message);
+return;
+}
+
+channelData=newChannel;
+}
+
+toast('Uploading video...');
+
+const fileName=
+currentUser.id+'/'+Date.now()+'_'+
+file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+
+const {error:uploadError}=await supabase
+.storage
+.from('videos')
+.upload(fileName,file,{
+cacheControl:'3600',
+upsert:false,
+contentType:file.type
+});
+
+if(uploadError){
+toast(uploadError.message);
+return;
+}
+
+const {data:urlData}=supabase
+.storage
+.from('videos')
+.getPublicUrl(fileName);
+
+const {error:videoError}=await supabase
+.from('videos')
+.insert({
+channel_id:channelData.id,
+owner_id:currentUser.id,
+title:title,
+description:description,
+category:category,
+video_url:urlData.publicUrl
+});
+
+if(videoError){
+toast(videoError.message);
+return;
+}
+
+document.getElementById('uploadTitle').value='';
+document.getElementById('uploadDescription').value='';
+document.getElementById('videoFile').value='';
+
+closeModal('uploadModal');
+toast('Video uploaded successfully.');
+
+await loadVideos();
+}
+
+/* =========================================================
+   LOAD VIDEOS
+   ========================================================= */
+
+async function loadVideos(){
+
+if(!supabase)return;
+
+const {data,error}=await supabase
+.from('videos')
+.select('*,channels(name,handle)')
+.order('created_at',{ascending:false})
+.limit(30);
+
+if(error)return;
+
+const container=document.getElementById('databaseVideos');
+
+if(!data || !data.length){
+container.innerHTML='';
+return;
+}
+
+const filtered=currentCategory==='All'
+?data
+:data.filter(v=>v.category===currentCategory);
+
+container.innerHTML=`
+<h2 class="section-title">Latest videos</h2>
+<div class="video-grid">
+${filtered.map(video=>`
+<div class="video-card" onclick='openRealVideo(${JSON.stringify(video).replace(/'/g,"&#39;")})'>
+<div class="thumb">▶️</div>
+<div class="video-title">${escapeHTML(video.title)}</div>
+<div class="video-meta">
+${escapeHTML(video.channels?.name||'ViTube Creator')}
+ • ${escapeHTML(video.category||'Other')}
+</div>
+</div>
+`).join('')}
+</div>`;
+}
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+async function searchVideos(){
+
+const query=document.getElementById('searchInput').value.trim().toLowerCase();
+
+if(!query){
+goHome();
+return;
+}
+
+if(!supabase){
+toast('Search demo: connect Supabase for uploaded videos.');
+return;
+}
+
+const {data,error}=await supabase
+.from('videos')
+.select('*,channels(name,handle)')
+.ilike('title','%'+query+'%')
+.order('created_at',{ascending:false})
+.limit(30);
+
+if(error){
+toast(error.message);
+return;
+}
+
+document.getElementById('homePage').style.display='block';
+document.getElementById('watchPage').style.display='none';
+
+const container=document.getElementById('databaseVideos');
+
+if(!data || !data.length){
+container.innerHTML=
+'<h2 class="section-title">Search results</h2><div class="empty">No videos found.</div>';
+return;
+}
+
+container.innerHTML=`
+<h2 class="section-title">Search results for "${escapeHTML(query)}"</h2>
+<div class="video-grid">
+${data.map(video=>`
+<div class="video-card"
+onclick='openRealVideo(${JSON.stringify(video).replace(/'/g,"&#39;")})'>
+<div class="thumb">▶️</div>
+<div class="video-title">${escapeHTML(video.title)}</div>
+<div class="video-meta">
+${escapeHTML(video.channels?.name||'ViTube Creator')}
+</div>
+</div>
+`).join('')}
+</div>`;
+}
+
+/* =========================================================
+   CATEGORY
+   ========================================================= */
+
+function filterCategory(category,button){
+
+currentCategory=category;
+
+document.querySelectorAll('.chip')
+.forEach(x=>x.classList.remove('active'));
+
+button.classList.add('active');
+
+loadVideos();
+}
+
+/* =========================================================
+   NOTIFICATIONS
+   ========================================================= */
+
+function showNotifications(){
+
+if(!currentUser){
+openLogin();
+return;
+}
+
+toast('You have no new notifications.');
+}
+
+/* =========================================================
+   AUTH STATE
+   ========================================================= */
+
+async function initializeApp(){
+
+if(!supabase){
+updateHeader();
+return;
+}
+
+const {data}=await supabase.auth.getSession();
+
+currentUser=data.session?.user || null;
+
+updateHeader();
+
+if(currentUser){
+await ensureProfile();
+}
+
+supabase.auth.onAuthStateChange(async(event,session)=>{
+
+currentUser=session?.user || null;
+updateHeader();
+
+if(currentUser && event==='SIGNED_IN'){
+await ensureProfile();
+}
+
+});
+
+await loadVideos();
+}
+
+initializeApp();
 </script>
-
 
 </body>
 </html>
