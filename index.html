@@ -940,65 +940,8 @@ function searchVideos(){
 }
 
 </script>
-function subscribeChannel(channelId){
-
-const button = document.querySelector('.subscribe-btn');
-
-if(!button) return;
-
-if(button.classList.contains('subscribed')){
-
-button.classList.remove('subscribed');
-button.textContent = 'Subscribe';
-
-}else{
-
-button.classList.add('subscribed');
-button.textContent = 'Subscribed';
-
-}
-
-}
 
 
-function openModal(id){
-
-document.getElementById(id).classList.add('show');
-
-}
-
-
-function closeModal(id){
-
-document.getElementById(id).classList.remove('show');
-
-}
-
-
-function searchVideos(){
-
-const q =
-document.getElementById('search')
-.value
-.trim()
-.toLowerCase();
-
-document
-.querySelectorAll('#videos .card')
-.forEach(c => {
-
-c.style.display =
-(!q || c.innerText.toLowerCase().includes(q))
-?
-'block'
-:
-'none';
-
-});
-
-}
-
-</script>
 <!-- SUPABASE LIBRARY -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
