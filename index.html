@@ -628,10 +628,21 @@ function openModal(id){
 document.getElementById(id).style.display='flex';
 }
 
-function toggleProfileMenu(){
-const el=document.getElementById('profileMenu');
-el.style.display=el.style.display==='block'?'none':'block';
+functifunction toggleProfileMenu(){
+  const el = document.getElementById('profileMenu');
+
+  if(!el){
+    alert('Profile menu not found');
+    return;
+  }
+
+  if(el.style.display === 'block'){
+    el.style.display = 'none';
+  }else{
+    el.style.display = 'block';
+  }
 }
+
 
 function toggleSidebar(){
 document.getElementById('sidebar').style.display=
