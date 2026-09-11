@@ -1,38 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-
-<title>ViTube</title>
+<title>ViTube — Global Video Platform</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
-*{
- box-sizing:border-box;
- margin:0;
- padding:0;
-}
-
+*{box-sizing:border-box}
 body{
+ margin:0;
  font-family:Arial,Helvetica,sans-serif;
  background:#fff;
  color:#111;
 }
-
-button{
- cursor:pointer;
-}
+button,input{font:inherit}
+button{cursor:pointer}
 
 .header{
  height:64px;
  display:flex;
  align-items:center;
  gap:12px;
- padding:0 16px;
+ padding:8px 14px;
  border-bottom:1px solid #ddd;
  position:sticky;
  top:0;
@@ -40,95 +31,63 @@ button{
  z-index:1000;
 }
 
-.logo{
- color:#e60023;
- font-size:27px;
- font-weight:800;
- cursor:pointer;
+.menu-btn{
+ border:0;
+ background:none;
+ font-size:28px;
 }
 
-.menu{
+.logo{
+ font-size:28px;
+ font-weight:800;
+ color:#e60023;
+ cursor:pointer;
+ white-space:nowrap;
+}
+
+.search-box{
+ display:flex;
+ flex:1;
+ max-width:650px;
+ margin:auto;
+}
+
+.search-box input{
+ width:100%;
+ height:44px;
+ border:1px solid #ccc;
+ border-radius:24px 0 0 24px;
+ padding:0 18px;
+ outline:none;
+}
+
+.search-box button{
+ width:60px;
+ border:1px solid #ccc;
+ border-left:0;
+ border-radius:0 24px 24px 0;
+ background:#f5f5f5;
+}
+
+.header-right{
+ display:flex;
+ align-items:center;
+ gap:8px;
+}
+
+.icon-btn,.avatar{
  border:0;
  background:none;
  font-size:23px;
 }
 
-.search{
- flex:1;
- max-width:650px;
- margin:auto;
- display:flex;
-}
-
-.search input{
- flex:1;
- height:42px;
- border:1px solid #ccc;
- border-radius:22px 0 0 22px;
- padding:0 16px;
- font-size:15px;
-}
-
-.search button{
- width:55px;
- border:1px solid #ccc;
- border-left:0;
- border-radius:0 22px 22px 0;
-}
-
-.head-actions{
- display:flex;
- align-items:center;
- gap:5px;
-}
-
-.head-btn{
- border:0;
- background:none;
- font-size:21px;
- padding:8px;
-}
-
 .avatar{
- width:38px;
- height:38px;
- border:0;
+ width:42px;
+ height:42px;
  border-radius:50%;
  background:#e60023;
- color:white;
+ color:#fff;
  font-weight:bold;
-}
-
-.sidebar{
- position:fixed;
- top:64px;
- left:-260px;
- width:245px;
- height:calc(100vh - 64px);
- background:white;
- border-right:1px solid #ddd;
- padding:15px;
- z-index:900;
- transition:.25s;
-}
-
-.sidebar.open{
- left:0;
-}
-
-.sidebar button{
- width:100%;
- padding:13px;
- border:0;
- background:white;
- text-align:left;
- border-radius:8px;
- font-size:15px;
- margin-bottom:5px;
-}
-
-.sidebar button:hover{
- background:#f2f2f2;
 }
 
 .profile-menu{
@@ -137,74 +96,89 @@ button{
  right:12px;
  top:58px;
  width:230px;
- background:white;
+ background:#fff;
  border:1px solid #ddd;
  border-radius:12px;
+ box-shadow:0 8px 30px rgba(0,0,0,.18);
  padding:8px;
- box-shadow:0 8px 30px rgba(0,0,0,.15);
  z-index:2000;
 }
 
 .profile-menu button{
  width:100%;
- border:0;
- background:white;
  text-align:left;
- padding:12px;
+ border:0;
+ background:#fff;
+ padding:13px;
  border-radius:8px;
 }
 
 .profile-menu button:hover{
+ background:#f3f3f3;
+}
+
+.layout{
+ display:flex;
+}
+
+.sidebar{
+ width:230px;
+ min-height:calc(100vh - 64px);
+ border-right:1px solid #eee;
+ padding:14px;
+ position:fixed;
+ left:0;
+ top:64px;
+ background:#fff;
+ z-index:900;
+}
+
+.sidebar button{
+ display:block;
+ width:100%;
+ border:0;
+ background:#fff;
+ text-align:left;
+ padding:14px;
+ border-radius:9px;
+ margin-bottom:4px;
+}
+
+.sidebar button:hover{
  background:#f2f2f2;
 }
 
-.container{
- max-width:1400px;
- margin:auto;
+.main{
+ margin-left:230px;
+ width:calc(100% - 230px);
  padding:20px;
 }
 
-.hero{
- background:#111;
- color:white;
- border-radius:15px;
- padding:35px;
- margin-bottom:25px;
+.page-title{
+ font-size:25px;
+ margin:5px 0 20px;
 }
 
-.hero h1{
- font-size:34px;
- margin-bottom:10px;
-}
-
-.hero p{
- color:#ddd;
-}
-
-.title{
- font-size:23px;
- margin:22px 0 15px;
-}
-
-.grid{
+.video-grid{
  display:grid;
- grid-template-columns:repeat(4,1fr);
- gap:20px;
+ grid-template-columns:repeat(3,1fr);
+ gap:24px 18px;
 }
 
-.card{
+.video-card{
  cursor:pointer;
 }
 
 .thumb{
  width:100%;
  aspect-ratio:16/9;
- background:#eee;
- border-radius:12px;
+ background:#ddd;
+ border-radius:10px;
  overflow:hidden;
  display:flex;
  align-items:center;
  justify-content:center;
+ font-size:55px;
 }
 
 .thumb img{
@@ -213,150 +187,170 @@ button{
  object-fit:cover;
 }
 
-.demo-thumb{
- font-size:55px;
+.video-info{
+ display:flex;
+ gap:10px;
+ padding-top:10px;
 }
 
-.card-title{
- font-size:16px;
+.channel-mini{
+ width:38px;
+ height:38px;
+ border-radius:50%;
+ background:#e60023;
+ color:#fff;
+ display:flex;
+ align-items:center;
+ justify-content:center;
  font-weight:bold;
- margin-top:8px;
- line-height:1.35;
+ flex:none;
 }
 
-.meta{
+.video-title{
+ font-weight:700;
+ line-height:1.3;
+}
+
+.video-meta{
  color:#666;
  font-size:13px;
  margin-top:5px;
 }
 
 .watch{
- max-width:1050px;
+ max-width:1000px;
  margin:auto;
 }
 
 .player{
  width:100%;
  aspect-ratio:16/9;
- background:#000;
+ background:#111;
  border-radius:12px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ color:#fff;
  overflow:hidden;
 }
 
 .player video{
  width:100%;
  height:100%;
+ object-fit:contain;
+}
+
+.demo-player{
+ width:100%;
+ height:100%;
+ display:flex;
+ flex-direction:column;
+ justify-content:center;
+ align-items:center;
+ gap:10px;
+}
+
+.demo-player .big-icon{
+ font-size:90px;
 }
 
 .watch-title{
  font-size:24px;
- margin:18px 0;
+ font-weight:700;
+ margin:18px 0 10px;
 }
 
 .channel-row{
  display:flex;
  align-items:center;
- gap:12px;
+ justify-content:space-between;
+ gap:10px;
  padding:10px 0;
 }
 
+.channel-left{
+ display:flex;
+ align-items:center;
+ gap:10px;
+}
+
 .channel-avatar{
- width:48px;
- height:48px;
+ width:45px;
+ height:45px;
  border-radius:50%;
- background:#ddd;
+ background:#e60023;
+ color:white;
  display:flex;
  align-items:center;
  justify-content:center;
  font-weight:bold;
- overflow:hidden;
-}
-
-.channel-avatar img{
- width:100%;
- height:100%;
- object-fit:cover;
-}
-
-.channel-info{
- flex:1;
-}
-
-.channel-name{
- font-weight:bold;
 }
 
 .subscribe{
- background:#111;
- color:white;
  border:0;
- border-radius:22px;
+ background:#e60023;
+ color:#fff;
  padding:11px 18px;
+ border-radius:22px;
  font-weight:bold;
 }
 
-.subscribe.active{
- background:#eee;
- color:#111;
-}
-
-.bell{
- width:42px;
- height:42px;
- border:0;
- border-radius:50%;
- background:#eee;
+.subscribe.subscribed{
+ background:#222;
 }
 
 .actions{
  display:flex;
- flex-wrap:wrap;
  gap:8px;
- border-bottom:1px solid #ddd;
- padding:12px 0 18px;
+ flex-wrap:wrap;
+ margin:12px 0;
 }
 
-.action{
+.action-btn{
  border:0;
  background:#eee;
+ border-radius:22px;
  padding:10px 15px;
- border-radius:20px;
- font-weight:bold;
 }
 
 .description{
- padding:18px 0;
- line-height:1.6;
+ background:#f4f4f4;
+ padding:14px;
+ border-radius:10px;
+ margin:15px 0;
 }
 
 .comments{
- margin-top:20px;
+ margin-top:25px;
 }
 
 .comment-form{
  display:flex;
  gap:8px;
- margin:15px 0;
 }
 
 .comment-form input{
  flex:1;
- padding:13px;
+ padding:12px;
  border:1px solid #ccc;
- border-radius:22px;
+ border-radius:20px;
 }
 
 .comment-form button{
  border:0;
  background:#e60023;
- color:white;
- padding:0 20px;
- border-radius:22px;
+ color:#fff;
+ padding:0 18px;
+ border-radius:20px;
 }
 
 .comment{
+ padding:12px 0;
  border-bottom:1px solid #eee;
- padding:13px 0;
+}
+
+.recommended{
+ margin-top:30px;
 }
 
 .modal-bg{
@@ -364,184 +358,177 @@ button{
  position:fixed;
  inset:0;
  background:rgba(0,0,0,.55);
+ z-index:3000;
  align-items:center;
  justify-content:center;
- z-index:5000;
  padding:20px;
 }
 
 .modal{
+ background:#fff;
  width:100%;
- max-width:450px;
+ max-width:430px;
+ border-radius:15px;
+ padding:22px;
  max-height:90vh;
  overflow:auto;
- background:white;
- border-radius:15px;
- padding:25px;
 }
 
 .modal h2{
- margin-bottom:18px;
+ margin-top:0;
 }
 
-.modal input,
-.modal textarea,
-.modal select{
+.modal input,.modal textarea{
  width:100%;
- padding:13px;
+ padding:12px;
+ margin:7px 0;
  border:1px solid #ccc;
  border-radius:8px;
- margin-bottom:12px;
 }
 
 .primary{
  width:100%;
- padding:13px;
+ padding:12px;
  border:0;
  background:#e60023;
- color:white;
- border-radius:8px;
- font-weight:bold;
-}
-
-.secondary{
- width:100%;
- padding:13px;
- border:0;
- background:#eee;
+ color:#fff;
  border-radius:8px;
  margin-top:8px;
+ font-weight:bold;
 }
 
 .close{
  float:right;
  border:0;
  background:none;
- font-size:24px;
+ font-size:25px;
+}
+
+.hidden{
+ display:none!important;
 }
 
 .empty{
  text-align:center;
- padding:50px;
- color:#777;
+ padding:70px 20px;
+ color:#666;
 }
 
 @media(max-width:900px){
- .grid{
+ .sidebar{display:none}
+ .main{
+  margin-left:0;
+  width:100%;
+  padding:12px;
+ }
+ .video-grid{
   grid-template-columns:repeat(2,1fr);
  }
+ .logo{font-size:23px}
+ .search-box{max-width:none}
 }
 
 @media(max-width:600px){
-
  .header{
-  padding:0 8px;
   gap:6px;
+  padding:8px;
  }
-
- .logo{
-  font-size:21px;
+ .logo{font-size:21px}
+ .search-box input{
+  padding:0 10px;
  }
-
- .container{
-  padding:12px;
+ .search-box button{
+  width:45px;
  }
-
- .grid{
+ .upload-head{display:none}
+ .video-grid{
   grid-template-columns:1fr;
+  gap:22px;
  }
-
- .hero{
-  padding:25px;
- }
-
- .hero h1{
-  font-size:27px;
- }
-
  .watch-title{
-  font-size:20px;
+  font-size:19px;
  }
-
- .search{
-  max-width:none;
+ .player{
+  border-radius:0;
+  margin-left:-12px;
+  width:calc(100% + 24px);
  }
-
- .upload-head{
-  display:none;
- }
-
 }
-
 </style>
 </head>
 
 <body>
 
-
 <header class="header">
 
-<button class="menu" onclick="toggleSidebar()">☰</button>
+<button class="menu-btn" onclick="toggleSidebar()">☰</button>
 
-<div class="logo" onclick="home()">ViTube</div>
+<div class="logo" onclick="goHome()">ViTube</div>
 
-<div class="search">
-
+<div class="search-box">
 <input
  id="searchInput"
  type="search"
  placeholder="Search videos..."
  onkeydown="if(event.key==='Enter')searchVideos()">
-
 <button onclick="searchVideos()">🔍</button>
-
 </div>
 
-<div class="head-actions">
-
-<button class="head-btn upload-head"
- onclick="openUpload()">＋</button>
-
-<button class="head-btn"
- onclick="notifications()">🔔</button>
-
-<button class="avatar"
- id="avatar"
- onclick="toggleProfile()">G</button>
-
+<div class="header-right">
+<button class="icon-btn" onclick="openUpload()">＋</button>
+<button class="icon-btn" onclick="showNotifications()">🔔</button>
+<button class="avatar" id="headerAvatar" onclick="toggleProfileMenu()">G</button>
 </div>
 
 <div class="profile-menu" id="profileMenu">
-
-<button onclick="account()">👤 Account</button>
-
+<button onclick="openAccount()">👤 Account</button>
 <button onclick="openUpload()">⬆️ Upload Video</button>
-
-<button onclick="notifications()">🔔 Notifications</button>
-
-<button onclick="logout()">🚪 Sign out</button>
-
+<button onclick="showNotifications()">🔔 Notifications</button>
+<button onclick="signOutUser()">🚪 Sign out</button>
 </div>
 
 </header>
 
 
+<div class="layout">
+
 <aside class="sidebar" id="sidebar">
 
-<button onclick="home()">🏠 Home</button>
-
-<button onclick="home()">🔥 Trending</button>
-
-<button onclick="home()">🌎 Explore</button>
-
+<button onclick="goHome()">🏠 Home</button>
+<button onclick="goHome()">🔥 Trending</button>
+<button onclick="showSubscriptions()">📺 Subscriptions</button>
 <button onclick="openUpload()">⬆️ Upload</button>
-
-<button onclick="account()">👤 Account</button>
+<button onclick="openLogin()">🔐 Sign in</button>
 
 </aside>
 
 
-<main class="container" id="app"></main>
+<main class="main">
+
+<section id="homePage">
+
+<h1 class="page-title">Recommended videos</h1>
+
+<div id="videoGrid" class="video-grid"></div>
+
+</section>
+
+
+<section id="watchPage" class="hidden">
+
+<div class="watch">
+
+<button onclick="goHome()" class="action-btn">← Back</button>
+
+<div id="watchContent"></div>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
 
 
 <!-- LOGIN -->
@@ -554,26 +541,20 @@ button{
 
 <h2>Sign in to ViTube</h2>
 
-<input
- id="loginEmail"
- type="email"
- placeholder="Gmail / Email">
+<input id="loginEmail" type="email" placeholder="Email">
 
-<input
- id="loginPassword"
- type="password"
- placeholder="Password">
+<input id="loginPassword" type="password" placeholder="Password">
 
-<button class="primary" onclick="login()">
-Sign In
+<button class="primary" onclick="signInUser()">Sign in</button>
+
+<p>
+Don't have an account?
+<button onclick="switchToSignup()" style="border:0;background:none;color:#e60023">
+Create account
 </button>
-
-<button class="secondary" onclick="signupOpen()">
-Create Account
-</button>
+</p>
 
 </div>
-
 </div>
 
 
@@ -585,38 +566,22 @@ Create Account
 
 <button class="close" onclick="closeModal('signupModal')">×</button>
 
-<h2>Create ViTube Account</h2>
+<h2>Create your ViTube account</h2>
 
-<input
- id="signupEmail"
- type="email"
- placeholder="Gmail / Email">
+<input id="signupEmail" type="email" placeholder="Email">
 
-<input
- id="signupPassword"
- type="password"
- placeholder="Password">
+<input id="signupPassword" type="password" placeholder="Password">
 
-<input
- id="signupUsername"
- type="text"
- placeholder="Username">
+<button class="primary" onclick="signUpUser()">Create account</button>
 
-<input
- id="signupName"
- type="text"
- placeholder="Display Name">
-
-<button class="primary" onclick="signup()">
-Create Account
+<p>
+Already have an account?
+<button onclick="switchToLogin()" style="border:0;background:none;color:#e60023">
+Sign in
 </button>
-
-<p style="margin-top:12px;color:#666;font-size:13px">
-After signup, check your Gmail/email and confirm your account.
 </p>
 
 </div>
-
 </div>
 
 
@@ -626,49 +591,15 @@ After signup, check your Gmail/email and confirm your account.
 
 <div class="modal">
 
-<button class="close"
-onclick="closeModal('accountModal')">×</button>
+<button class="close" onclick="closeModal('accountModal')">×</button>
 
-<h2>My ViTube Account</h2>
+<h2>Your Account</h2>
 
-<div id="accountBox"></div>
+<div id="accountData"></div>
 
-</div>
-
-</div>
-
-
-<!-- CHANNEL -->
-
-<div class="modal-bg" id="channelModal">
-
-<div class="modal">
-
-<button class="close"
-onclick="closeModal('channelModal')">×</button>
-
-<h2>Create Channel</h2>
-
-<input
- id="channelName"
- placeholder="Channel name">
-
-<input
- id="channelHandle"
- placeholder="@handle">
-
-<textarea
- id="channelDescription"
- rows="4"
- placeholder="Channel description"></textarea>
-
-<button class="primary"
-onclick="createChannel()">
-Create Channel
-</button>
+<button class="primary" onclick="signOutUser()">Sign out</button>
 
 </div>
-
 </div>
 
 
@@ -678,605 +609,250 @@ Create Channel
 
 <div class="modal">
 
-<button class="close"
-onclick="closeModal('uploadModal')">×</button>
+<button class="close" onclick="closeModal('uploadModal')">×</button>
 
 <h2>Upload Video</h2>
 
-<input
- id="videoTitle"
- placeholder="Video title">
-
-<textarea
- id="videoDescription"
- rows="4"
- placeholder="Description"></textarea>
-
-<select id="channelSelect"></select>
-
-<input
- id="videoFile"
- type="file"
- accept="video/*">
-
-<input
- id="thumbnailFile"
- type="file"
- accept="image/*">
-
-<button class="primary"
-onclick="uploadVideo()">
-Upload Video
-</button>
-
-<p id="uploadStatus"
-style="margin-top:12px;color:#666">
+<p id="uploadNotice">
+Sign in first to upload a video.
 </p>
 
-</div>
+<input id="uploadTitle" placeholder="Video title">
 
+<textarea id="uploadDescription" placeholder="Description"></textarea>
+
+<input id="uploadVideoUrl" placeholder="Video URL">
+
+<button class="primary" onclick="publishVideo()">
+Publish Video
+</button>
+
+</div>
 </div>
 
 
 <script>
 
-
-/* =====================================================
+/* ================================
    SUPABASE CONFIG
-   =====================================================
+   ================================ */
 
-   Replace only the two values below.
+const SUPABASE_URL = 'PASTE_YOUR_SUPABASE_PROJECT_URL_HERE';
+const SUPABASE_PUBLISHABLE_KEY = 'PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE';
 
-   Use your:
-   1. Project URL
-   2. Publishable key
-
-   NEVER put the Supabase Secret Key here.
-   ===================================================== */
-
-const SUPABASE_URL='YOUR_SUPABASE_PROJECT_URL';
-
-const SUPABASE_PUBLISHABLE_KEY='YOUR_SUPABASE_PUBLISHABLE_KEY';
-
-
-let supabase=null;
-let currentUser=null;
-let currentVideo=null;
-
-
-/* =====================================================
-   INITIALIZE
-   ===================================================== */
+let supabaseClient = null;
 
 if(
  SUPABASE_URL &&
  SUPABASE_PUBLISHABLE_KEY &&
- !SUPABASE_URL.includes('YOUR_') &&
- !SUPABASE_PUBLISHABLE_KEY.includes('YOUR_')
+ !SUPABASE_URL.includes('PASTE_') &&
+ !SUPABASE_PUBLISHABLE_KEY.includes('PASTE_')
 ){
-
- supabase=window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY,
-  {
-   auth:{
-    autoRefreshToken:true,
-    persistSession:true,
-    detectSessionInUrl:true
-   }
-  }
- );
-
-}
-
-
-document.addEventListener('DOMContentLoaded',async()=>{
-
- if(supabase){
-
-  const {data}=await supabase.auth.getSession();
-
-  currentUser=data.session?.user || null;
-
-  supabase.auth.onAuthStateChange(
-   (_event,session)=>{
-    currentUser=session?.user || null;
-    updateAvatar();
+ try{
+  supabaseClient = window.supabase.createClient(
+   SUPABASE_URL,
+   SUPABASE_PUBLISHABLE_KEY,
+   {
+    auth:{
+     autoRefreshToken:true,
+     persistSession:true,
+     detectSessionInUrl:true
+    }
    }
   );
-
+ }catch(error){
+  console.error(error);
  }
-
- updateAvatar();
-
- home();
-
-});
-
-
-/* =====================================================
-   HEADER
-   ===================================================== */
-
-function updateAvatar(){
-
- const a=document.getElementById('avatar');
-
- if(currentUser){
-
-  a.textContent=
-   (currentUser.email||'U')
-   .charAt(0)
-   .toUpperCase();
-
- }else{
-
-  a.textContent='G';
-
- }
-
 }
 
 
-function toggleSidebar(){
-
- document
-  .getElementById('sidebar')
-  .classList.toggle('open');
-
-}
-
-
-function toggleProfile(){
-
- const p=document.getElementById('profileMenu');
-
- p.style.display=
-  p.style.display==='block'
-  ? 'none'
-  : 'block';
-
-}
-
-
-/* =====================================================
-   HOME
-   ===================================================== */
-
-async function home(){
-
- currentVideo=null;
-
- document.getElementById('app').innerHTML=`
-
- <section class="hero">
-
-  <h1>Welcome to ViTube</h1>
-
-  <p>
-   Watch, upload and discover videos from around the world.
-  </p>
-
- </section>
-
- <h2 class="title">Recommended Videos</h2>
-
- <div id="videoGrid" class="grid">
-
-  <div class="empty">
-   Loading videos...
-  </div>
-
- </div>
-
- `;
-
- await loadVideos();
-
-}
-
-
-async function loadVideos(){
-
- const box=document.getElementById('videoGrid');
-
- if(!supabase){
-
-  box.innerHTML=demoVideos();
-
-  return;
-
- }
-
- const {data,error}=await supabase
-  .from('videos')
-  .select('*,channels(name,avatar_url)')
-  .order('created_at',{ascending:false});
-
- if(error || !data || !data.length){
-
-  box.innerHTML=demoVideos();
-
-  return;
-
- }
-
- box.innerHTML=data.map(videoCard).join('');
-
-}
-
-
-function videoCard(v){
-
- const channel=v.channels?.name || 'ViTube Creator';
-
- const image=v.thumbnail_url
-  ? `<img src="${esc(v.thumbnail_url)}">`
-  : `<div class="demo-thumb">▶️</div>`;
-
- return `
-
- <article class="card"
-  onclick="openVideo('${v.id}')">
-
-  <div class="thumb">
-   ${image}
-  </div>
-
-  <div class="card-title">
-   ${esc(v.title)}
-  </div>
-
-  <div class="meta">
-   ${esc(channel)} ·
-   ${Number(v.views||0).toLocaleString()} views
-  </div>
-
- </article>
-
- `;
-
-}
-
-
-/* =====================================================
+/* ================================
    DEMO VIDEOS
-   ===================================================== */
+   ================================ */
 
-function demoVideos(){
+const demoVideos = [
 
- const list=[
+{
+ id:'demo1',
+ title:'Amazing World — Discover Our Beautiful Planet',
+ channel:'ViTube World',
+ icon:'🌍',
+ views:'1.2M views',
+ time:'2 days ago',
+ description:'Explore amazing places around our beautiful planet.'
+},
 
-  ['demo1','🌍','Discover The World','ViTube World'],
-  ['demo2','💻','Future Technology','ViTube Tech'],
-  ['demo3','🍔','Amazing Food','ViTube Food'],
-  ['demo4','🌎','Beautiful Planet Earth','ViTube Nature'],
-  ['demo5','🚀','Future Of Space','ViTube Science'],
-  ['demo6','🏙️','Amazing Cities','ViTube Travel'],
-  ['demo7','🎮','Gaming World','ViTube Gaming'],
-  ['demo8','🎵','Music Around The World','ViTube Music']
+{
+ id:'demo2',
+ title:'The Future of Technology Is Here',
+ channel:'ViTube Tech',
+ icon:'💻',
+ views:'845K views',
+ time:'5 days ago',
+ description:'Discover how technology is changing our future.'
+},
 
- ];
+{
+ id:'demo3',
+ title:'Amazing Food Around The World',
+ channel:'ViTube Food',
+ icon:'🍔',
+ views:'623K views',
+ time:'1 week ago',
+ description:'A journey through delicious food from around the world.'
+},
 
- return list.map(v=>`
+{
+ id:'demo4',
+ title:'Earth From Above — Beautiful Places',
+ channel:'ViTube Travel',
+ icon:'🌎',
+ views:'412K views',
+ time:'2 weeks ago',
+ description:'See some of the most beautiful places on Earth.'
+}
 
- <article class="card"
- onclick="demoWatch('${v[0]}')">
+];
 
-  <div class="thumb">
-   <div class="demo-thumb">${v[1]}</div>
+
+let currentUser = null;
+let currentWatchVideo = null;
+let searchResults = demoVideos;
+
+
+/* ================================
+   HOME
+   ================================ */
+
+function renderHome(list = demoVideos){
+
+ const grid = document.getElementById('videoGrid');
+
+ if(!grid) return;
+
+ if(!list.length){
+
+  grid.innerHTML = `
+  <div class="empty">
+   <h2>No videos found</h2>
+   <p>Try another search.</p>
   </div>
+  `;
 
-  <div class="card-title">
-   ${v[2]}
-  </div>
+  return;
+ }
 
-  <div class="meta">
-   ${v[3]} · ViTube
-  </div>
+ grid.innerHTML = list.map(video => `
+
+ <article class="video-card" onclick="openDemoWatch('${video.id}')">
+
+   <div class="thumb">
+     <div>${video.icon}</div>
+   </div>
+
+   <div class="video-info">
+
+     <div class="channel-mini">
+       ${video.channel.charAt(0)}
+     </div>
+
+     <div>
+
+       <div class="video-title">
+         ${escapeHtml(video.title)}
+       </div>
+
+       <div class="video-meta">
+         ${escapeHtml(video.channel)}
+         <br>
+         ${escapeHtml(video.views)} • ${escapeHtml(video.time)}
+       </div>
+
+     </div>
+
+   </div>
 
  </article>
 
  `).join('');
-
 }
 
 
-/* =====================================================
-   REAL VIDEO
-   ===================================================== */
+/* ================================
+   WATCH PAGE
+   ================================ */
 
-async function openVideo(id){
+function openDemoWatch(id){
 
- if(!supabase){
+ const video = demoVideos.find(v => v.id === id);
 
-  demoWatch('demo1');
+ if(!video) return;
 
-  return;
+ currentWatchVideo = video;
 
- }
+ document.getElementById('homePage').classList.add('hidden');
+ document.getElementById('watchPage').classList.remove('hidden');
 
- const {data,error}=await supabase
-  .from('videos')
-  .select(`
-   *,
-   channels(
-    id,
-    name,
-    handle,
-    avatar_url,
-    description
-   )
-  `)
-  .eq('id',id)
-  .single();
+ const content = document.getElementById('watchContent');
 
- if(error || !data){
+ content.innerHTML = `
 
-  alert('Video could not be loaded.');
+ <div class="player">
 
-  return;
+   <div class="demo-player">
 
- }
+     <div class="big-icon">${video.icon}</div>
 
- currentVideo=data;
-
- await supabase
-  .from('videos')
-  .update({
-   views:Number(data.views||0)+1
-  })
-  .eq('id',id);
-
- renderWatch(data);
-
-}
-
-
-/* =====================================================
-   DEMO WATCH PAGE
-   ===================================================== */
-
-function demoWatch(id){
-
- const demos={
-
-  demo1:['🌍','Discover The World','ViTube World'],
-  demo2:['💻','Future Technology','ViTube Tech'],
-  demo3:['🍔','Amazing Food','ViTube Food'],
-  demo4:['🌎','Beautiful Planet Earth','ViTube Nature'],
-  demo5:['🚀','Future Of Space','ViTube Science'],
-  demo6:['🏙️','Amazing Cities','ViTube Travel'],
-  demo7:['🎮','Gaming World','ViTube Gaming'],
-  demo8:['🎵','Music Around The World','ViTube Music']
-
- };
-
- const v=demos[id] || demos.demo1;
-
- document.getElementById('app').innerHTML=`
-
- <div class="watch">
-
-  <div class="player">
-
-   <div style="
-    width:100%;
-    height:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:white;
-    font-size:90px">
-
-    ${v[0]}
+     <div>ViTube Demo Video</div>
 
    </div>
-
-  </div>
-
-  <h1 class="watch-title">
-   ${v[1]}
-  </h1>
-
-  <div class="channel-row">
-
-   <div class="channel-avatar">
-    ${v[0]}
-   </div>
-
-   <div class="channel-info">
-
-    <div class="channel-name">
-     ${v[2]}
-    </div>
-
-    <div class="meta">
-     ViTube Channel
-    </div>
-
-   </div>
-
-   <button
-    class="subscribe"
-    onclick="needLogin()">
-
-    Subscribe
-
-   </button>
-
-   <button
-    class="bell"
-    onclick="needLogin()">
-
-    🔔
-
-   </button>
-
-  </div>
-
-  <div class="actions">
-
-   <button class="action"
-   onclick="needLogin()">
-   👍 Like
-   </button>
-
-   <button class="action">
-   👎 Dislike
-   </button>
-
-   <button class="action"
-   onclick="shareVideo()">
-   ↗ Share
-   </button>
-
-   <button class="action"
-   onclick="copyLink()">
-   🔗 Copy Link
-   </button>
-
-  </div>
-
-  <div class="description">
-
-   Welcome to ViTube.
-   Discover videos from creators around the world.
-
-  </div>
-
-  <div class="comments">
-
-   <h2>Comments</h2>
-
-   <div class="comment-form">
-
-    <input
-    placeholder="Sign in to comment..."
-    onclick="needLogin()">
-
-    <button onclick="needLogin()">
-     Comment
-    </button>
-
-   </div>
-
-  </div>
-
-  <h2 class="title">
-   More videos
-  </h2>
-
-  <div class="grid">
-   ${demoVideos()}
-  </div>
 
  </div>
 
- `;
+ <div class="watch-title">
+   ${escapeHtml(video.title)}
+ </div>
 
-}
+ <div class="channel-row">
 
+   <div class="channel-left">
 
-/* =====================================================
-   REAL WATCH PAGE
-   ===================================================== */
+     <div class="channel-avatar">
+       ${video.channel.charAt(0)}
+     </div>
 
-async function renderWatch(v){
-
- const c=v.channels || {};
-
- document.getElementById('app').innerHTML=`
-
- <div class="watch">
-
-  <div class="player">
-
-   <video
-    controls
-    playsinline
-    src="${esc(v.video_url)}">
-   </video>
-
-  </div>
-
-  <h1 class="watch-title">
-   ${esc(v.title)}
-  </h1>
-
-  <div class="channel-row">
-
-   <div class="channel-avatar">
-
-    ${
-     c.avatar_url
-     ? `<img src="${esc(c.avatar_url)}">`
-     : esc((c.name||'V').charAt(0).toUpperCase())
-    }
-
-   </div>
-
-   <div class="channel-info">
-
-    <div class="channel-name">
-     ${esc(c.name||'ViTube Creator')}
-    </div>
-
-    <div class="meta">
-     ${Number(v.views||0).toLocaleString()} views
-    </div>
+     <strong>${escapeHtml(video.channel)}</strong>
 
    </div>
 
    <button
-    id="subscribeButton"
+    id="subscribeBtn"
     class="subscribe"
-    onclick="subscribe('${v.channel_id}')">
-
+    onclick="subscribeChannel('${video.channel}')">
     Subscribe
-
    </button>
 
-   <button
-    id="bellButton"
-    class="bell"
-    onclick="bell()">
+ </div>
 
-    🔔
+ <div class="actions">
 
-   </button>
+   <button class="action-btn" onclick="likeVideo()">👍 Like</button>
 
-  </div>
+   <button class="action-btn" onclick="dislikeVideo()">👎 Dislike</button>
 
-  <div class="actions">
+   <button class="action-btn" onclick="shareVideo()">↗ Share</button>
 
-   <button class="action"
-   onclick="like('${v.id}',true)">
-   👍 Like
-   </button>
+   <button class="action-btn" onclick="copyVideoLink()">🔗 Copy Link</button>
 
-   <button class="action"
-   onclick="like('${v.id}',false)">
-   👎 Dislike
-   </button>
+ </div>
 
-   <button class="action"
-   onclick="shareVideo()">
-   ↗ Share
-   </button>
+ <div class="description">
 
-   <button class="action"
-   onclick="copyLink()">
-   🔗 Copy Link
-   </button>
+   ${escapeHtml(video.description)}
 
-  </div>
+ </div>
 
-  <div class="description">
-   ${esc(v.description||'')}
-  </div>
-
-  <div class="comments">
+ <div class="comments">
 
    <h2>Comments</h2>
 
@@ -1284,392 +860,340 @@ async function renderWatch(v){
 
     <input
      id="commentInput"
-     placeholder="Write a comment...">
+     placeholder="Add a comment...">
 
-    <button
-     onclick="addComment('${v.id}')">
-     Comment
-    </button>
+    <button onclick="addComment()">Post</button>
 
    </div>
 
-   <div id="commentsBox">
-    Loading comments...
+   <div id="commentList">
+
+    <div class="comment">
+      Be the first to comment.
+    </div>
+
    </div>
 
-  </div>
+ </div>
 
-  <h2 class="title">
-   More videos
-  </h2>
+ <div class="recommended">
 
-  <div id="recommended"
-   class="grid">
-   Loading...
-  </div>
+   <h2>Recommended videos</h2>
+
+   <div id="recommendedGrid" class="video-grid"></div>
 
  </div>
 
  `;
 
- await loadComments(v.id);
+ renderRecommended();
 
- await loadRecommended(v.id);
-
+ window.scrollTo(0,0);
 }
 
 
-/* =====================================================
-   SUBSCRIBE
-   ===================================================== */
+/* ================================
+   RECOMMENDED
+   ================================ */
 
-async function subscribe(channelId){
+function renderRecommended(){
 
- if(!currentUser){
+ const grid = document.getElementById('recommendedGrid');
 
-  needLogin();
+ if(!grid) return;
 
-  return;
+ grid.innerHTML = demoVideos
+ .filter(v => !currentWatchVideo || v.id !== currentWatchVideo.id)
+ .map(video => `
 
- }
+ <article class="video-card"
+ onclick="openDemoWatch('${video.id}')">
 
- const {data}=await supabase
-  .from('channel_followers')
-  .select('*')
-  .eq('channel_id',channelId)
-  .eq('follower_id',currentUser.id)
-  .maybeSingle();
+   <div class="thumb">
+     <div>${video.icon}</div>
+   </div>
 
- if(data){
+   <div class="video-info">
 
-  await supabase
-   .from('channel_followers')
-   .delete()
-   .eq('channel_id',channelId)
-   .eq('follower_id',currentUser.id);
+     <div class="channel-mini">
+       ${video.channel.charAt(0)}
+     </div>
 
- }else{
+     <div>
 
-  await supabase
-   .from('channel_followers')
-   .insert({
-    channel_id:channelId,
-    follower_id:currentUser.id
-   });
+       <div class="video-title">
+         ${escapeHtml(video.title)}
+       </div>
 
- }
+       <div class="video-meta">
+         ${escapeHtml(video.channel)}
+         <br>
+         ${escapeHtml(video.views)}
+       </div>
 
- const b=document.getElementById('subscribeButton');
+     </div>
 
- if(b){
+   </div>
 
-  b.textContent=data
-   ? 'Subscribe'
-   : 'Subscribed';
-
-  b.classList.toggle(
-   'active',
-   !data
-  );
-
- }
-
-}
-
-
-/* =====================================================
-   BELL
-   ===================================================== */
-
-function bell(){
-
- if(!currentUser){
-
-  needLogin();
-
-  return;
-
- }
-
- const b=document.getElementById('bellButton');
-
- b.textContent=
-  b.textContent==='🔔'
-  ? '🔕'
-  : '🔔';
-
-}
-
-
-/* =====================================================
-   LIKE
-   ===================================================== */
-
-async function like(videoId,isLike){
-
- if(!currentUser){
-
-  needLogin();
-
-  return;
-
- }
-
- const {data}=await supabase
-  .from('video_likes')
-  .select('*')
-  .eq('video_id',videoId)
-  .eq('user_id',currentUser.id)
-  .maybeSingle();
-
- if(data){
-
-  if(data.is_like===isLike){
-
-   await supabase
-    .from('video_likes')
-    .delete()
-    .eq('video_id',videoId)
-    .eq('user_id',currentUser.id);
-
-  }else{
-
-   await supabase
-    .from('video_likes')
-    .update({is_like:isLike})
-    .eq('video_id',videoId)
-    .eq('user_id',currentUser.id);
-
-  }
-
- }else{
-
-  await supabase
-   .from('video_likes')
-   .insert({
-    video_id:videoId,
-    user_id:currentUser.id,
-    is_like:isLike
-   });
-
- }
-
-}
-
-
-/* =====================================================
-   COMMENTS
-   ===================================================== */
-
-async function loadComments(videoId){
-
- const box=document.getElementById('commentsBox');
-
- const {data,error}=await supabase
-  .from('comments')
-  .select('*')
-  .eq('video_id',videoId)
-  .order('created_at',{ascending:false});
-
- if(error){
-
-  box.innerHTML='Comments unavailable.';
-
-  return;
-
- }
-
- if(!data.length){
-
-  box.innerHTML='<p>No comments yet.</p>';
-
-  return;
-
- }
-
- box.innerHTML=data.map(c=>`
-
-  <div class="comment">
-   ${esc(c.text)}
-  </div>
+ </article>
 
  `).join('');
-
 }
 
 
-async function addComment(videoId){
+/* ================================
+   HOME
+   ================================ */
 
- if(!currentUser){
+function goHome(){
 
-  needLogin();
+ document.getElementById('watchPage').classList.add('hidden');
+ document.getElementById('homePage').classList.remove('hidden');
 
-  return;
+ renderHome();
 
- }
-
- const input=document.getElementById('commentInput');
-
- const text=input.value.trim();
-
- if(!text)return;
-
- const {error}=await supabase
-  .from('comments')
-  .insert({
-   video_id:videoId,
-   user_id:currentUser.id,
-   text:text
-  });
-
- if(error){
-
-  alert(error.message);
-
-  return;
-
- }
-
- input.value='';
-
- loadComments(videoId);
-
+ window.scrollTo(0,0);
 }
 
 
-/* =====================================================
-   RECOMMENDED
-   ===================================================== */
-
-async function loadRecommended(currentId){
-
- const box=document.getElementById('recommended');
-
- const {data}=await supabase
-  .from('videos')
-  .select('*,channels(name,avatar_url)')
-  .neq('id',currentId)
-  .order('created_at',{ascending:false})
-  .limit(12);
-
- if(!data || !data.length){
-
-  box.innerHTML=demoVideos();
-
-  return;
-
- }
-
- box.innerHTML=data.map(videoCard).join('');
-
-}
-
-
-/* =====================================================
+/* ================================
    SEARCH
-   ===================================================== */
+   ================================ */
 
-async function searchVideos(){
+function searchVideos(){
 
- const q=document
-  .getElementById('searchInput')
-  .value
-  .trim();
+ const q = document
+ .getElementById('searchInput')
+ .value
+ .trim()
+ .toLowerCase();
 
  if(!q){
 
-  home();
+  renderHome(demoVideos);
+  return;
+ }
+
+ searchResults = demoVideos.filter(video =>
+   video.title.toLowerCase().includes(q) ||
+   video.channel.toLowerCase().includes(q)
+ );
+
+ document.getElementById('watchPage').classList.add('hidden');
+ document.getElementById('homePage').classList.remove('hidden');
+
+ renderHome(searchResults);
+}
+
+
+/* ================================
+   SUBSCRIBE
+   ================================ */
+
+async function subscribeChannel(channel){
+
+ if(!currentUser){
+
+  openLogin();
 
   return;
+ }
+
+ const button = document.getElementById('subscribeBtn');
+
+ if(button){
+
+  button.textContent = 'Subscribed';
+  button.classList.add('subscribed');
 
  }
 
- document.getElementById('app').innerHTML=`
-
- <h2 class="title">
-  Search results for "${esc(q)}"
- </h2>
-
- <div id="searchResults"
- class="grid">
-  Searching...
- </div>
-
- `;
-
- const box=document.getElementById('searchResults');
-
- if(!supabase){
-
-  box.innerHTML=demoVideos();
-
-  return;
-
- }
-
- const {data}=await supabase
-  .from('videos')
-  .select('*,channels(name,avatar_url)')
-  .ilike('title',`%${q}%`)
-  .order('created_at',{ascending:false});
-
- if(!data || !data.length){
-
-  box.innerHTML=
-   '<div class="empty">No videos found.</div>';
-
-  return;
-
- }
-
- box.innerHTML=data.map(videoCard).join('');
+ alert('Subscribed to ' + channel);
 
 }
 
 
-/* =====================================================
-   SIGNUP
-   ===================================================== */
+/* ================================
+   LIKE
+   ================================ */
 
-async function signup(){
+function likeVideo(){
 
- const email=document
-  .getElementById('signupEmail')
-  .value.trim();
+ if(!currentUser){
 
- const password=document
-  .getElementById('signupPassword')
-  .value;
-
- const username=document
-  .getElementById('signupUsername')
-  .value.trim();
-
- const name=document
-  .getElementById('signupName')
-  .value.trim();
-
- if(!email || !password || !username){
-
-  alert('Please fill all required fields.');
-
+  openLogin();
   return;
 
  }
 
- const {data,error}=await supabase.auth.signUp({
+ alert('Liked 👍');
 
-  email:email,
+}
 
-  password:password,
 
-  options:{
-   data:{
-    username:username,
-    display_name:name || username
-   }
-  }
+/* ================================
+   DISLIKE
+   ================================ */
 
+function dislikeVideo(){
+
+ if(!currentUser){
+
+  openLogin();
+  return;
+
+ }
+
+ alert('Disliked');
+
+}
+
+
+/* ================================
+   SHARE
+   ================================ */
+
+async function shareVideo(){
+
+ const url = window.location.href;
+
+ if(navigator.share){
+
+  try{
+
+   await navigator.share({
+    title:currentWatchVideo?.title || 'ViTube',
+    url:url
+   });
+
+  }catch(e){}
+
+ }else{
+
+  await copyText(url);
+
+  alert('Link copied');
+
+ }
+
+}
+
+
+/* ================================
+   COPY LINK
+   ================================ */
+
+async function copyVideoLink(){
+
+ await copyText(window.location.href);
+
+ alert('Video link copied');
+
+}
+
+
+/* ================================
+   COMMENT
+   ================================ */
+
+function addComment(){
+
+ if(!currentUser){
+
+  openLogin();
+  return;
+
+ }
+
+ const input = document.getElementById('commentInput');
+
+ if(!input) return;
+
+ const text = input.value.trim();
+
+ if(!text) return;
+
+ const list = document.getElementById('commentList');
+
+ const comment = document.createElement('div');
+
+ comment.className='comment';
+
+ comment.textContent = text;
+
+ list.prepend(comment);
+
+ input.value='';
+
+}
+
+
+/* ================================
+   LOGIN
+   ================================ */
+
+function openLogin(){
+
+ closeAllModals();
+
+ document.getElementById('loginModal').style.display='flex';
+
+}
+
+function switchToSignup(){
+
+ closeAllModals();
+
+ document.getElementById('signupModal').style.display='flex';
+
+}
+
+function switchToLogin(){
+
+ closeAllModals();
+
+ document.getElementById('loginModal').style.display='flex';
+
+}
+
+
+/* ================================
+   SIGN UP
+   ================================ */
+
+async function signUpUser(){
+
+ const email =
+ document.getElementById('signupEmail').value.trim();
+
+ const password =
+ document.getElementById('signupPassword').value;
+
+ if(!email || !password){
+
+  alert('Please enter email and password.');
+
+  return;
+ }
+
+ if(password.length < 6){
+
+  alert('Password must be at least 6 characters.');
+
+  return;
+ }
+
+ if(!supabaseClient){
+
+  alert('Supabase is not connected yet.');
+
+  return;
+ }
+
+ const {data,error} =
+ await supabaseClient.auth.signUp({
+  email,
+  password
  });
 
  if(error){
@@ -1677,476 +1201,196 @@ async function signup(){
   alert(error.message);
 
   return;
-
  }
-
- if(data.user){
-
-  await supabase
-   .from('profiles')
-   .upsert({
-    id:data.user.id,
-    username:username,
-    display_name:name || username,
-    language:'en'
-   });
-
- }
-
- closeModal('signupModal');
 
  alert(
-  'Account created. Check your Gmail/email and confirm your account.'
+  'Account created. Please check your email and confirm your account.'
  );
+
+ closeAllModals();
 
 }
 
 
-/* =====================================================
-   LOGIN
-   ===================================================== */
+/* ================================
+   SIGN IN
+   ================================ */
 
-async function login(){
+async function signInUser(){
 
- const email=document
-  .getElementById('loginEmail')
-  .value
-  .trim();
+ const email =
+ document.getElementById('loginEmail').value.trim();
 
- const password=document
-  .getElementById('loginPassword')
-  .value;
+ const password =
+ document.getElementById('loginPassword').value;
 
- const {error}=await supabase.auth
-  .signInWithPassword({
-   email:email,
-   password:password
-  });
+ if(!email || !password){
+
+  alert('Please enter email and password.');
+
+  return;
+ }
+
+ if(!supabaseClient){
+
+  alert('Supabase is not connected yet.');
+
+  return;
+ }
+
+ const {data,error} =
+ await supabaseClient.auth.signInWithPassword({
+  email,
+  password
+ });
 
  if(error){
 
   alert(error.message);
 
   return;
+ }
+
+ currentUser = data.user;
+
+ updateHeader();
+
+ closeAllModals();
+
+ alert('Signed in successfully!');
+
+}
+
+
+/* ================================
+   SIGN OUT
+   ================================ */
+
+async function signOutUser(){
+
+ if(supabaseClient){
+
+  await supabaseClient.auth.signOut();
 
  }
 
- closeModal('loginModal');
+ currentUser=null;
 
- updateAvatar();
+ updateHeader();
 
-}
-
-
-/* =====================================================
-   LOGOUT
-   ===================================================== */
-
-async function logout(){
-
- await supabase.auth.signOut();
-
- document.getElementById('profileMenu').style.display='none';
-
- home();
+ closeAllModals();
 
 }
 
 
-/* =====================================================
+/* ================================
    ACCOUNT
-   ===================================================== */
+   ================================ */
 
-async function account(){
+function openAccount(){
 
- document.getElementById('profileMenu').style.display='none';
+ closeProfileMenu();
 
  if(!currentUser){
 
-  needLogin();
+  openLogin();
 
   return;
-
  }
 
- document.getElementById('accountBox').innerHTML=`
+ document.getElementById('accountData').innerHTML = `
 
- <p>
-  <strong>Email:</strong>
-  ${esc(currentUser.email||'')}
- </p>
+ <p><strong>Email:</strong></p>
 
- <button
-  class="primary"
-  style="margin-top:20px"
-  onclick="openChannel()">
+ <p>${escapeHtml(currentUser.email || '')}</p>
 
-  Create Channel
-
- </button>
-
- <button
-  class="secondary"
-  onclick="openUpload()">
-
-  Upload Video
-
- </button>
+ <p><strong>Status:</strong> Signed in</p>
 
  `;
 
- openModal('accountModal');
+ document.getElementById('accountModal').style.display='flex';
 
 }
 
 
-/* =====================================================
-   CHANNEL CREATE
-   ===================================================== */
-
-function openChannel(){
-
- closeModal('accountModal');
-
- openModal('channelModal');
-
-}
-
-
-async function createChannel(){
-
- if(!currentUser){
-
-  needLogin();
-
-  return;
-
- }
-
- const name=document
-  .getElementById('channelName')
-  .value
-  .trim();
-
- let handle=document
-  .getElementById('channelHandle')
-  .value
-  .trim();
-
- const description=document
-  .getElementById('channelDescription')
-  .value
-  .trim();
-
- if(!name || !handle){
-
-  alert('Channel name and handle are required.');
-
-  return;
-
- }
-
- handle=handle.replace(/^@/,'');
-
- const {error}=await supabase
-  .from('channels')
-  .insert({
-   owner_id:currentUser.id,
-   name:name,
-   handle:'@'+handle,
-   description:description,
-   is_default:true
-  });
-
- if(error){
-
-  alert(error.message);
-
-  return;
-
- }
-
- closeModal('channelModal');
-
- alert('Channel created successfully.');
-
-}
-
-
-/* =====================================================
+/* ================================
    UPLOAD
-   ===================================================== */
+   ================================ */
 
-async function openUpload(){
+function openUpload(){
 
- document.getElementById('profileMenu').style.display='none';
-
- if(!currentUser){
-
-  needLogin();
-
-  return;
-
- }
-
- await loadChannels();
-
- openModal('uploadModal');
-
-}
-
-
-async function loadChannels(){
-
- const select=document.getElementById('channelSelect');
-
- const {data,error}=await supabase
-  .from('channels')
-  .select('*')
-  .eq('owner_id',currentUser.id)
-  .order('created_at',{ascending:true});
-
- if(error){
-
-  alert(error.message);
-
-  return;
-
- }
-
- if(!data.length){
-
-  select.innerHTML=
-   '<option value="">No channel yet</option>';
-
-  setTimeout(()=>{
-
-   closeModal('uploadModal');
-
-   openChannel();
-
-  },300);
-
-  return;
-
- }
-
- select.innerHTML=data.map(c=>`
-
-  <option value="${c.id}">
-   ${esc(c.name)}
-  </option>
-
- `).join('');
-
-}
-
-
-/* =====================================================
-   UPLOAD VIDEO
-   ===================================================== */
-
-async function uploadVideo(){
+ closeProfileMenu();
 
  if(!currentUser){
 
-  needLogin();
+  openLogin();
 
   return;
-
  }
 
- const title=document
-  .getElementById('videoTitle')
-  .value
-  .trim();
+ document.getElementById('uploadNotice').textContent =
+ 'Upload section is ready. Storage connection will be added next.';
 
- const description=document
-  .getElementById('videoDescription')
-  .value
-  .trim();
-
- const channelId=document
-  .getElementById('channelSelect')
-  .value;
-
- const video=document
-  .getElementById('videoFile')
-  .files[0];
-
- const thumb=document
-  .getElementById('thumbnailFile')
-  .files[0];
-
- const status=document
-  .getElementById('uploadStatus');
-
- if(!title || !channelId || !video){
-
-  alert('Title, channel and video are required.');
-
-  return;
-
- }
-
- status.textContent='Uploading video...';
-
- const videoPath=
-  currentUser.id+'/'+Date.now()+'-'+safe(video.name);
-
- const upload=await supabase.storage
-  .from('videos')
-  .upload(videoPath,video);
-
- if(upload.error){
-
-  alert(upload.error.message);
-
-  return;
-
- }
-
- const videoUrl=supabase.storage
-  .from('videos')
-  .getPublicUrl(videoPath)
-  .data
-  .publicUrl;
-
- let thumbnailUrl='';
-
- if(thumb){
-
-  status.textContent='Uploading thumbnail...';
-
-  const thumbPath=
-   currentUser.id+'/'+Date.now()+'-'+safe(thumb.name);
-
-  const tu=await supabase.storage
-   .from('thumbnails')
-   .upload(thumbPath,thumb);
-
-  if(!tu.error){
-
-   thumbnailUrl=supabase.storage
-    .from('thumbnails')
-    .getPublicUrl(thumbPath)
-    .data
-    .publicUrl;
-
-  }
-
- }
-
- status.textContent='Saving video...';
-
- const {error}=await supabase
-  .from('videos')
-  .insert({
-   owner_id:currentUser.id,
-   channel_id:channelId,
-   title:title,
-   description:description,
-   video_url:videoUrl,
-   thumbnail_url:thumbnailUrl
-  });
-
- if(error){
-
-  alert(error.message);
-
-  return;
-
- }
-
- status.textContent='Upload successful!';
-
- setTimeout(()=>{
-
-  closeModal('uploadModal');
-
-  home();
-
- },1000);
+ document.getElementById('uploadModal').style.display='flex';
 
 }
 
 
-/* =====================================================
-   SHARE
-   ===================================================== */
+async function publishVideo(){
 
-async function shareVideo(){
+ if(!currentUser){
 
- if(navigator.share){
-
-  await navigator.share({
-   title:currentVideo?.title || 'ViTube',
-   url:window.location.href
-  });
-
- }else{
-
-  copyLink();
+  openLogin();
+  return;
 
  }
 
-}
+ const title =
+ document.getElementById('uploadTitle').value.trim();
 
+ const description =
+ document.getElementById('uploadDescription').value.trim();
 
-async function copyLink(){
+ const videoUrl =
+ document.getElementById('uploadVideoUrl').value.trim();
 
- await navigator.clipboard.writeText(
-  window.location.href
+ if(!title || !videoUrl){
+
+  alert('Please enter video title and video URL.');
+
+  return;
+ }
+
+ if(!supabaseClient){
+
+  alert('Supabase is not connected yet.');
+
+  return;
+ }
+
+ /*
+   Real file upload will be connected after
+   Supabase Storage is configured.
+ */
+
+ alert(
+  'Your upload system is ready for the next Storage step.'
  );
 
- alert('Link copied.');
-
 }
 
 
-/* =====================================================
-   LOGIN HELPERS
-   ===================================================== */
-
-function needLogin(){
-
- if(currentUser)return;
-
- openLogin();
-
-}
-
-
-function openLogin(){
-
- closeModal('signupModal');
-
- openModal('loginModal');
-
-}
-
-
-function signupOpen(){
-
- closeModal('loginModal');
-
- openModal('signupModal');
-
-}
-
-
-/* =====================================================
+/* ================================
    NOTIFICATIONS
-   ===================================================== */
+   ================================ */
 
-function notifications(){
+function showNotifications(){
 
  if(!currentUser){
 
-  needLogin();
+  openLogin();
 
   return;
-
  }
 
  alert('No new notifications.');
@@ -2154,48 +1398,235 @@ function notifications(){
 }
 
 
-/* =====================================================
-   MODALS
-   ===================================================== */
+/* ================================
+   SUBSCRIPTIONS
+   ================================ */
 
-function openModal(id){
+function showSubscriptions(){
 
- document.getElementById(id).style.display='flex';
+ if(!currentUser){
+
+  openLogin();
+
+  return;
+ }
+
+ alert('Your subscribed channels will appear here.');
 
 }
 
+
+/* ================================
+   SIDEBAR
+   ================================ */
+
+function toggleSidebar(){
+
+ const sidebar =
+ document.getElementById('sidebar');
+
+ if(window.innerWidth <= 900){
+
+  sidebar.style.display =
+  sidebar.style.display === 'block'
+  ? 'none'
+  : 'block';
+
+ }
+
+}
+
+
+/* ================================
+   PROFILE MENU
+   ================================ */
+
+function toggleProfileMenu(){
+
+ const menu =
+ document.getElementById('profileMenu');
+
+ menu.style.display =
+ menu.style.display === 'block'
+ ? 'none'
+ : 'block';
+
+}
+
+function closeProfileMenu(){
+
+ const menu =
+ document.getElementById('profileMenu');
+
+ if(menu){
+
+  menu.style.display='none';
+
+ }
+
+}
+
+
+/* ================================
+   HEADER
+   ================================ */
+
+function updateHeader(){
+
+ const avatar =
+ document.getElementById('headerAvatar');
+
+ if(currentUser){
+
+  avatar.textContent =
+  (currentUser.email || 'U')
+  .charAt(0)
+  .toUpperCase();
+
+ }else{
+
+  avatar.textContent='G';
+
+ }
+
+}
+
+
+/* ================================
+   MODALS
+   ================================ */
 
 function closeModal(id){
 
- document.getElementById(id).style.display='none';
+ const modal =
+ document.getElementById(id);
+
+ if(modal){
+
+  modal.style.display='none';
+
+ }
+
+}
+
+function closeAllModals(){
+
+ document
+ .querySelectorAll('.modal-bg')
+ .forEach(modal => {
+  modal.style.display='none';
+ });
 
 }
 
 
-/* =====================================================
+/* ================================
    HELPERS
-   ===================================================== */
+   ================================ */
 
-function safe(name){
+async function copyText(text){
 
- return name.replace(
-  /[^a-zA-Z0-9._-]/g,
-  '_'
- );
+ try{
+
+  await navigator.clipboard.writeText(text);
+
+ }catch(error){
+
+  const area=document.createElement('textarea');
+
+  area.value=text;
+
+  document.body.appendChild(area);
+
+  area.select();
+
+  document.execCommand('copy');
+
+  area.remove();
+
+ }
 
 }
 
 
-function esc(value){
+function escapeHtml(value){
 
- return String(value ?? '')
-  .replace(/&/g,'&amp;')
-  .replace(/</g,'&lt;')
-  .replace(/>/g,'&gt;')
-  .replace(/"/g,'&quot;')
-  .replace(/'/g,'&#039;');
+ return String(value)
+ .replace(/&/g,'&amp;')
+ .replace(/</g,'&lt;')
+ .replace(/>/g,'&gt;')
+ .replace(/"/g,'&quot;')
+ .replace(/'/g,'&#039;');
 
 }
+
+
+/* ================================
+   START APP
+   ================================ */
+
+async function initApp(){
+
+ renderHome();
+
+ updateHeader();
+
+ if(!supabaseClient){
+
+  console.log(
+   'ViTube running in demo mode. Supabase is not connected yet.'
+  );
+
+  return;
+ }
+
+ try{
+
+  const {data} =
+  await supabaseClient.auth.getUser();
+
+  if(data && data.user){
+
+   currentUser=data.user;
+
+   updateHeader();
+
+  }
+
+ }catch(error){
+
+  console.log(error);
+
+ }
+
+}
+
+
+/* ================================
+   CLOSE PROFILE WHEN CLICKING OUTSIDE
+   ================================ */
+
+document.addEventListener('click',function(event){
+
+ const menu=document.getElementById('profileMenu');
+
+ const avatar=document.getElementById('headerAvatar');
+
+ if(
+  menu &&
+  avatar &&
+  !menu.contains(event.target) &&
+  !avatar.contains(event.target)
+ ){
+
+  menu.style.display='none';
+
+ }
+
+});
+
+
+initApp();
 
 </script>
 
