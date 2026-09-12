@@ -621,7 +621,7 @@ Sign in first to upload a video.
 
 <textarea id="uploadDescription" placeholder="Description"></textarea>
 
-<input id="uploadVideoUrl" placeholder="Video URL">
+<input id="uploadVideoFile" type="file" accept="video/*">
 
 <button class="primary" onclick="publishVideo()">
 Publish Video
@@ -1336,48 +1336,59 @@ function openUpload(){
 
 
 async function publishVideo(){
+  if(!currentUser){
+    openLogin();
+    return;
+  }
 
- if(!currentUser){
+  const title = document.getElementById('uploadTitle').value.trim();
+  const description = document.getElementById('uploadDescription').value.trim();
+  const videoFile = document.getElementById('uploadVideoFile').files[0];
 
-  openLogin();
-  return;
+  if(!title || !videoFile){
+    alert('Please enter a video title and select a video file.');
+    return;
+  }
 
- }
+  if(!supabaseClient){
+    alert('Supabase is not connected.');
+    return;
+  }
 
- const title =
- document.getElementById('uploadTitle').value.trim();
+  const safeName = videoFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+  const filePath = currentUser.id + '/' + Date.now() + '_' + safeName;
 
- const description =
- document.getElementById('uploadDescription').value.trim();
+  try{
 
- const videoUrl =
- document.getElementById('uploadVideoUrl').value.trim();
+    const { error: uploadError } = await supabaseClient
+      .storage
+      .from('videos')
+      .upload(filePath, videoFile);
 
- if(!title || !videoUrl){
+    if(uploadError){
+      throw uploadError;
+    }
 
-  alert('Please enter video title and video URL.');
+    const { data } = supabaseClient
+      .storage
+      .from('videos')
+      .getPublicUrl(filePath);
 
-  return;
- }
+    alert('Video uploaded successfully!');
 
- if(!supabaseClient){
+    console.log('Video URL:', data.publicUrl);
+    console.log('Title:', title);
+    console.log('Description:', description);
 
-  alert('Supabase is not connected yet.');
+    closeModal('uploadModal');
 
-  return;
- }
+  }catch(error){
 
- /*
-   Real file upload will be connected after
-   Supabase Storage is configured.
- */
+    console.error(error);
+    alert('Video upload failed: ' + error.message);
 
- alert(
-  'Your upload system is ready for the next Storage step.'
- );
-
+  }
 }
-
 
 /* ================================
    NOTIFICATIONS
