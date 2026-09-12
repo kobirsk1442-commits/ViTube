@@ -1334,7 +1334,6 @@ function openUpload(){
 
 }
 
-
 async function publishVideo(){
   if(!currentUser){
     openLogin();
@@ -1355,40 +1354,145 @@ async function publishVideo(){
     return;
   }
 
-  const safeName = videoFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-  const filePath = currentUser.id + '/' + Date.now() + '_' + safeName;
-
   try{
 
-    const { error: uploadError } = await supabaseClient
-      .storage
-      .from('videos')
-      .upload(filePath, videoFile);
+    if(!window.tus){
 
-    if(uploadError){
-      throw uploadError;
+      await new Promise((resolve,reject)=>{
+
+        const script = document.createElement('script');
+
+        script.src =
+          'https://cdn.jsdelivr.net/npm/tus-js-client@4/dist/tus.min.js';
+
+        script.onload = resolve;
+
+        script.onerror = () =>
+          reject(new Error('Upload system could not be loaded.'));
+
+        document.head.appendChild(script);
+
+      });
+
     }
 
-    const { data } = supabaseClient
-      .storage
-      .from('videos')
-      .getPublicUrl(filePath);
+    const { data: sessionData } =
+      await supabaseClient.auth.getSession();
+
+    const session = sessionData.session;
+
+    if(!session){
+      alert('Your session has expired. Please sign in again.');
+      return;
+    }
+
+    const safeName =
+      videoFile.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+
+    const filePath =
+      currentUser.id + '/' +
+      Date.now() + '_' +
+      safeName;
+
+    const uploadNotice =
+      document.getElementById('uploadNotice');
+
+    uploadNotice.textContent = 'Uploading: 0%';
+
+    await new Promise((resolve,reject)=>{
+
+      const upload = new tus.Upload(videoFile,{
+
+        endpoint:
+          'https://visiptpbssladdksqerv.storage.supabase.co/storage/v1/upload/resumable',
+
+        retryDelays:
+          [0,3000,5000,10000,20000],
+
+        headers:{
+          authorization:
+            'Bearer ' + session.access_token,
+
+          'x-upsert':'false'
+        },
+
+        uploadDataDuringCreation:true,
+
+        removeFingerprintOnSuccess:true,
+
+        metadata:{
+          bucketName:'videos',
+          objectName:filePath,
+          contentType:
+            videoFile.type || 'video/mp4',
+          cacheControl:'3600'
+        },
+
+        onError:function(error){
+          reject(error);
+        },
+
+        onProgress:function(bytesUploaded,bytesTotal){
+
+          const percent =
+            Math.round(
+              (bytesUploaded / bytesTotal) * 100
+            );
+
+          uploadNotice.textContent =
+            'Uploading: ' + percent + '%';
+        },
+
+        onSuccess:function(){
+          resolve();
+        }
+
+      });
+
+      upload.findPreviousUploads()
+        .then(function(previousUploads){
+
+          if(previousUploads.length){
+
+            upload.resumeFromPreviousUpload(
+              previousUploads[0]
+            );
+
+          }
+
+          upload.start();
+
+        })
+        .catch(reject);
+
+    });
+
+    const { data } =
+      supabaseClient
+        .storage
+        .from('videos')
+        .getPublicUrl(filePath);
 
     alert('Video uploaded successfully!');
 
-    console.log('Video URL:', data.publicUrl);
-    console.log('Title:', title);
-    console.log('Description:', description);
+    console.log('Video URL:',data.publicUrl);
+    console.log('Title:',title);
+    console.log('Description:',description);
 
     closeModal('uploadModal');
 
   }catch(error){
 
     console.error(error);
-    alert('Video upload failed: ' + error.message);
+
+    alert(
+      'Video upload failed: ' +
+      (error.message || error)
+    );
 
   }
 }
+
 
 /* ================================
    NOTIFICATIONS
