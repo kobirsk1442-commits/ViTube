@@ -1409,7 +1409,7 @@ async function publishVideo(){
   const title = document.getElementById('uploadTitle').value.trim();
   const description = document.getElementById('uploadDescription').value.trim();
   const videoFile = document.getElementById('uploadVideoFile').files[0];
-
+  const thumbnailFile = document.getElementById('uploadThumbnailFile').files[0];
   if(!title || !videoFile){
     alert('Please enter a video title and select a video file.');
     return;
