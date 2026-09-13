@@ -1472,7 +1472,19 @@ async function publishVideo(){
         .storage
         .from('videos')
         .getPublicUrl(filePath);
+   
+const { error: dbError } = await supabaseClient
+  .from('videos')
+  .insert({
+    owner_id: currentUser.id,
+    title: title,
+    description: description,
+    video_url: data.publicUrl
+  });
 
+if(dbError){
+  throw dbError;
+}
     alert('Video uploaded successfully!');
 
     console.log('Video URL:',data.publicUrl);
