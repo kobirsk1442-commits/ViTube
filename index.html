@@ -829,7 +829,7 @@ function renderHome(list = [...databaseVideos, ...demoVideos]){
 
 function openDemoWatch(id){
 
- const video = demoVideos.find(v => v.id === id);
+ const video = [...databaseVideos, ...demoVideos].find(v => v.id === id);
 
  if(!video) return;
 
@@ -844,15 +844,29 @@ function openDemoWatch(id){
 
  <div class="player">
 
-   <div class="demo-player">
+  ${
+    video.video_url
+    ? `
+      <video
+        src="${video.video_url}"
+        controls
+        autoplay
+        playsinline
+        style="width:100%;height:100%;background:#000;"
+      ></video>
+    `
+    : `
+      <div class="demo-player">
 
-     <div class="big-icon">${video.icon}</div>
+        <div class="big-icon">${video.icon}</div>
 
-     <div>ViTube Demo Video</div>
+        <div>ViTube Demo Video</div>
 
-   </div>
+      </div>
+    `
+  }
 
- </div>
+</div>
 
  <div class="watch-title">
    ${escapeHtml(video.title)}
