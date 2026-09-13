@@ -712,8 +712,7 @@ const demoVideos = [
 }
 
 ];
-
-
+let databaseVideos = [];
 let currentUser = null;
 let currentWatchVideo = null;
 let searchResults = demoVideos;
@@ -723,59 +722,106 @@ let searchResults = demoVideos;
    HOME
    ================================ */
 
-function renderHome(list = demoVideos){
+function renderHome(list = [...databaseVideos, ...demoVideos]){
 
- const grid = document.getElementById('videoGrid');
+  const grid = document.getElementById('videoGrid');
 
- if(!grid) return;
+  if(!grid) return;
 
- if(!list.length){
+  if(!list.length){
 
-  grid.innerHTML = `
-  <div class="empty">
-   <h2>No videos found</h2>
-   <p>Try another search.</p>
-  </div>
-  `;
+    grid.innerHTML = `
+      <div class="empty">
+        <h2>No videos found</h2>
+        <p>Try another search.</p>
+      </div>
+    `;
 
-  return;
- }
+    return;
+  }
 
- grid.innerHTML = list.map(video => `
+  grid.innerHTML = list.map(video => `
 
- <article class="video-card" onclick="openDemoWatch('${video.id}')">
+    <article class="video-card" onclick="openDemoWatch('${video.id}')">
 
-   <div class="thumb">
-     <div>${video.icon}</div>
-   </div>
+      <div class="thumb">
 
-   <div class="video-info">
+        ${
+          video.thumbnail_url
+          ? `<img src="${video.thumbnail_url}" style="width:100%;height:100%;object-fit:cover;">`
+          : `<div>${video.icon || '🎬'}</div>`
+        }
 
-     <div class="channel-mini">
-       ${video.channel.charAt(0)}
-     </div>
+      </div>
 
-     <div>
+      <div class="video-info">
 
-       <div class="video-title">
-         ${escapeHtml(video.title)}
-       </div>
+        <div class="channel-mini">
+          ${video.channel ? video.channel.charAt(0) : 'V'}
+        </div>
 
-       <div class="video-meta">
-         ${escapeHtml(video.channel)}
-         <br>
-         ${escapeHtml(video.views)} • ${escapeHtml(video.time)}
-       </div>
+        <div>
 
-     </div>
+          <div class="video-title">
+            ${escapeHtml(video.title || 'Untitled video')}
+          </div>
 
-   </div>
+          <div class="video-meta">
+            ${escapeHtml(video.channel || 'ViTube User')}
+            <br>
+            ${escapeHtml(video.views || '0 views')} •
+            ${escapeHtml(video.time || '')}
+          </div>
 
- </article>
+        </div>
 
- `).join('');
+      </div>
+
+    </article>
+
+  `).join('');
 }
+ async function loadDatabaseVideos(){
 
+  if(!supabaseClient) return;
+
+  const { data, error } = await supabaseClient
+    .from('videos')
+    .select('id,owner_id,title,description,video_url,thumbnail_url,views,created_at')
+    .order('created_at', { ascending:false });
+
+  if(error){
+
+    console.error('Failed to load videos:', error);
+
+    return;
+  }
+
+  databaseVideos = (data || []).map(video => ({
+
+    id: 'db_' + video.id,
+
+    title: video.title || 'Untitled video',
+
+    channel: 'ViTube User',
+
+    icon: '🎬',
+
+    views: `${video.views || 0} views`,
+
+    time: new Date(video.created_at).toLocaleDateString(),
+
+    description: video.description || '',
+
+    video_url: video.video_url,
+
+    thumbnail_url: video.thumbnail_url || ''
+
+  }));
+
+  renderHome();
+
+}
 
 /* ================================
    WATCH PAGE
@@ -949,7 +995,7 @@ function goHome(){
  document.getElementById('watchPage').classList.add('hidden');
  document.getElementById('homePage').classList.remove('hidden');
 
- renderHome();
+ loadDatabaseVideos();
 
  window.scrollTo(0,0);
 }
