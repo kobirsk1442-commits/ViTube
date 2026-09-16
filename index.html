@@ -1322,7 +1322,30 @@ async function signInUser(){
  alert('Signed in successfully!');
 
 }
+async function signInWithGoogle(){
 
+  if(!supabaseClient){
+
+    alert('Authentication is not ready.');
+
+    return;
+
+  }
+
+  const { error } =
+    await supabaseClient.auth.signInWithOAuth({
+
+      provider: 'google'
+
+    });
+
+  if(error){
+
+    alert('Google login failed: ' + error.message);
+
+  }
+
+}
 
 /* ================================
    SIGN OUT
