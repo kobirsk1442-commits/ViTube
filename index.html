@@ -1333,11 +1333,16 @@ async function signInWithGoogle(){
   }
 
   const { error } =
-    await supabaseClient.auth.signInWithOAuth({
+  await supabaseClient.auth.signInWithOAuth({
 
-      provider: 'google'
+    provider: 'google',
 
-    });
+    options: {
+      redirectTo: 'https://kobirsk1442-commits.github.io/ViTube/'
+    }
+
+});
+
 
   if(error){
 
