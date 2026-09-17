@@ -1591,7 +1591,7 @@ async function openChannel(){
     (data.name || 'V').charAt(0).toUpperCase();
 
   document.getElementById('channelPageModal').style.display='flex';
-
+  loadChannelVideos();
   return;
 
 }
@@ -1601,6 +1601,82 @@ async function openChannel(){
   }
 document.getElementById('channelModal').style.display='flex';
   
+}
+ async function loadChannelVideos(){
+
+  const grid =
+    document.getElementById('channelVideoGrid');
+
+  if(!grid) return;
+
+  if(!supabaseClient || !currentUser) return;
+
+  const { data, error } =
+    await supabaseClient
+      .from('videos')
+      .select('id,title,description,video_url,thumbnail_url,views,created_at')
+      .eq('owner_id', currentUser.id)
+      .order('created_at', { ascending:false });
+
+  if(error){
+
+    console.error('Channel videos error:', error);
+
+    grid.innerHTML =
+      '<p>Unable to load videos.</p>';
+
+    return;
+
+  }
+
+  if(!data || !data.length){
+
+    grid.innerHTML =
+      '<p style="color:#777;">No videos uploaded yet.</p>';
+
+    return;
+
+  }
+
+  grid.innerHTML = data.map(video => `
+
+    <article
+      class="video-card"
+      onclick="openDemoWatch('db_${video.id}')">
+
+      <div class="thumb">
+
+        ${
+          video.thumbnail_url
+          ? `<img
+              src="${video.thumbnail_url}"
+              style="width:100%;height:100%;object-fit:cover;">`
+          : `<div>🎬</div>`
+        }
+
+      </div>
+
+      <div class="video-info">
+
+        <div>
+          <div class="video-title">
+            ${escapeHtml(video.title || 'Untitled video')}
+          </div>
+
+          <div class="video-meta">
+            ${video.views || 0} views
+            •
+            ${new Date(video.created_at).toLocaleDateString()}
+          </div>
+
+        </div>
+
+      </div>
+
+    </article>
+
+  `).join('');
+
 }
  async function createChannel(){
 
