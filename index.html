@@ -1513,8 +1513,106 @@ async function openChannel(){
   }
 
   alert('You do not have a channel yet. Create your channel next.');
+}
+ async function createChannel(){
+
+  if(!currentUser){
+
+    openLogin();
+
+    return;
+
+  }
+
+  if(!supabaseClient){
+
+    alert('Database is not ready.');
+
+    return;
+
+  }
+
+  const name =
+    document.getElementById('channelName').value.trim();
+
+  const handle =
+    document.getElementById('channelHandle').value
+      .trim()
+      .replace(/^@/, '');
+
+  const description =
+    document.getElementById('channelDescription').value.trim();
+
+  if(!name){
+
+    alert('Please enter a channel name.');
+
+    return;
+
+  }
+
+  if(!handle){
+
+    alert('Please enter a channel handle.');
+
+    return;
+
+  }
+
+  const { data: existingChannel, error: checkError } =
+    await supabaseClient
+      .from('channels')
+      .select('id')
+      .eq('owner_id', currentUser.id)
+      .limit(1)
+      .maybeSingle();
+
+  if(checkError){
+
+    console.error('Channel check error:', checkError);
+
+    alert('Unable to check your channel.');
+
+    return;
+
+  }
+
+  if(existingChannel){
+
+    alert('You already have a channel.');
+
+    return;
+
+  }
+
+  const { data, error } =
+    await supabaseClient
+      .from('channels')
+      .insert({
+        owner_id: currentUser.id,
+        name: name,
+        handle: handle,
+        description: description
+      })
+      .select()
+      .single();
+
+  if(error){
+
+    console.error('Channel creation error:', error);
+
+    alert('Channel creation failed: ' + error.message);
+
+    return;
+
+  }
+
+  closeModal('channelModal');
+
+  alert('Channel created successfully!');
 
 }
+
 async function publishVideo(){
   if(!currentUser){
     openLogin();
