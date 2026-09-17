@@ -2063,7 +2063,9 @@ function escapeHtml(value){
 async function initApp(){
 
  renderHome();
-
+ 
+loadDatabaseVideos();
+ 
  updateHeader();
 
  if(!supabaseClient){
