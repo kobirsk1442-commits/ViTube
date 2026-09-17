@@ -720,6 +720,45 @@ Sign in
   </div>
 
 </div>
+
+ <!-- EDIT CHANNEL -->
+<div class="modal-bg" id="editChannelModal">
+  <div class="modal">
+
+    <button class="close" onclick="closeModal('editChannelModal')">×</button>
+
+    <h2>Edit your channel</h2>
+
+    <p>
+      Update your channel information.
+    </p>
+
+    <input
+      id="editChannelName"
+      type="text"
+      placeholder="Channel name"
+    >
+
+    <input
+      id="editChannelHandle"
+      type="text"
+      placeholder="Handle"
+    >
+
+    <textarea
+      id="editChannelDescription"
+      placeholder="Channel description"
+    ></textarea>
+
+    <button
+      class="primary"
+      onclick="saveChannelChanges()"
+    >
+      Save changes
+    </button>
+
+  </div>
+</div>
 <!-- UPLOAD -->
 
 <div class="modal-bg" id="uploadModal">
