@@ -1425,7 +1425,58 @@ function openUpload(){
  document.getElementById('uploadModal').style.display='flex';
 
 }
+async function openChannel(){
 
+  if(!currentUser){
+
+    openLogin();
+
+    return;
+
+  }
+
+  if(!supabaseClient){
+
+    alert('Database is not ready.');
+
+    return;
+
+  }
+
+  const { data, error } =
+    await supabaseClient
+      .from('channels')
+      .select('*')
+      .eq('owner_id', currentUser.id)
+      .limit(1)
+      .maybeSingle();
+
+  if(error){
+
+    console.error('Channel load error:', error);
+
+    alert('Unable to load your channel.');
+
+    return;
+
+  }
+
+  if(data){
+
+    alert(
+      'Your Channel: ' +
+      data.name +
+      '\nHandle: @' +
+      data.handle
+    );
+
+    return;
+
+  }
+
+  alert('You do not have a channel yet. Create your channel next.');
+
+}
 async function publishVideo(){
   if(!currentUser){
     openLogin();
