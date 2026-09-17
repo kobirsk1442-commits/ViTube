@@ -1634,6 +1634,48 @@ async function openChannel(){
 document.getElementById('channelModal').style.display='flex';
   
 }
+ async function openEditChannel(){
+
+  if(!currentUser){
+    openLogin();
+    return;
+  }
+
+  if(!supabaseClient){
+    alert('Database is not ready.');
+    return;
+  }
+
+  const { data, error } =
+    await supabaseClient
+      .from('channels')
+      .select('*')
+      .eq('owner_id', currentUser.id)
+      .limit(1)
+      .maybeSingle();
+
+  if(error){
+    console.error('Edit channel load error:', error);
+    alert('Unable to load your channel.');
+    return;
+  }
+
+  if(!data){
+    alert('Please create a channel first.');
+    return;
+  }
+
+  document.getElementById('editChannelName').value =
+    data.name || '';
+
+  document.getElementById('editChannelHandle').value =
+    data.handle || '';
+
+  document.getElementById('editChannelDescription').value =
+    data.description || '';
+
+  document.getElementById('editChannelModal').style.display = 'flex';
+}
  async function createChannel(){
 
   if(!currentUser){
