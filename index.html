@@ -1578,14 +1578,25 @@ async function openChannel(){
 
   if(data){
 
-    alert(
-      'Your Channel: ' +
-      data.name +
-      '\nHandle: @' +
-      data.handle
-    );
+  document.getElementById('channelPageName').textContent =
+    data.name || 'Your Channel';
 
-    return;
+  document.getElementById('channelPageHandle').textContent =
+    '@' + (data.handle || '');
+
+  document.getElementById('channelPageDescription').textContent =
+    data.description || '';
+
+  document.getElementById('channelAvatar').textContent =
+    (data.name || 'V').charAt(0).toUpperCase();
+
+  document.getElementById('channelPageModal').style.display='flex';
+
+  return;
+
+}
+
+    
 
   }
 document.getElementById('channelModal').style.display='flex';
