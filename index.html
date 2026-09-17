@@ -605,7 +605,45 @@ Sign in
 
 </div>
 </div>
+<!-- CREATE CHANNEL -->
+<div class="modal-bg" id="channelModal">
 
+  <div class="modal">
+
+    <button class="close" onclick="closeModal('channelModal')">×</button>
+
+    <h2>Create Your Channel</h2>
+
+    <p>
+      Create your ViTube channel and start sharing videos.
+    </p>
+
+    <input
+      id="channelName"
+      type="text"
+      placeholder="Channel name"
+    >
+
+    <input
+      id="channelHandle"
+      type="text"
+      placeholder="Handle (example: kobirtech)"
+    >
+
+    <textarea
+      id="channelDescription"
+      placeholder="Channel description"
+    ></textarea>
+
+    <button
+      class="primary"
+      onclick="createChannel()">
+      Create Channel
+    </button>
+
+  </div>
+
+</div>
 
 <!-- UPLOAD -->
 
