@@ -607,21 +607,20 @@ Sign in
 </div>
 <!-- CREATE CHANNEL -->
 <div class="modal-bg" id="channelModal">
-
   <div class="modal">
 
     <button class="close" onclick="closeModal('channelModal')">×</button>
 
-    <h2>Create Your Channel</h2>
+    <h2>Create your channel</h2>
 
     <p>
-      Create your ViTube channel and start sharing videos.
+      Choose a name and handle for your ViTube channel.
     </p>
 
     <input
       id="channelName"
       type="text"
-      placeholder="Channel name"
+      placeholder="Name"
     >
 
     <input
@@ -632,17 +631,17 @@ Sign in
 
     <textarea
       id="channelDescription"
-      placeholder="Channel description"
+      placeholder="Tell viewers about your channel"
     ></textarea>
 
     <button
       class="primary"
-      onclick="createChannel()">
-      Create Channel
+      onclick="createChannel()"
+    >
+      Create channel
     </button>
 
   </div>
-
 </div>
 <!-- CHANNEL PAGE -->
 <div class="modal-bg" id="channelPageModal">
