@@ -1749,6 +1749,232 @@ if(data.banner_url){
 document.getElementById('channelModal').style.display='flex';
   
 }
+ function openViTubeStudio(){
+
+  if(!currentUser){
+    openLogin();
+    return;
+  }
+
+  const oldStudio =
+    document.getElementById('viTubeStudioPage');
+
+  if(oldStudio){
+    oldStudio.remove();
+  }
+
+  const studio = document.createElement('div');
+
+  studio.id = 'viTubeStudioPage';
+
+  studio.style.cssText = `
+    position:fixed;
+    inset:0;
+    z-index:9999;
+    background:#f5f5f5;
+    overflow:auto;
+    font-family:Arial,sans-serif;
+  `;
+
+  studio.innerHTML = `
+    <div style="
+      background:#fff;
+      padding:18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid #ddd;
+      position:sticky;
+      top:0;
+      z-index:2;
+    ">
+
+      <div style="font-size:22px;font-weight:bold;">
+        🎬 ViTube Studio
+      </div>
+
+      <button
+        onclick="document.getElementById('viTubeStudioPage').remove()"
+        style="
+          border:0;
+          background:#eee;
+          padding:10px 16px;
+          border-radius:8px;
+          font-size:15px;
+        ">
+        ✕ Close
+      </button>
+
+    </div>
+
+    <div style="
+      padding:20px;
+      max-width:1100px;
+      margin:auto;
+    ">
+
+      <h1 style="margin-top:5px;">
+        Channel Dashboard
+      </h1>
+
+      <p style="color:#666;">
+        Welcome to your ViTube creator dashboard.
+      </p>
+
+      <div style="
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+        gap:15px;
+        margin-top:25px;
+      ">
+
+        <div style="
+          background:#fff;
+          padding:20px;
+          border-radius:12px;
+          box-shadow:0 2px 8px #0001;
+        ">
+          <div style="font-size:14px;color:#777;">
+            Videos
+          </div>
+          <div style="font-size:28px;font-weight:bold;">
+            0
+          </div>
+        </div>
+
+        <div style="
+          background:#fff;
+          padding:20px;
+          border-radius:12px;
+          box-shadow:0 2px 8px #0001;
+        ">
+          <div style="font-size:14px;color:#777;">
+            Views
+          </div>
+          <div style="font-size:28px;font-weight:bold;">
+            0
+          </div>
+        </div>
+
+        <div style="
+          background:#fff;
+          padding:20px;
+          border-radius:12px;
+          box-shadow:0 2px 8px #0001;
+        ">
+          <div style="font-size:14px;color:#777;">
+            Subscribers
+          </div>
+          <div style="font-size:28px;font-weight:bold;">
+            0
+          </div>
+        </div>
+
+      </div>
+
+      <div style="
+        background:#fff;
+        margin-top:25px;
+        padding:20px;
+        border-radius:12px;
+        box-shadow:0 2px 8px #0001;
+      ">
+
+        <h2>Studio</h2>
+
+        <button style="
+          display:block;
+          width:100%;
+          padding:15px;
+          margin:10px 0;
+          border:0;
+          border-radius:8px;
+          background:#f1f1f1;
+          text-align:left;
+          font-size:16px;
+        ">
+          🎬 Content
+        </button>
+
+        <button style="
+          display:block;
+          width:100%;
+          padding:15px;
+          margin:10px 0;
+          border:0;
+          border-radius:8px;
+          background:#f1f1f1;
+          text-align:left;
+          font-size:16px;
+        ">
+          📊 Analytics
+        </button>
+
+        <button style="
+          display:block;
+          width:100%;
+          padding:15px;
+          margin:10px 0;
+          border:0;
+          border-radius:8px;
+          background:#f1f1f1;
+          text-align:left;
+          font-size:16px;
+        ">
+          💬 Comments
+        </button>
+
+        <button
+          onclick="openEditChannel()"
+          style="
+            display:block;
+            width:100%;
+            padding:15px;
+            margin:10px 0;
+            border:0;
+            border-radius:8px;
+            background:#f1f1f1;
+            text-align:left;
+            font-size:16px;
+          ">
+          🎨 Channel Customization
+        </button>
+
+        <button style="
+          display:block;
+          width:100%;
+          padding:15px;
+          margin:10px 0;
+          border:0;
+          border-radius:8px;
+          background:#f1f1f1;
+          text-align:left;
+          font-size:16px;
+        ">
+          ⚙️ Settings
+        </button>
+
+        <button style="
+          display:block;
+          width:100%;
+          padding:15px;
+          margin:10px 0;
+          border:0;
+          border-radius:8px;
+          background:#f1f1f1;
+          text-align:left;
+          font-size:16px;
+        ">
+          📱 Verification
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  document.body.appendChild(studio);
+}
  async function openEditChannel(){
 
   if(!currentUser){
