@@ -1702,8 +1702,44 @@ async function openChannel(){
   document.getElementById('channelPageDescription').textContent =
     data.description || '';
 
-  document.getElementById('channelAvatar').textContent =
+  // CHANNEL LOGO
+const avatarImage =
+  document.getElementById('channelAvatarImage');
+
+const avatarLetter =
+  document.getElementById('channelAvatar');
+
+if(data.avatar_url){
+
+  avatarImage.src = data.avatar_url;
+  avatarImage.style.display = 'block';
+  avatarLetter.style.display = 'none';
+
+}else{
+
+  avatarImage.style.display = 'none';
+  avatarLetter.style.display = 'flex';
+
+  avatarLetter.textContent =
     (data.name || 'V').charAt(0).toUpperCase();
+
+}
+
+
+// CHANNEL BANNER
+const bannerImage =
+  document.getElementById('channelBannerImage');
+
+if(data.banner_url){
+
+  bannerImage.src = data.banner_url;
+  bannerImage.style.display = 'block';
+
+}else{
+
+  bannerImage.style.display = 'none';
+
+}
 
   document.getElementById('channelPageModal').style.display='flex';
 
