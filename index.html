@@ -1940,7 +1940,9 @@ document.getElementById('channelModal').style.display='flex';
           🎨 Channel Customization
         </button>
 
-        <button style="
+        <button
+        onclick="openViTubeStudioSettings()"
+         style="
           display:block;
           width:100%;
           padding:15px;
@@ -1974,6 +1976,284 @@ document.getElementById('channelModal').style.display='flex';
   `;
 
   document.body.appendChild(studio);
+}
+ function openViTubeStudioSettings(){
+
+  if(!currentUser){
+    openLogin();
+    return;
+  }
+
+  const oldSettings =
+    document.getElementById('viTubeStudioSettingsPage');
+
+  if(oldSettings){
+    oldSettings.remove();
+  }
+
+  const settings = document.createElement('div');
+
+  settings.id = 'viTubeStudioSettingsPage';
+
+  settings.style.cssText = `
+    position:fixed;
+    inset:0;
+    z-index:10000;
+    background:#f5f5f5;
+    overflow:auto;
+    font-family:Arial,sans-serif;
+  `;
+
+  settings.innerHTML = `
+
+    <div style="
+      background:#fff;
+      padding:18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid #ddd;
+      position:sticky;
+      top:0;
+      z-index:2;
+    ">
+
+      <div style="
+        font-size:22px;
+        font-weight:bold;
+      ">
+        ⚙️ Channel Settings
+      </div>
+
+      <button
+        onclick="document.getElementById('viTubeStudioSettingsPage').remove()"
+        style="
+          border:0;
+          background:#eee;
+          padding:10px 16px;
+          border-radius:8px;
+          font-size:15px;
+        ">
+        ✕ Close
+      </button>
+
+    </div>
+
+    <div style="
+      padding:20px;
+      max-width:800px;
+      margin:auto;
+    ">
+
+      <h2>Channel Information</h2>
+
+      <p style="color:#666;">
+        Manage your ViTube channel settings.
+      </p>
+
+      <div style="
+        background:#fff;
+        padding:20px;
+        border-radius:12px;
+        margin-top:20px;
+        box-shadow:0 2px 8px #0001;
+      ">
+
+        <label>Country / Region</label>
+
+        <select
+          id="vitubeCountry"
+          style="
+            width:100%;
+            padding:12px;
+            margin:8px 0 20px;
+            border:1px solid #ccc;
+            border-radius:8px;
+          ">
+
+          <option value="">Select country</option>
+          <option value="India">India</option>
+          <option value="United States">United States</option>
+          <option value="United Kingdom">United Kingdom</option>
+          <option value="Canada">Canada</option>
+          <option value="Australia">Australia</option>
+          <option value="Other">Other</option>
+
+        </select>
+
+
+        <label>Channel Keywords</label>
+
+        <textarea
+          id="vitubeKeywords"
+          placeholder="Example: technology, education, news, entertainment"
+          style="
+            width:100%;
+            min-height:100px;
+            padding:12px;
+            margin:8px 0 20px;
+            border:1px solid #ccc;
+            border-radius:8px;
+            box-sizing:border-box;
+          "
+        ></textarea>
+
+
+        <label>Audience</label>
+
+        <select
+          id="vitubeAudience"
+          style="
+            width:100%;
+            padding:12px;
+            margin:8px 0 20px;
+            border:1px solid #ccc;
+            border-radius:8px;
+          ">
+
+          <option value="">Select audience</option>
+          <option value="kids">
+            Made for kids
+          </option>
+
+          <option value="not_kids">
+            Not made for kids
+          </option>
+
+        </select>
+
+
+        <label>Channel Visibility</label>
+
+        <select
+          id="vitubeVisibility"
+          style="
+            width:100%;
+            padding:12px;
+            margin:8px 0 20px;
+            border:1px solid #ccc;
+            border-radius:8px;
+          ">
+
+          <option value="public">Public</option>
+          <option value="hidden">Hidden</option>
+
+        </select>
+
+
+        <button
+          onclick="saveViTubeStudioSettings()"
+          style="
+            width:100%;
+            padding:14px;
+            border:0;
+            border-radius:8px;
+            background:#e60023;
+            color:white;
+            font-size:16px;
+            font-weight:bold;
+          ">
+          Save Settings
+        </button>
+
+      </div>
+
+
+      <div style="
+        background:#fff;
+        padding:20px;
+        border-radius:12px;
+        margin-top:20px;
+        box-shadow:0 2px 8px #0001;
+      ">
+
+        <h2>📱 Verification</h2>
+
+        <p style="color:#666;">
+          Verify your channel with a mobile number.
+        </p>
+
+        <button
+          style="
+            width:100%;
+            padding:14px;
+            border:0;
+            border-radius:8px;
+            background:#f1f1f1;
+            text-align:left;
+            font-size:16px;
+          ">
+          📱 Phone Verification
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  document.body.appendChild(settings);
+}
+ async function saveViTubeStudioSettings(){
+
+  if(!currentUser){
+    openLogin();
+    return;
+  }
+
+  if(!supabaseClient){
+    alert('Database is not ready.');
+    return;
+  }
+
+  const country =
+    document.getElementById('vitubeCountry').value;
+
+  const keywords =
+    document.getElementById('vitubeKeywords').value.trim();
+
+  const audience =
+    document.getElementById('vitubeAudience').value;
+
+  const visibility =
+    document.getElementById('vitubeVisibility').value;
+
+  const { data: channel, error: channelError } =
+    await supabaseClient
+      .from('channels')
+      .select('id')
+      .eq('owner_id', currentUser.id)
+      .limit(1)
+      .maybeSingle();
+
+  if(channelError){
+    alert('Failed to load channel: ' + channelError.message);
+    return;
+  }
+
+  if(!channel){
+    alert('Please create a channel first.');
+    return;
+  }
+
+  const { error } =
+    await supabaseClient
+      .from('channels')
+      .update({
+        country: country,
+        keywords: keywords,
+        audience: audience,
+        visibility: visibility
+      })
+      .eq('id', channel.id)
+      .eq('owner_id', currentUser.id);
+
+  if(error){
+    alert('Failed to save settings: ' + error.message);
+    return;
+  }
+
+  alert('Settings saved successfully!');
+
 }
  async function openEditChannel(){
 
