@@ -1706,6 +1706,126 @@ document.getElementById('channelModal').style.display='flex';
 
   document.getElementById('editChannelModal').style.display = 'flex';
 }
+ async function saveChannelChanges(){
+
+  if(!currentUser){
+    openLogin();
+    return;
+  }
+
+  if(!supabaseClient){
+    alert('Database is not ready.');
+    return;
+  }
+
+  const name =
+    document.getElementById('editChannelName').value.trim();
+
+  const handle =
+    document.getElementById('editChannelHandle').value.trim();
+
+  const description =
+    document.getElementById('editChannelDescription').value.trim();
+
+  const avatarFile =
+    document.getElementById('editChannelAvatar').files[0];
+
+  const bannerFile =
+    document.getElementById('editChannelBanner').files[0];
+
+  if(!name || !handle){
+    alert('Channel name and handle are required.');
+    return;
+  }
+
+  try{
+
+    const { data: channel, error: channelError } =
+      await supabaseClient
+        .from('channels')
+        .select('id,avatar_url,banner_url')
+        .eq('owner_id', currentUser.id)
+        .limit(1)
+        .maybeSingle();
+
+    if(channelError) throw channelError;
+
+    if(!channel){
+      alert('Channel not found.');
+      return;
+    }
+
+    let avatarUrl = channel.avatar_url || '';
+    let bannerUrl = channel.banner_url || '';
+
+    if(avatarFile){
+
+      const avatarPath =
+        currentUser.id + '/avatar_' + Date.now() + '_' + avatarFile.name;
+
+      const { error } =
+        await supabaseClient.storage
+          .from('channel-assets')
+          .upload(avatarPath, avatarFile);
+
+      if(error) throw error;
+
+      const { data } =
+        supabaseClient.storage
+          .from('channel-assets')
+          .getPublicUrl(avatarPath);
+
+      avatarUrl = data.publicUrl;
+    }
+
+    if(bannerFile){
+
+      const bannerPath =
+        currentUser.id + '/banner_' + Date.now() + '_' + bannerFile.name;
+
+      const { error } =
+        await supabaseClient.storage
+          .from('channel-assets')
+          .upload(bannerPath, bannerFile);
+
+      if(error) throw error;
+
+      const { data } =
+        supabaseClient.storage
+          .from('channel-assets')
+          .getPublicUrl(bannerPath);
+
+      bannerUrl = data.publicUrl;
+    }
+
+    const { error: updateError } =
+      await supabaseClient
+        .from('channels')
+        .update({
+          name: name,
+          handle: handle,
+          description: description,
+          avatar_url: avatarUrl,
+          banner_url: bannerUrl
+        })
+        .eq('id', channel.id)
+        .eq('owner_id', currentUser.id);
+
+    if(updateError) throw updateError;
+
+    alert('Channel updated successfully!');
+
+    closeModal('editChannelModal');
+
+    openChannel();
+
+  }catch(error){
+
+    console.error('Channel update error:', error);
+
+    alert('Failed to update channel: ' + error.message);
+  }
+}
  async function createChannel(){
 
   if(!currentUser){
