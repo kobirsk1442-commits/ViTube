@@ -1477,8 +1477,23 @@ function likeVideo(){
   return;
 
  }
+const button =
+  document.querySelector('.actions .action-btn');
 
- alert('Liked 👍');
+if(!button) return;
+
+if(button.dataset.liked === 'true'){
+
+  button.dataset.liked = 'false';
+  button.textContent = '👍 Like';
+
+}else{
+
+  button.dataset.liked = 'true';
+  button.textContent = '👍 Liked';
+
+}
+ 
 
 }
 
@@ -1495,8 +1510,23 @@ function dislikeVideo(){
   return;
 
  }
+const button =
+  document.querySelector('.actions button[onclick="dislikeVideo()"]');
 
- alert('Disliked');
+if(!button) return;
+
+if(button.dataset.disliked === 'true'){
+
+  button.dataset.disliked = 'false';
+  button.textContent = '👎 Dislike';
+
+}else{
+
+  button.dataset.disliked = 'true';
+  button.textContent = '👎 Disliked';
+
+}
+ 
 
 }
 
