@@ -1286,24 +1286,143 @@ function searchVideos(){
 
 async function subscribeChannel(channel){
 
- if(!currentUser){
+  if(!currentUser){
+    openLogin();
+    return;
+  }
 
-  openLogin();
+  const button =
+    document.getElementById('subscribeBtn');
 
-  return;
- }
+  if(button){
 
- const button = document.getElementById('subscribeBtn');
+    button.textContent = 'Subscribed';
 
- if(button){
+    button.classList.add('subscribed');
 
-  button.textContent = 'Subscribed';
-  button.classList.add('subscribed');
+    let bell =
+      document.getElementById('notificationBell');
 
- }
+    if(!bell){
 
- alert('Subscribed to ' + channel);
+      bell = document.createElement('button');
 
+      bell.id = 'notificationBell';
+
+      bell.type = 'button';
+
+      bell.textContent = '🔔';
+
+      bell.style.cssText = `
+        margin-left:8px;
+        padding:8px 12px;
+        border:0;
+        border-radius:20px;
+        background:#f1f1f1;
+        cursor:pointer;
+        font-size:18px;
+      `;
+
+      button.insertAdjacentElement(
+        'afterend',
+        bell
+      );
+
+      bell.onclick = function(){
+
+        let menu =
+          document.getElementById(
+            'notificationMenu'
+          );
+
+        if(menu){
+          menu.remove();
+          return;
+        }
+
+        menu = document.createElement('div');
+
+        menu.id = 'notificationMenu';
+
+        menu.style.cssText = `
+          position:fixed;
+          background:#fff;
+          border:1px solid #ddd;
+          border-radius:10px;
+          box-shadow:0 4px 15px #0003;
+          padding:8px;
+          z-index:99999;
+          min-width:190px;
+        `;
+
+        menu.innerHTML = `
+          <div style="
+            padding:10px;
+            font-weight:bold;
+            border-bottom:1px solid #eee;
+          ">
+            Notifications
+          </div>
+
+          <button
+            onclick="selectNotification('All notifications')"
+            style="
+              width:100%;
+              padding:11px;
+              border:0;
+              background:#fff;
+              text-align:left;
+              cursor:pointer;
+            "
+          >
+            🔔 All notifications
+          </button>
+
+          <button
+            onclick="selectNotification('Personalized')"
+            style="
+              width:100%;
+              padding:11px;
+              border:0;
+              background:#fff;
+              text-align:left;
+              cursor:pointer;
+            "
+          >
+            🔔 Personalized
+          </button>
+
+          <button
+            onclick="selectNotification('None')"
+            style="
+              width:100%;
+              padding:11px;
+              border:0;
+              background:#fff;
+              text-align:left;
+              cursor:pointer;
+            "
+          >
+            🔕 None
+          </button>
+        `;
+
+        document.body.appendChild(menu);
+
+        const rect =
+          bell.getBoundingClientRect();
+
+        menu.style.top =
+          (rect.bottom + 8) + 'px';
+
+        menu.style.left =
+          Math.max(
+            10,
+            rect.right - 190
+          ) + 'px';
+      };
+    }
+  }
 }
 
 
