@@ -1065,7 +1065,7 @@ function renderHome(list = [...databaseVideos, ...demoVideos]){
 
     icon: '🎬',
 
-    views: `${video.views || 0} views`,
+    views: `${video.views || 0} ${Number(video.views || 0) === 1 ? 'view' : 'views'}`,
 
     time: new Date(video.created_at).toLocaleDateString(),
 
@@ -1104,7 +1104,7 @@ if(video.id.startsWith('db_') && supabaseClient){
 
   if(!error && newViews !== null){
 
-    video.views = `${newViews} views`;
+    video.views = `${newViews} ${Number(newViews) === 1 ? 'view' : 'views'}`;
 
   }
 
