@@ -1176,6 +1176,14 @@ if(video.id.startsWith('db_') && supabaseClient){
    ${escapeHtml(video.title)}
  </div>
 
+<div class="watch-meta">
+  ${escapeHtml(video.channel || 'ViTube User')}
+  · 0 likes
+  · ${escapeHtml(video.views || '0 views')}
+  · ${escapeHtml(video.time || '')}
+  · <button class="more-btn" onclick="toggleDescription()">More</button>
+</div>
+
  <div class="channel-row">
 
    <div class="channel-left">
@@ -1209,11 +1217,11 @@ if(video.id.startsWith('db_') && supabaseClient){
 
  </div>
 
- <div class="description">
+ <div id="videoDescription" class="description" style="display:none;">
 
-   ${escapeHtml(video.description)}
+  ${escapeHtml(video.description || '')}
 
- </div>
+</div>
 
  <div class="comments">
 
@@ -1253,7 +1261,27 @@ if(video.id.startsWith('db_') && supabaseClient){
 
  window.scrollTo(0,0);
 }
+ 
+function toggleDescription(){
 
+  const box = document.getElementById('videoDescription');
+  const button = document.querySelector('.more-btn');
+
+  if(!box || !button) return;
+
+  if(box.style.display === 'none'){
+
+    box.style.display = 'block';
+    button.textContent = 'Show less';
+
+  }else{
+
+    box.style.display = 'none';
+    button.textContent = 'More';
+
+  }
+
+}
 
 /* ================================
    RECOMMENDED
