@@ -1283,7 +1283,7 @@ function searchVideos(){
 /* ================================
    SUBSCRIBE
    ================================ */
-
+let selectedNotification = 'All notifications';
 async function subscribeChannel(channel){
 
   if(!currentUser){
@@ -1356,58 +1356,68 @@ async function subscribeChannel(channel){
         `;
 
         menu.innerHTML = `
-          <div style="
-            padding:10px;
-            font-weight:bold;
-            border-bottom:1px solid #eee;
-          ">
-            Notifications
-          </div>
+  <div style="
+    padding:10px;
+    font-weight:bold;
+    border-bottom:1px solid #eee;
+  ">
+    Notifications
+  </div>
 
-          <button
-            onclick="selectNotification('All notifications')"
-            style="
-              width:100%;
-              padding:11px;
-              border:0;
-              background:#fff;
-              text-align:left;
-              cursor:pointer;
-            "
-          >
-            🔔 All notifications
-          </button>
+  <button
+    onclick="selectNotification('All notifications')"
+    style="
+      width:100%;
+      padding:11px;
+      border:0;
+      background:#fff;
+      text-align:left;
+      cursor:pointer;
+      font-size:15px;
+    "
+  >
+    🔔 All notifications
+    <span style="float:right;">
+      ${selectedNotification === 'All notifications' ? '✓' : ''}
+    </span>
+  </button>
 
-          <button
-            onclick="selectNotification('Personalized')"
-            style="
-              width:100%;
-              padding:11px;
-              border:0;
-              background:#fff;
-              text-align:left;
-              cursor:pointer;
-            "
-          >
-            🔔 Personalized
-          </button>
+  <button
+    onclick="selectNotification('Personalized')"
+    style="
+      width:100%;
+      padding:11px;
+      border:0;
+      background:#fff;
+      text-align:left;
+      cursor:pointer;
+      font-size:15px;
+    "
+  >
+    🛎️ Personalized
+    <span style="float:right;">
+      ${selectedNotification === 'Personalized' ? '✓' : ''}
+    </span>
+  </button>
 
-          <button
-            onclick="selectNotification('None')"
-            style="
-              width:100%;
-              padding:11px;
-              border:0;
-              background:#fff;
-              text-align:left;
-              cursor:pointer;
-            "
-          >
-            🔕 None
-          </button>
-        `;
-
-        document.body.appendChild(menu);
+  <button
+    onclick="selectNotification('None')"
+    style="
+      width:100%;
+      padding:11px;
+      border:0;
+      background:#fff;
+      text-align:left;
+      cursor:pointer;
+      font-size:15px;
+    "
+  >
+    🔕 None
+    <span style="float:right;">
+      ${selectedNotification === 'None' ? '✓' : ''}
+    </span>
+  </button>
+`;
 
         const rect =
           bell.getBoundingClientRect();
@@ -1425,7 +1435,7 @@ async function subscribeChannel(channel){
   }
 }
 function selectNotification(type){
-
+selectedNotification = type;
   const bell =
     document.getElementById('notificationBell');
 
