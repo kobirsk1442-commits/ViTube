@@ -307,10 +307,33 @@ button{cursor:pointer}
 }
 
 .action-btn{
- border:0;
- background:#eee;
- border-radius:22px;
- padding:10px 15px;
+  border:0;
+  background:#f2f2f2;
+  color:#222;
+  border-radius:50%;
+  width:44px;
+  height:44px;
+  padding:0;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:21px;
+  cursor:pointer;
+  transition:all .2s ease;
+}
+
+.action-btn:hover{
+  background:#e5e5e5;
+  transform:scale(1.05);
+}
+
+.action-btn:active{
+  transform:scale(.92);
+}
+
+.action-btn.active{
+  background:#222;
+  color:#fff;
 }
 
 .description{
@@ -1485,12 +1508,14 @@ if(!button) return;
 if(button.dataset.liked === 'true'){
 
   button.dataset.liked = 'false';
-  button.textContent = '👍 Like';
+  button.textContent = '👍';
+button.classList.remove('active');
 
 }else{
 
   button.dataset.liked = 'true';
-  button.textContent = '👍 Liked';
+  button.textContent = '👍';
+button.classList.add('active');
 
 }
  
@@ -1518,12 +1543,14 @@ if(!button) return;
 if(button.dataset.disliked === 'true'){
 
   button.dataset.disliked = 'false';
-  button.textContent = '👎 Dislike';
+  button.textContent = '👎';
+button.classList.remove('active');
 
 }else{
 
   button.dataset.disliked = 'true';
-  button.textContent = '👎 Disliked';
+  button.textContent = '👎';
+button.classList.add('active');
 
 }
  
