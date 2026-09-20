@@ -1085,14 +1085,30 @@ function renderHome(list = [...databaseVideos, ...demoVideos]){
    WATCH PAGE
    ================================ */
 
-function openDemoWatch(id){
+async function openDemoWatch(id){
 
  const video = [...databaseVideos, ...demoVideos].find(v => v.id === id);
 
  if(!video) return;
 
  currentWatchVideo = video;
+if(video.id.startsWith('db_') && supabaseClient){
 
+  const realVideoId = video.id.replace('db_', '');
+
+  const { data: newViews, error } =
+    await supabaseClient.rpc(
+      'increment_video_views',
+      { p_video_id: realVideoId }
+    );
+
+  if(!error && newViews !== null){
+
+    video.views = `${newViews} views`;
+
+  }
+
+}
  document.getElementById('homePage').classList.add('hidden');
  document.getElementById('watchPage').classList.remove('hidden');
 
