@@ -1494,31 +1494,30 @@ selectedNotification = type;
 
 function likeVideo(){
 
- if(!currentUser){
+  if(!currentUser){
+    openLogin();
+    return;
+  }
 
-  openLogin();
-  return;
+  const likeBtn = document.querySelector('.actions button[onclick="likeVideo()"]');
+  const dislikeBtn = document.querySelector('.actions button[onclick="dislikeVideo()"]');
 
- }
-const button =
-  document.querySelector('.actions .action-btn');
+  if(!likeBtn || !dislikeBtn) return;
 
-if(!button) return;
+  if(likeBtn.dataset.liked === 'true'){
 
-if(button.dataset.liked === 'true'){
+    likeBtn.dataset.liked = 'false';
+    likeBtn.classList.remove('active');
 
-  button.dataset.liked = 'false';
-  button.textContent = '👍';
-button.classList.remove('active');
+  }else{
 
-}else{
+    likeBtn.dataset.liked = 'true';
+    likeBtn.classList.add('active');
 
-  button.dataset.liked = 'true';
-  button.textContent = '👍';
-button.classList.add('active');
+    dislikeBtn.dataset.disliked = 'false';
+    dislikeBtn.classList.remove('active');
 
-}
- 
+  }
 
 }
 
@@ -1526,37 +1525,34 @@ button.classList.add('active');
 /* ================================
    DISLIKE
    ================================ */
-
 function dislikeVideo(){
 
- if(!currentUser){
+  if(!currentUser){
+    openLogin();
+    return;
+  }
 
-  openLogin();
-  return;
+  const likeBtn = document.querySelector('.actions button[onclick="likeVideo()"]');
+  const dislikeBtn = document.querySelector('.actions button[onclick="dislikeVideo()"]');
 
- }
-const button =
-  document.querySelector('.actions button[onclick="dislikeVideo()"]');
+  if(!likeBtn || !dislikeBtn) return;
 
-if(!button) return;
+  if(dislikeBtn.dataset.disliked === 'true'){
 
-if(button.dataset.disliked === 'true'){
+    dislikeBtn.dataset.disliked = 'false';
+    dislikeBtn.classList.remove('active');
 
-  button.dataset.disliked = 'false';
-  button.textContent = '👎';
-button.classList.remove('active');
+  }else{
 
-}else{
+    dislikeBtn.dataset.disliked = 'true';
+    dislikeBtn.classList.add('active');
 
-  button.dataset.disliked = 'true';
-  button.textContent = '👎';
-button.classList.add('active');
+    likeBtn.dataset.liked = 'false';
+    likeBtn.classList.remove('active');
+
+  }
 
 }
- 
-
-}
-
 
 /* ================================
    SHARE
