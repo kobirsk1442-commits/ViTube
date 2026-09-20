@@ -1424,7 +1424,36 @@ async function subscribeChannel(channel){
     }
   }
 }
+function selectNotification(type){
 
+  const bell =
+    document.getElementById('notificationBell');
+
+  if(bell){
+
+    if(type === 'All notifications'){
+      bell.textContent = '🔔';
+      bell.title = 'All notifications';
+    }
+
+    if(type === 'Personalized'){
+      bell.textContent = '🔔';
+      bell.title = 'Personalized notifications';
+    }
+
+    if(type === 'None'){
+      bell.textContent = '🔕';
+      bell.title = 'Notifications off';
+    }
+  }
+
+  const menu =
+    document.getElementById('notificationMenu');
+
+  if(menu){
+    menu.remove();
+  }
+}
 
 /* ================================
    LIKE
