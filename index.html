@@ -503,6 +503,7 @@ button{cursor:pointer}
  placeholder="Search videos..."
  onkeydown="if(event.key==='Enter')searchVideos()">
 <button onclick="searchVideos()">🔍</button>
+ <button class="icon-btn" onclick="startVoiceSearch()">🎙️</button>
 </div>
 
 <div class="header-right">
@@ -1396,7 +1397,30 @@ function searchVideos(){
 
  renderHome(searchResults);
 }
+function startVoiceSearch(){
+  const input = document.getElementById('searchInput');
 
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if(!SpeechRecognition){
+    alert('Voice search is not supported on this browser.');
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+
+  recognition.lang = 'en-IN';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.onresult = function(event){
+    input.value = event.results[0][0].transcript;
+    searchVideos();
+  };
+
+  recognition.start();
+}
 
 /* ================================
    SUBSCRIBE
