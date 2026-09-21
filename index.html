@@ -2193,7 +2193,79 @@ if(data.banner_url){
   bannerImage.style.display = 'none';
 
 }
+const channelVideoGrid =
+  document.getElementById('channelVideoGrid');
 
+const { data: channelVideos, error: videoError } =
+  await supabaseClient
+    .from('videos')
+    .select('id,title,description,video_url,thumbnail_url,views,created_at')
+    .eq('owner_id', currentUser.id)
+    .order('created_at', { ascending:false });
+
+if(videoError){
+  console.error('Channel videos load error:', videoError);
+}else if(channelVideoGrid){
+
+  if(!channelVideos || channelVideos.length === 0){
+
+    channelVideoGrid.innerHTML =
+      '<p style="color:#777;">No videos yet.</p>';
+
+  }else{
+
+    channelVideoGrid.innerHTML = channelVideos.map(video => `
+      <div
+        style="cursor:pointer;"
+        onclick="openDemoWatch('db_${video.id}')"
+      >
+
+        <div style="
+          width:100%;
+          aspect-ratio:16/9;
+          background:#eee;
+          border-radius:10px;
+          overflow:hidden;
+        ">
+          ${
+            video.thumbnail_url
+            ? `<img
+                src="${escapeHtml(video.thumbnail_url)}"
+                style="width:100%;height:100%;object-fit:cover;"
+              >`
+            : `<div style="
+                width:100%;
+                height:100%;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                font-size:45px;
+              ">🎬</div>`
+          }
+        </div>
+
+        <div style="
+          font-weight:700;
+          margin-top:8px;
+          line-height:1.3;
+        ">
+          ${escapeHtml(video.title || 'Untitled video')}
+        </div>
+
+        <div style="
+          color:#777;
+          font-size:13px;
+          margin-top:5px;
+        ">
+          ${escapeHtml(String(video.views || 0))} views
+          · ${getRelativeTime(video.created_at)}
+        </div>
+
+      </div>
+    `).join('');
+
+  }
+}
   document.getElementById('channelPageModal').style.display='flex';
 
   return;
