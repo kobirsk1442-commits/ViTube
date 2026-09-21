@@ -887,6 +887,14 @@ Sign in first to upload a video.
 <input id="uploadTitle" placeholder="Video title">
 
 <textarea id="uploadDescription" placeholder="Description"></textarea>
+ <label style="display:block;margin:15px 0 8px;font-weight:600;">
+  Thumbnail
+</label>
+
+<input id="uploadThumbnailFile" type="file" accept="image/*">
+
+<img id="thumbnailPreview"
+     style="display:none;width:100%;max-height:220px;object-fit:cover;margin-top:10px;border-radius:10px;">
 <label style="display:block;margin:15px 0 8px;font-weight:600;">
   Visibility
 </label>
