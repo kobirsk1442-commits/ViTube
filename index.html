@@ -3260,6 +3260,76 @@ thumbnailInput.addEventListener('change', function(){
   thumbnailPreview.src = URL.createObjectURL(file);
   thumbnailPreview.style.display = 'block';
 });
+ async function generateAutoThumbnail(videoFile){
+
+  return new Promise((resolve) => {
+
+    const video = document.createElement('video');
+    const canvas = document.createElement('canvas');
+
+    const url = URL.createObjectURL(videoFile);
+
+    video.src = url;
+    video.muted = true;
+    video.playsInline = true;
+    video.preload = 'metadata';
+
+    video.onloadedmetadata = function(){
+
+      const duration = video.duration || 1;
+
+      video.currentTime = Math.min(
+        Math.max(duration * 0.10, 1),
+        duration - 0.1
+      );
+    };
+
+    video.onseeked = function(){
+
+      try{
+
+        canvas.width = video.videoWidth || 1280;
+        canvas.height = video.videoHeight || 720;
+
+        const ctx = canvas.getContext('2d');
+
+        ctx.drawImage(
+          video,
+          0,
+          0,
+          canvas.width,
+          canvas.height
+        );
+
+        canvas.toBlob(
+          function(blob){
+
+            URL.revokeObjectURL(url);
+            resolve(blob);
+
+          },
+          'image/jpeg',
+          0.85
+        );
+
+      }catch(error){
+
+        URL.revokeObjectURL(url);
+        resolve(null);
+
+      }
+    };
+
+    video.onerror = function(){
+
+      URL.revokeObjectURL(url);
+      resolve(null);
+
+    };
+
+  });
+
+}
 async function publishVideo(){
   if(!currentUser){
     openLogin();
@@ -3401,10 +3471,21 @@ async function publishVideo(){
         .getPublicUrl(filePath);
    let thumbnailUrl = '';
 
-if(thumbnailFile){
+let thumbnailToUpload = thumbnailFile;
+
+if(!thumbnailToUpload){
+
+  thumbnailToUpload =
+    await generateAutoThumbnail(videoFile);
+
+}
+
+if(thumbnailToUpload){
 
   const thumbnailName =
-    thumbnailFile.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+    thumbnailFile
+      ? thumbnailFile.name.replace(/[^a-zA-Z0-9._-]/g,'_')
+      : 'auto-thumbnail.jpg';
 
   const thumbnailPath =
     currentUser.id + '/' +
@@ -3417,9 +3498,10 @@ if(thumbnailFile){
       .from('thumbnails')
       .upload(
         thumbnailPath,
-        thumbnailFile,
+        thumbnailToUpload,
         {
-          contentType: thumbnailFile.type || 'image/jpeg',
+          contentType:
+            thumbnailToUpload.type || 'image/jpeg',
           upsert:false
         }
       );
@@ -3434,7 +3516,9 @@ if(thumbnailFile){
       .from('thumbnails')
       .getPublicUrl(thumbnailPath);
 
-  thumbnailUrl = thumbnailPublic.publicUrl;
+  thumbnailUrl =
+    thumbnailPublic.publicUrl;
+
 }
 const { error: dbError } = await supabaseClient
   .from('videos')
