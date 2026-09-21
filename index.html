@@ -1092,7 +1092,14 @@ function renderHome(list = [...databaseVideos, ...demoVideos]){
 
     return;
   }
+const { data: channels } = await supabaseClient
+  .from('channels')
+  .select('owner_id,handle');
 
+const channelMap = {};
+(channels || []).forEach(channel => {
+  channelMap[channel.owner_id] = channel.handle;
+});
   databaseVideos = (data || []).map(video => ({
 
     id: 'db_' + video.id,
@@ -1100,7 +1107,7 @@ function renderHome(list = [...databaseVideos, ...demoVideos]){
     title: video.title || 'Untitled video',
 
     channel: 'ViTube User',
-
+    handle: (channelMap[video.owner_id] || 'vitubeworld').replace(/^@/, ''),
     icon: '🎬',
 
     views: `${video.views || 0} ${Number(video.views || 0) === 1 ? 'view' : 'views'}`,
@@ -1186,7 +1193,7 @@ if(video.id.startsWith('db_') && supabaseClient){
 
 <div class="watch-meta">
 
-  ${escapeHtml(video.channel || 'ViTube User')}
+  @${escapeHtml(video.handle || 'vitubeworld')}
 
   · 0 likes
 
