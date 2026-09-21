@@ -1407,6 +1407,7 @@ function searchVideos(){
 }
 
 function startVoiceSearch(){
+
   const input = document.getElementById('searchInput');
 
   const SpeechRecognition =
@@ -1417,15 +1418,111 @@ function startVoiceSearch(){
     return;
   }
 
+  const overlay = document.createElement('div');
+
+  overlay.id = 'voiceSearchOverlay';
+
+  overlay.style.cssText = `
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.72);
+    z-index:9999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  `;
+
+  overlay.innerHTML = `
+    <div style="
+      width:min(90%,420px);
+      background:#181818;
+      color:#fff;
+      border-radius:18px;
+      padding:28px 20px 32px;
+      text-align:center;
+      box-shadow:0 15px 50px rgba(0,0,0,.5);
+    ">
+
+      <div style="
+        display:flex;
+        justify-content:flex-end;
+        font-size:28px;
+        cursor:pointer;
+      " id="closeVoiceSearch">×</div>
+
+      <div id="voiceText" style="
+        min-height:45px;
+        font-size:22px;
+        font-weight:600;
+        margin:20px 0 30px;
+      ">
+        Listening…
+      </div>
+
+      <button id="voiceMicButton" style="
+        width:78px;
+        height:78px;
+        border:0;
+        border-radius:50%;
+        background:#ff0033;
+        color:#fff;
+        font-size:34px;
+        cursor:pointer;
+      ">🎙️</button>
+
+      <div style="
+        margin-top:22px;
+        color:#aaa;
+        font-size:14px;
+      ">
+        Speak to search ViTube
+      </div>
+
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  const voiceText = document.getElementById('voiceText');
+
+  document.getElementById('closeVoiceSearch').onclick = function(){
+    recognition.stop();
+    overlay.remove();
+  };
+
   const recognition = new SpeechRecognition();
 
   recognition.lang = 'en-IN';
-  recognition.interimResults = false;
+  recognition.interimResults = true;
   recognition.maxAlternatives = 1;
 
   recognition.onresult = function(event){
-    input.value = event.results[0][0].transcript;
-    searchVideos();
+
+    const transcript =
+      event.results[event.results.length - 1][0].transcript;
+
+    voiceText.textContent = transcript;
+
+    if(event.results[event.results.length - 1].isFinal){
+
+      input.value = transcript;
+
+      setTimeout(function(){
+        overlay.remove();
+        searchVideos();
+      }, 500);
+
+    }
+  };
+
+  recognition.onerror = function(){
+    voiceText.textContent = 'Try again…';
+  };
+
+  recognition.onend = function(){
+    if(document.body.contains(overlay)){
+      overlay.remove();
+    }
   };
 
   recognition.start();
