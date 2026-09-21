@@ -887,7 +887,15 @@ Sign in first to upload a video.
 <input id="uploadTitle" placeholder="Video title">
 
 <textarea id="uploadDescription" placeholder="Description"></textarea>
+<label style="display:block;margin:15px 0 8px;font-weight:600;">
+  Visibility
+</label>
 
+<select id="uploadVisibility" style="width:100%;padding:12px;border:1px solid #ccc;border-radius:10px;">
+  <option value="public">Public</option>
+  <option value="unlisted">Unlisted</option>
+  <option value="private">Private</option>
+</select>
 <input id="uploadVideoFile" type="file" accept="video/*">
 
 <button class="primary" onclick="publishVideo()">
@@ -3168,7 +3176,7 @@ async function publishVideo(){
   const title = document.getElementById('uploadTitle').value.trim();
   const description = document.getElementById('uploadDescription').value.trim();
   const videoFile = document.getElementById('uploadVideoFile').files[0];
-
+ const visibility = document.getElementById('uploadVisibility').value;
   if(!title || !videoFile){
     alert('Please enter a video title and select a video file.');
     return;
@@ -3305,6 +3313,7 @@ const { error: dbError } = await supabaseClient
     title: title,
     description: description,
     video_url: data.publicUrl
+    visibility: visibility
   });
 
 if(dbError){
