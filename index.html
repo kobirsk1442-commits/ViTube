@@ -3399,7 +3399,43 @@ async function publishVideo(){
         .storage
         .from('videos')
         .getPublicUrl(filePath);
-   
+   let thumbnailUrl = '';
+
+if(thumbnailFile){
+
+  const thumbnailName =
+    thumbnailFile.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+
+  const thumbnailPath =
+    currentUser.id + '/' +
+    Date.now() + '_' +
+    thumbnailName;
+
+  const { error: thumbnailError } =
+    await supabaseClient
+      .storage
+      .from('thumbnails')
+      .upload(
+        thumbnailPath,
+        thumbnailFile,
+        {
+          contentType: thumbnailFile.type || 'image/jpeg',
+          upsert:false
+        }
+      );
+
+  if(thumbnailError){
+    throw thumbnailError;
+  }
+
+  const { data: thumbnailPublic } =
+    supabaseClient
+      .storage
+      .from('thumbnails')
+      .getPublicUrl(thumbnailPath);
+
+  thumbnailUrl = thumbnailPublic.publicUrl;
+}
 const { error: dbError } = await supabaseClient
   .from('videos')
   .insert({
@@ -3407,6 +3443,7 @@ const { error: dbError } = await supabaseClient
     title: title,
     description: description,
     video_url: data.publicUrl,
+   thumbnail_url: thumbnailUrl,
     visibility: visibility
   });
 
