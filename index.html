@@ -1102,7 +1102,7 @@ function renderHome(list = [...databaseVideos, ...demoVideos]){
     .from('videos')
     .select('id,owner_id,title,description,video_url,thumbnail_url,views,created_at')
     .order('created_at', { ascending:false });
-
+    .eq('visibility', 'public')
   if(error){
 
     console.error('Failed to load videos:', error);
