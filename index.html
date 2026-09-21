@@ -1177,11 +1177,17 @@ if(video.id.startsWith('db_') && supabaseClient){
  </div>
 
 <div class="watch-meta">
+
   ${escapeHtml(video.channel || 'ViTube User')}
+
   · 0 likes
+
   · ${escapeHtml(video.views || '0 views')}
+
   · ${escapeHtml(video.time || '')}
+
   · <button class="more-btn" onclick="toggleDescription()">More</button>
+
 </div>
 
  <div class="channel-row">
