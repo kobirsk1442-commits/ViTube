@@ -1372,31 +1372,40 @@ function goHome(){
 /* ================================
    SEARCH
    ================================ */
-
 function searchVideos(){
 
- const q = document
- .getElementById('searchInput')
- .value
- .trim()
- .toLowerCase();
+  const q = document
+    .getElementById('searchInput')
+    .value
+    .trim()
+    .toLowerCase();
 
- if(!q){
+  const allVideos = [
+    ...databaseVideos,
+    ...demoVideos
+  ];
 
-  renderHome(demoVideos);
-  return;
- }
+  if(!q){
+    renderHome(allVideos);
+    return;
+  }
 
- searchResults = demoVideos.filter(video =>
-   video.title.toLowerCase().includes(q) ||
-   video.channel.toLowerCase().includes(q)
- );
+  searchResults = allVideos.filter(video =>
 
- document.getElementById('watchPage').classList.add('hidden');
- document.getElementById('homePage').classList.remove('hidden');
+    (video.title || '').toLowerCase().includes(q) ||
 
- renderHome(searchResults);
+    (video.channel || '').toLowerCase().includes(q) ||
+
+    (video.description || '').toLowerCase().includes(q)
+
+  );
+
+  document.getElementById('watchPage').classList.add('hidden');
+  document.getElementById('homePage').classList.remove('hidden');
+
+  renderHome(searchResults);
 }
+
 function startVoiceSearch(){
   const input = document.getElementById('searchInput');
 
