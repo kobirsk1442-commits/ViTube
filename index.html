@@ -2712,11 +2712,216 @@ async function loadStudioContentVideos(){
           ${escapeHtml(video.visibility || 'private')}
         </div>
 
+        <div style="margin-top:12px;">
+
+  <button
+    onclick="openStudioVideoEditor('${video.id}')"
+    style="
+      border:0;
+      background:#222;
+      color:#fff;
+      padding:9px 16px;
+      border-radius:7px;
+      font-size:14px;
+      font-weight:600;
+      cursor:pointer;
+    "
+  >
+    ✏️ Edit
+  </button>
+
+</div>
       </div>
 
     </div>
 
   `).join('');
+}
+ function openStudioVideoEditor(videoId){
+
+  if(!currentUser){
+    openLogin();
+    return;
+  }
+
+  const oldEditor =
+    document.getElementById('viTubeStudioVideoEditor');
+
+  if(oldEditor){
+    oldEditor.remove();
+  }
+
+  const editor =
+    document.createElement('div');
+
+  editor.id = 'viTubeStudioVideoEditor';
+
+  editor.style.cssText = `
+    position:fixed;
+    inset:0;
+    z-index:11000;
+    background:#f5f5f5;
+    overflow:auto;
+    font-family:Arial,sans-serif;
+    padding:20px;
+  `;
+
+  editor.innerHTML = `
+
+    <div style="
+      max-width:900px;
+      margin:auto;
+    ">
+
+      <div style="
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        margin-bottom:20px;
+      ">
+
+        <h2 style="margin:0;">
+          ✏️ Edit Video
+        </h2>
+
+        <button
+          onclick="
+            document
+              .getElementById('viTubeStudioVideoEditor')
+              .remove()
+          "
+          style="
+            border:0;
+            background:#222;
+            color:#fff;
+            padding:10px 16px;
+            border-radius:8px;
+            cursor:pointer;
+          "
+        >
+          Close
+        </button>
+
+      </div>
+
+      <div style="
+        background:#fff;
+        border-radius:14px;
+        padding:20px;
+        box-shadow:0 2px 10px rgba(0,0,0,.08);
+      ">
+
+        <h3 style="margin-top:0;">
+          Video Editor
+        </h3>
+
+        <p style="
+          color:#666;
+          font-size:14px;
+        ">
+          Video ID: ${escapeHtml(videoId)}
+        </p>
+
+        <label style="
+          display:block;
+          font-weight:700;
+          margin:18px 0 8px;
+        ">
+          Title
+        </label>
+
+        <input
+          id="editVideoTitle"
+          placeholder="Video title"
+          style="
+            width:100%;
+            box-sizing:border-box;
+            padding:13px;
+            border:1px solid #ccc;
+            border-radius:8px;
+            font-size:16px;
+          "
+        >
+
+        <label style="
+          display:block;
+          font-weight:700;
+          margin:18px 0 8px;
+        ">
+          Description
+        </label>
+
+        <textarea
+          id="editVideoDescription"
+          placeholder="Video description"
+          style="
+            width:100%;
+            min-height:150px;
+            box-sizing:border-box;
+            padding:13px;
+            border:1px solid #ccc;
+            border-radius:8px;
+            font-size:15px;
+            resize:vertical;
+          "
+        ></textarea>
+
+        <label style="
+          display:block;
+          font-weight:700;
+          margin:18px 0 8px;
+        ">
+          Visibility
+        </label>
+
+        <select
+          id="editVideoVisibility"
+          style="
+            width:100%;
+            padding:13px;
+            border:1px solid #ccc;
+            border-radius:8px;
+            font-size:15px;
+          "
+        >
+          <option value="public">Public</option>
+          <option value="unlisted">Unlisted</option>
+          <option value="private">Private</option>
+        </select>
+
+        <div style="
+          margin-top:25px;
+          display:flex;
+          justify-content:flex-end;
+        ">
+
+          <button
+            onclick="
+              document
+                .getElementById('viTubeStudioVideoEditor')
+                .remove()
+            "
+            style="
+              border:0;
+              background:#222;
+              color:#fff;
+              padding:11px 20px;
+              border-radius:8px;
+              cursor:pointer;
+            "
+          >
+            Close Editor
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+  document.body.appendChild(editor);
 }
  function openViTubeStudioSettings(){
 
