@@ -2417,8 +2417,7 @@ document.getElementById('channelModal').style.display='flex';
           text-align:left;
           font-size:16px;
         ">
-          🎬 Content
-        </button>
+          🎬<button onclick="openStudioContent()" style="
 
         <button style="
           display:block;
@@ -2500,6 +2499,224 @@ document.getElementById('channelModal').style.display='flex';
   `;
 
   document.body.appendChild(studio);
+}
+ function openStudioContent(){
+
+  if(!currentUser){
+    openLogin();
+    return;
+  }
+
+  const oldContent =
+    document.getElementById('viTubeStudioContentPage');
+
+  if(oldContent){
+    oldContent.remove();
+  }
+
+  const page = document.createElement('div');
+
+  page.id = 'viTubeStudioContentPage';
+
+  page.style.cssText = `
+    position:fixed;
+    inset:0;
+    z-index:10000;
+    background:#f5f5f5;
+    overflow:auto;
+    font-family:Arial,sans-serif;
+    padding:25px;
+  `;
+
+  page.innerHTML = `
+    <div style="
+      max-width:1100px;
+      margin:auto;
+    ">
+
+      <div style="
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        margin-bottom:25px;
+      ">
+
+        <h2 style="margin:0;">
+          🎬 Content
+        </h2>
+
+        <button
+          onclick="document.getElementById('viTubeStudioContentPage').remove()"
+          style="
+            border:0;
+            background:#222;
+            color:#fff;
+            padding:10px 16px;
+            border-radius:8px;
+            cursor:pointer;
+          "
+        >
+          Close
+        </button>
+
+      </div>
+
+      <div id="studioContentList">
+        Loading videos...
+      </div>
+
+    </div>
+  `;
+
+  document.body.appendChild(page);
+
+  loadStudioContentVideos();
+}
+
+
+async function loadStudioContentVideos(){
+
+  const list =
+    document.getElementById('studioContentList');
+
+  if(!list || !currentUser) return;
+
+  const { data, error } =
+    await supabaseClient
+      .from('videos')
+      .select(`
+        id,
+        title,
+        description,
+        thumbnail_url,
+        views,
+        created_at,
+        visibility
+      `)
+      .eq('owner_id', currentUser.id)
+      .order('created_at', { ascending:false });
+
+  if(error){
+
+    console.error('Studio content error:', error);
+
+    list.innerHTML = `
+      <div style="
+        background:#fff;
+        padding:20px;
+        border-radius:12px;
+        color:#d00;
+      ">
+        Failed to load videos.
+      </div>
+    `;
+
+    return;
+  }
+
+  if(!data || data.length === 0){
+
+    list.innerHTML = `
+      <div style="
+        background:#fff;
+        padding:30px;
+        border-radius:12px;
+        text-align:center;
+        color:#777;
+      ">
+        No videos uploaded yet.
+      </div>
+    `;
+
+    return;
+  }
+
+  list.innerHTML = data.map(video => `
+
+    <div style="
+      display:flex;
+      gap:18px;
+      background:#fff;
+      padding:15px;
+      margin-bottom:15px;
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,.08);
+      align-items:center;
+    ">
+
+      <div style="
+        width:220px;
+        aspect-ratio:16/9;
+        background:#eee;
+        border-radius:8px;
+        overflow:hidden;
+        flex-shrink:0;
+      ">
+
+        ${
+          video.thumbnail_url
+          ? `
+            <img
+              src="${escapeHtml(video.thumbnail_url)}"
+              style="
+                width:100%;
+                height:100%;
+                object-fit:cover;
+              "
+            >
+          `
+          :
+          `
+            <div style="
+              width:100%;
+              height:100%;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              font-size:40px;
+            ">
+              🎬
+            </div>
+          `
+        }
+
+      </div>
+
+      <div style="flex:1;">
+
+        <div style="
+          font-size:18px;
+          font-weight:700;
+          margin-bottom:8px;
+        ">
+          ${escapeHtml(video.title || 'Untitled video')}
+        </div>
+
+        <div style="
+          color:#666;
+          font-size:14px;
+          margin-bottom:8px;
+        ">
+          ${escapeHtml(String(video.views || 0))} views
+          · ${getRelativeTime(video.created_at)}
+        </div>
+
+        <div style="
+          display:inline-block;
+          padding:5px 10px;
+          border-radius:6px;
+          background:#eee;
+          font-size:13px;
+          font-weight:600;
+        ">
+          ${escapeHtml(video.visibility || 'private')}
+        </div>
+
+      </div>
+
+    </div>
+
+  `).join('');
 }
  function openViTubeStudioSettings(){
 
