@@ -2751,8 +2751,7 @@ async function loadStudioContentVideos(){
     oldEditor.remove();
   }
 
-  const editor =
-    document.createElement('div');
+  const editor = document.createElement('div');
 
   editor.id = 'viTubeStudioVideoEditor';
 
@@ -2804,6 +2803,7 @@ async function loadStudioContentVideos(){
 
       </div>
 
+
       <div style="
         background:#fff;
         border-radius:14px;
@@ -2812,22 +2812,68 @@ async function loadStudioContentVideos(){
       ">
 
         <h3 style="margin-top:0;">
-          Video Editor
+          Video Details
         </h3>
 
-        <p style="
-          color:#666;
-          font-size:14px;
-        ">
-          Video ID: ${escapeHtml(videoId)}
-        </p>
 
         <label style="
           display:block;
           font-weight:700;
-          margin:18px 0 8px;
+          margin:20px 0 8px;
         ">
-          Title
+          🖼️ Thumbnail
+        </label>
+
+        <div style="
+          width:100%;
+          max-width:420px;
+          aspect-ratio:16/9;
+          background:#eee;
+          border-radius:10px;
+          overflow:hidden;
+          margin-bottom:10px;
+        ">
+
+          <img
+            id="editThumbnailPreview"
+            style="
+              width:100%;
+              height:100%;
+              object-fit:cover;
+              display:none;
+            "
+          >
+
+          <div
+            id="editThumbnailPlaceholder"
+            style="
+              width:100%;
+              height:100%;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              font-size:45px;
+            "
+          >
+            🎬
+          </div>
+
+        </div>
+
+        <input
+          id="editThumbnailFile"
+          type="file"
+          accept="image/*"
+          style="width:100%;"
+        >
+
+
+        <label style="
+          display:block;
+          font-weight:700;
+          margin:20px 0 8px;
+        ">
+          📝 Title
         </label>
 
         <input
@@ -2843,20 +2889,21 @@ async function loadStudioContentVideos(){
           "
         >
 
+
         <label style="
           display:block;
           font-weight:700;
-          margin:18px 0 8px;
+          margin:20px 0 8px;
         ">
-          Description
+          📄 Description
         </label>
 
         <textarea
           id="editVideoDescription"
-          placeholder="Video description"
+          placeholder="Tell viewers about your video"
           style="
             width:100%;
-            min-height:150px;
+            min-height:170px;
             box-sizing:border-box;
             padding:13px;
             border:1px solid #ccc;
@@ -2866,12 +2913,113 @@ async function loadStudioContentVideos(){
           "
         ></textarea>
 
+
         <label style="
           display:block;
           font-weight:700;
-          margin:18px 0 8px;
+          margin:20px 0 8px;
         ">
-          Visibility
+          🏷️ Tags
+        </label>
+
+        <input
+          id="editVideoTags"
+          placeholder="mobile, smartphone, technology"
+          style="
+            width:100%;
+            box-sizing:border-box;
+            padding:13px;
+            border:1px solid #ccc;
+            border-radius:8px;
+            font-size:15px;
+          "
+        >
+
+        <div style="
+          color:#777;
+          font-size:13px;
+          margin-top:6px;
+        ">
+          Separate tags with commas.
+        </div>
+
+
+        <label style="
+          display:block;
+          font-weight:700;
+          margin:20px 0 8px;
+        ">
+          📂 Category
+        </label>
+
+        <select
+          id="editVideoCategory"
+          style="
+            width:100%;
+            padding:13px;
+            border:1px solid #ccc;
+            border-radius:8px;
+            font-size:15px;
+          "
+        >
+
+          <option value="">Select category</option>
+          <option value="Film & Animation">Film & Animation</option>
+          <option value="Autos & Vehicles">Autos & Vehicles</option>
+          <option value="Music">Music</option>
+          <option value="Pets & Animals">Pets & Animals</option>
+          <option value="Sports">Sports</option>
+          <option value="Travel & Events">Travel & Events</option>
+          <option value="Gaming">Gaming</option>
+          <option value="People & Blogs">People & Blogs</option>
+          <option value="Comedy">Comedy</option>
+          <option value="Entertainment">Entertainment</option>
+          <option value="News & Politics">News & Politics</option>
+          <option value="Howto & Style">Howto & Style</option>
+          <option value="Education">Education</option>
+          <option value="Science & Technology">Science & Technology</option>
+
+        </select>
+
+
+        <label style="
+          display:block;
+          font-weight:700;
+          margin:20px 0 8px;
+        ">
+          👨‍👩‍👧 Audience
+        </label>
+
+        <select
+          id="editVideoAudience"
+          style="
+            width:100%;
+            padding:13px;
+            border:1px solid #ccc;
+            border-radius:8px;
+            font-size:15px;
+          "
+        >
+
+          <option value="">Select audience</option>
+
+          <option value="not_made_for_kids">
+            No, it's not made for kids
+          </option>
+
+          <option value="made_for_kids">
+            Yes, it's made for kids
+          </option>
+
+        </select>
+
+
+        <label style="
+          display:block;
+          font-weight:700;
+          margin:20px 0 8px;
+        ">
+          🌍 Visibility
         </label>
 
         <select
@@ -2884,15 +3032,22 @@ async function loadStudioContentVideos(){
             font-size:15px;
           "
         >
-          <option value="public">Public</option>
-          <option value="unlisted">Unlisted</option>
-          <option value="private">Private</option>
+
+          <option value="public">🌍 Public</option>
+          <option value="unlisted">🔗 Unlisted</option>
+          <option value="private">🔒 Private</option>
+
         </select>
+
 
         <div style="
           margin-top:25px;
+          padding-top:20px;
+          border-top:1px solid #eee;
           display:flex;
           justify-content:flex-end;
+          gap:10px;
+          flex-wrap:wrap;
         ">
 
           <button
@@ -2902,15 +3057,46 @@ async function loadStudioContentVideos(){
                 .remove()
             "
             style="
+              border:1px solid #ccc;
+              background:#fff;
+              padding:11px 18px;
+              border-radius:8px;
+              cursor:pointer;
+            "
+          >
+            Cancel
+          </button>
+
+
+          <button
+            onclick="saveStudioVideoChanges('${videoId}')"
+            style="
               border:0;
               background:#222;
               color:#fff;
               padding:11px 20px;
               border-radius:8px;
               cursor:pointer;
+              font-weight:600;
             "
           >
-            Close Editor
+            💾 Save Changes
+          </button>
+
+
+          <button
+            onclick="publishStudioVideo('${videoId}')"
+            style="
+              border:0;
+              background:#e62117;
+              color:#fff;
+              padding:11px 20px;
+              border-radius:8px;
+              cursor:pointer;
+              font-weight:600;
+            "
+          >
+            🚀 Publish
           </button>
 
         </div>
@@ -2918,11 +3104,323 @@ async function loadStudioContentVideos(){
       </div>
 
     </div>
-
   `;
 
   document.body.appendChild(editor);
+
+
+  const thumbnailInput =
+    document.getElementById('editThumbnailFile');
+
+  thumbnailInput.addEventListener('change', function(){
+
+    const file = this.files[0];
+
+    if(!file) return;
+
+    const preview =
+      document.getElementById('editThumbnailPreview');
+
+    const placeholder =
+      document.getElementById('editThumbnailPlaceholder');
+
+    preview.src =
+      URL.createObjectURL(file);
+
+    preview.style.display = 'block';
+
+    placeholder.style.display = 'none';
+
+  });
+
+
+  loadStudioVideoData(videoId);
 }
+
+
+async function loadStudioVideoData(videoId){
+
+  const { data: video, error } =
+    await supabaseClient
+      .from('videos')
+      .select(`
+        id,
+        title,
+        description,
+        thumbnail_url,
+        tags,
+        category,
+        audience,
+        visibility
+      `)
+      .eq('id', videoId)
+      .eq('owner_id', currentUser.id)
+      .single();
+
+
+  if(error){
+
+    console.error(
+      'Video editor load error:',
+      error
+    );
+
+    alert('Could not load video details.');
+
+    return;
+  }
+
+
+  document.getElementById('editVideoTitle').value =
+    video.title || '';
+
+  document.getElementById('editVideoDescription').value =
+    video.description || '';
+
+  document.getElementById('editVideoTags').value =
+    video.tags || '';
+
+  document.getElementById('editVideoCategory').value =
+    video.category || '';
+
+  document.getElementById('editVideoAudience').value =
+    video.audience || '';
+
+  document.getElementById('editVideoVisibility').value =
+    video.visibility || 'private';
+
+
+  const preview =
+    document.getElementById('editThumbnailPreview');
+
+  const placeholder =
+    document.getElementById('editThumbnailPlaceholder');
+
+
+  if(video.thumbnail_url){
+
+    preview.src =
+      video.thumbnail_url;
+
+    preview.style.display =
+      'block';
+
+    placeholder.style.display =
+      'none';
+
+  }
+
+}
+
+
+async function saveStudioVideoChanges(videoId){
+
+  if(!currentUser){
+    openLogin();
+    return;
+  }
+
+
+  const title =
+    document
+      .getElementById('editVideoTitle')
+      .value
+      .trim();
+
+
+  const description =
+    document
+      .getElementById('editVideoDescription')
+      .value
+      .trim();
+
+
+  const tags =
+    document
+      .getElementById('editVideoTags')
+      .value
+      .trim();
+
+
+  const category =
+    document
+      .getElementById('editVideoCategory')
+      .value;
+
+
+  const audience =
+    document
+      .getElementById('editVideoAudience')
+      .value;
+
+
+  const visibility =
+    document
+      .getElementById('editVideoVisibility')
+      .value;
+
+
+  if(!title){
+
+    alert('Please enter a video title.');
+
+    return;
+  }
+
+
+  let thumbnailUrl = null;
+
+
+  const thumbnailFile =
+    document
+      .getElementById('editThumbnailFile')
+      .files[0];
+
+
+  if(thumbnailFile){
+
+    const safeName =
+      thumbnailFile.name
+        .replace(
+          /[^a-zA-Z0-9._-]/g,
+          '_'
+        );
+
+
+    const thumbnailPath =
+      currentUser.id +
+      '/' +
+      Date.now() +
+      '_' +
+      safeName;
+
+
+    const { error: uploadError } =
+      await supabaseClient
+        .storage
+        .from('thumbnails')
+        .upload(
+          thumbnailPath,
+          thumbnailFile,
+          {
+            contentType:
+              thumbnailFile.type ||
+              'image/jpeg',
+            upsert:false
+          }
+        );
+
+
+    if(uploadError){
+
+      console.error(uploadError);
+
+      alert('Thumbnail upload failed.');
+
+      return;
+    }
+
+
+    const { data: publicData } =
+      supabaseClient
+        .storage
+        .from('thumbnails')
+        .getPublicUrl(
+          thumbnailPath
+        );
+
+
+    thumbnailUrl =
+      publicData.publicUrl;
+
+  }
+
+
+  const updateData = {
+
+    title:title,
+
+    description:description,
+
+    tags:tags,
+
+    category:category,
+
+    audience:audience,
+
+    visibility:visibility
+
+  };
+
+
+  if(thumbnailUrl){
+
+    updateData.thumbnail_url =
+      thumbnailUrl;
+
+  }
+
+
+  const { error } =
+    await supabaseClient
+      .from('videos')
+      .update(updateData)
+      .eq('id', videoId)
+      .eq('owner_id', currentUser.id);
+
+
+  if(error){
+
+    console.error(
+      'Video update error:',
+      error
+    );
+
+    alert(
+      'Could not save changes.'
+    );
+
+    return;
+  }
+
+
+  alert(
+    'Video changes saved successfully!'
+  );
+
+
+  const editor =
+    document.getElementById(
+      'viTubeStudioVideoEditor'
+    );
+
+
+  if(editor){
+    editor.remove();
+  }
+
+}
+
+
+async function publishStudioVideo(videoId){
+
+  const visibility =
+    document.getElementById(
+      'editVideoVisibility'
+    );
+
+  if(visibility){
+
+    visibility.value =
+      'public';
+
+  }
+
+
+  await saveStudioVideoChanges(videoId);
+
+}
+
  function openViTubeStudioSettings(){
 
   if(!currentUser){
