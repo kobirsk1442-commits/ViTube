@@ -3225,11 +3225,26 @@ async function loadStudioContentVideos(){
   `;
 
   document.body.appendChild(editor);
-  );
-document.addEventListener('keydown', function(e){
-  if(e.key === 'Enter' && e.target.id === 'editVideoTagsInput'){
+  
+  document.addEventListener('keydown', function(e){
+  if(
+    e.target.id === 'editVideoTagsInput' &&
+    (e.key === 'Enter' || e.keyCode === 13 || e.which === 13)
+  ){
     e.preventDefault();
-    e.stopPropagation();
+    e.stopImmediatePropagation();
+    addStudioTag();
+    return false;
+  }
+}, true);
+
+document.addEventListener('beforeinput', function(e){
+  if(
+    e.target.id === 'editVideoTagsInput' &&
+    e.inputType === 'insertLineBreak'
+  ){
+    e.preventDefault();
+    e.stopImmediatePropagation();
     addStudioTag();
   }
 }, true);
