@@ -2799,6 +2799,28 @@ async function loadStudioContentVideos(){
     studioTags.join(', ');
 
 }
+ function addStudioTag(){
+
+  const input =
+    document.getElementById('editVideoTagsInput');
+
+  if(!input) return;
+
+  const tag = input.value.trim();
+
+  if(!tag) return;
+
+  if(!studioTags.includes(tag)){
+
+    studioTags.push(tag);
+
+  }
+
+  input.value = '';
+
+  renderStudioTags();
+
+}
  function openStudioVideoEditor(videoId){
 
   if(!currentUser){
@@ -3195,7 +3217,24 @@ async function loadStudioContentVideos(){
   `;
 
   document.body.appendChild(editor);
+const studioTagInput =
+  document.getElementById('editVideoTagsInput');
 
+if(studioTagInput){
+
+  studioTagInput.addEventListener('keydown', function(event){
+
+    if(event.key === 'Enter'){
+
+      event.preventDefault();
+
+      addStudioTag();
+
+    }
+
+  });
+
+}
 
   const thumbnailInput =
     document.getElementById('editThumbnailFile');
