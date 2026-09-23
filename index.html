@@ -3035,7 +3035,8 @@ async function loadStudioContentVideos(){
     type="text"
     placeholder="Add a tag..."
     autocomplete="off"
-    onkeydown="if(event.keyCode === 13){addStudioTag();return false;}"
+
+   onkeydown="event.stopPropagation();if(event.key==='Enter'){event.preventDefault();addStudioTag();return false;}"
     style="
       flex:1;
       min-width:120px;
