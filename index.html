@@ -3034,9 +3034,7 @@ async function loadStudioContentVideos(){
     id="editVideoTagsInput"
     type="text"
     placeholder="Add a tag..."
-    autocomplete="off"
-
-   onkeydown="if(event.key === 'Enter' || event.keyCode === 13){event.preventDefault();event.stopImmediatePropagation();addStudioTag();return false;}"
+    autocomplete="off
     style="
       flex:1;
       min-width:120px;
@@ -3227,18 +3225,14 @@ async function loadStudioContentVideos(){
   `;
 
   document.body.appendChild(editor);
-  
-const tagInput = document.getElementById('editVideoTagsInput');
-
-if(tagInput){
-  tagInput.addEventListener('keydown', function(event){
-    if(event.key === 'Enter'){
-      event.preventDefault();
-      event.stopPropagation();
-      addStudioTag();
-    }
-  });
-}
+  );
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Enter' && e.target.id === 'editVideoTagsInput'){
+    e.preventDefault();
+    e.stopPropagation();
+    addStudioTag();
+  }
+}, true);
   const thumbnailInput =
     document.getElementById('editThumbnailFile');
 
