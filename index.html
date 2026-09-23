@@ -2737,6 +2737,68 @@ async function loadStudioContentVideos(){
 
   `).join('');
 }
+ let studioTags = [];
+ function renderStudioTags(){
+
+  const tagContainer =
+    document.getElementById('editVideoTagsContainer');
+
+  const hiddenTags =
+    document.getElementById('editVideoTags');
+
+  if(!tagContainer || !hiddenTags) return;
+
+  tagContainer.innerHTML = '';
+
+  studioTags.forEach(function(tag, index){
+
+    const chip =
+      document.createElement('div');
+
+    chip.style.cssText = `
+      display:flex;
+      align-items:center;
+      gap:6px;
+      background:#f1f1f1;
+      border:1px solid #ddd;
+      border-radius:18px;
+      padding:7px 10px;
+      font-size:14px;
+      font-weight:500;
+    `;
+
+    chip.innerHTML = `
+      <span>${escapeHtml(tag)}</span>
+      <button
+        type="button"
+        style="
+          border:0;
+          background:none;
+          cursor:pointer;
+          font-size:17px;
+          padding:0;
+          color:#666;
+        "
+      >×</button>
+    `;
+
+    chip.querySelector('button').onclick =
+      function(){
+
+        studioTags.splice(index,1);
+
+        renderStudioTags();
+
+      };
+
+    tagContainer.appendChild(chip);
+
+  });
+
+  hiddenTags.value =
+    studioTags.join(', ');
+
+}
  function openStudioVideoEditor(videoId){
 
   if(!currentUser){
@@ -2922,27 +2984,53 @@ async function loadStudioContentVideos(){
           🏷️ Tags
         </label>
 
-        <input
-          id="editVideoTags"
-          placeholder="mobile, smartphone, technology"
-          style="
-            width:100%;
-            box-sizing:border-box;
-            padding:13px;
-            border:1px solid #ccc;
-            border-radius:8px;
-            font-size:15px;
-          "
-        >
+        
+<div style="
+  border:1px solid #ccc;
+  border-radius:10px;
+  padding:10px;
+  background:#fff;
+  min-height:48px;
+">
 
-        <div style="
-          color:#777;
-          font-size:13px;
-          margin-top:6px;
-        ">
-          Separate tags with commas.
-        </div>
+  <div
+    id="editVideoTagsContainer"
+    style="
+      display:flex;
+      flex-wrap:wrap;
+      gap:7px;
+      margin-bottom:7px;
+    "
+  ></div>
 
+  <input
+    id="editVideoTagsInput"
+    placeholder="Add a tag..."
+    style="
+      width:100%;
+      box-sizing:border-box;
+      border:0;
+      outline:none;
+      padding:8px 4px;
+      font-size:15px;
+      background:transparent;
+    "
+  >
+
+</div>
+
+<div style="
+  color:#777;
+  font-size:13px;
+  margin-top:6px;
+">
+  Type a tag and press Enter.
+</div>
+
+<input
+  id="editVideoTags"
+  type="hidden"
+>
 
         <label style="
           display:block;
@@ -3177,8 +3265,20 @@ async function loadStudioVideoData(videoId){
   document.getElementById('editVideoDescription').value =
     video.description || '';
 
-  document.getElementById('editVideoTags').value =
-    video.tags || '';
+  document.getElementById('editVideoDescription').value =
+  video.description || '';
+
+studioTags =
+  (video.tags || '')
+    .split(',')
+    .map(function(tag){
+      return tag.trim();
+    })
+    .filter(function(tag){
+      return tag.length > 0;
+    });
+
+renderStudioTags();
 
   document.getElementById('editVideoCategory').value =
     video.category || '';
