@@ -3227,7 +3227,18 @@ async function loadStudioContentVideos(){
   `;
 
   document.body.appendChild(editor);
+  
+const tagInput = document.getElementById('editVideoTagsInput');
 
+if(tagInput){
+  tagInput.addEventListener('keydown', function(event){
+    if(event.key === 'Enter'){
+      event.preventDefault();
+      event.stopPropagation();
+      addStudioTag();
+    }
+  });
+}
   const thumbnailInput =
     document.getElementById('editThumbnailFile');
 
