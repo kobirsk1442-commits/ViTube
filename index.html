@@ -2748,7 +2748,11 @@ async function loadStudioContentVideos(){
 
   if(!tagContainer || !hiddenTags) return;
 
-  tagContainer.innerHTML = '';
+  tagContainer
+  .querySelectorAll('.studio-tag-chip')
+  .forEach(function(chip){
+    chip.remove();
+  });
 
   studioTags.forEach(function(tag, index){
 
@@ -3016,31 +3020,38 @@ async function loadStudioContentVideos(){
 ">
 
   <div
-    id="editVideoTagsContainer"
-    style="
-      display:flex;
-      flex-wrap:wrap;
-      gap:7px;
-      margin-bottom:7px;
-    "
-  ></div>
-
-  <input
-  id="editVideoTagsInput"
-  type="text"
-  placeholder="Add a tag..."
-  autocomplete="off"
-  onkeydown="if(event.key === 'Enter'){event.preventDefault();addStudioTag();}"
+  id="editVideoTagsContainer"
   style="
-    width:100%;
-    box-sizing:border-box;
-    border:0;
-    outline:none;
-    padding:8px 4px;
-    font-size:15px;
-    background:transparent;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:7px;
+    margin-bottom:7px;
 "
 >
+
+  <input
+    id="editVideoTagsInput"
+    type="text"
+    placeholder="Add a tag..."
+    autocomplete="off"
+    onkeydown="
+      if(event.key === 'Enter'){
+        event.preventDefault();
+        addStudioTag();
+      }
+    "
+    style="
+      flex:1;
+      min-width:120px;
+      box-sizing:border-box;
+      border:0;
+      outline:none;
+      padding:8px 4px;
+      font-size:15px;
+      background:transparent;
+  "
+  >
 
 </div>
 
