@@ -2889,27 +2889,7 @@ function addStudioTag(){
   input.focus();
 
 }
-
-  const input =
-    document.getElementById('editVideoTagsInput');
-
-  if(!input) return;
-
-  const tag = input.value.trim();
-
-  if(!tag) return;
-
-  if(!studioTags.includes(tag)){
-
-    studioTags.push(tag);
-
-  }
-
-  input.value = '';
-
-  renderStudioTags();
-
-}
+ 
  function openStudioVideoEditor(videoId){
 
   if(!currentUser){
