@@ -3292,6 +3292,28 @@ function addStudioTag(){
   document.body.appendChild(editor);
   
   renderStudioTags();
+
+  const tagInput =
+  document.getElementById('editVideoTagsInput');
+
+if(tagInput){
+
+  tagInput.addEventListener('keydown', function(e){
+
+    if(e.key === 'Enter'){
+
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+
+      addStudioTag();
+
+      return false;
+    }
+
+  }, true);
+
+}
   const thumbnailInput =
     document.getElementById('editThumbnailFile');
 
