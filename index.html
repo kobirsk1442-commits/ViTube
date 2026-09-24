@@ -2738,7 +2738,8 @@ async function loadStudioContentVideos(){
   `).join('');
 }
  let studioTags = [];
- function renderStudioTags(){
+
+function renderStudioTags(){
 
   const tagContainer =
     document.getElementById('editVideoTagsContainer');
@@ -2746,64 +2747,148 @@ async function loadStudioContentVideos(){
   const hiddenTags =
     document.getElementById('editVideoTags');
 
-  if(!tagContainer || !hiddenTags) return;
+  const input =
+    document.getElementById('editVideoTagsInput');
 
+  if(!tagContainer || !hiddenTags || !input) return;
+
+  /* Remove old tag chips */
   tagContainer
-  .querySelectorAll('.studio-tag-chip')
-  .forEach(function(chip){
-    chip.remove();
-  });
+    .querySelectorAll('.studio-tag-chip')
+    .forEach(function(chip){
+      chip.remove();
+    });
 
+  /* Create tag chips */
   studioTags.forEach(function(tag, index){
 
     const chip =
       document.createElement('div');
 
+    chip.className = 'studio-tag-chip';
+
     chip.style.cssText = `
-      display:flex;
+      display:inline-flex;
       align-items:center;
-      gap:6px;
+      gap:7px;
       background:#f1f1f1;
-      border:1px solid #ddd;
+      border:1px solid #d9d9d9;
       border-radius:18px;
       padding:7px 10px;
       font-size:14px;
       font-weight:500;
+      white-space:nowrap;
+      flex:none;
     `;
 
     chip.innerHTML = `
       <span>${escapeHtml(tag)}</span>
+
       <button
         type="button"
+        aria-label="Remove tag"
         style="
           border:0;
           background:none;
+          color:#666;
           cursor:pointer;
           font-size:17px;
+          line-height:1;
           padding:0;
-          color:#666;
+          margin:0;
         "
       >×</button>
     `;
 
     chip.querySelector('button').onclick =
-      function(){
+      function(e){
 
-        studioTags.splice(index,1);
+        e.preventDefault();
+        e.stopPropagation();
+
+        studioTags.splice(index, 1);
 
         renderStudioTags();
 
+        input.focus();
       };
 
-    tagContainer.appendChild(chip);
+    /* Put chip BEFORE the input */
+    tagContainer.insertBefore(chip, input);
 
   });
 
+  /* Save tags in hidden field */
   hiddenTags.value =
     studioTags.join(', ');
 
+  /* Keep Enter inside the Tags field */
+  input.onkeydown = function(e){
+
+    if(e.key === 'Enter'){
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      addStudioTag();
+
+      return false;
+    }
+
+    /* Backspace on empty input removes last tag */
+    if(
+      e.key === 'Backspace' &&
+      input.value === '' &&
+      studioTags.length > 0
+    ){
+
+      studioTags.pop();
+
+      renderStudioTags();
+
+      input.focus();
+    }
+
+  };
+
 }
- function addStudioTag(){
+
+
+function addStudioTag(){
+
+  const input =
+    document.getElementById('editVideoTagsInput');
+
+  if(!input) return;
+
+  const tag =
+    input.value.trim();
+
+  if(!tag){
+    input.focus();
+    return;
+  }
+
+  /* Prevent duplicate tags */
+  const alreadyExists =
+    studioTags.some(function(existingTag){
+      return existingTag.toLowerCase() === tag.toLowerCase();
+    });
+
+  if(!alreadyExists){
+
+    studioTags.push(tag);
+
+  }
+
+  input.value = '';
+
+  renderStudioTags();
+
+  /* Keep cursor in Add a tag box */
+  input.focus();
+
+}
 
   const input =
     document.getElementById('editVideoTagsInput');
@@ -3034,9 +3119,7 @@ async function loadStudioContentVideos(){
     id="editVideoTagsInput"
     type="text"
     placeholder="Add a tag..."
-    autocomplete="off
-
-    onkeydown="if(event.key==='Enter'){event.preventDefault();event.stopPropagation();addStudioTag();}"
+    autocomplete="off"
     style="
       flex:1;
       min-width:120px;
