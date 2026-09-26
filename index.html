@@ -3358,6 +3358,13 @@ studioTags =
       return tag.length > 0;
     });
 
+const tagInput =
+  document.getElementById('editVideoTagsInput');
+
+if(tagInput){
+  tagInput.value = '';
+}
+
 renderStudioTags();
 
   document.getElementById('editVideoCategory').value =
