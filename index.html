@@ -3253,7 +3253,28 @@ function addStudioTag(){
   `;
 
   document.body.appendChild(editor);
-  
+
+  [
+  'editVideoCategory',
+  'editVideoAudience',
+  'editVideoVisibility'
+].forEach(function(id){
+
+  const field = document.getElementById(id);
+
+  if(field){
+
+    field.style.display = 'none';
+
+    const label = field.previousElementSibling;
+
+    if(label && label.tagName === 'LABEL'){
+      label.style.display = 'none';
+    }
+
+  }
+
+});
   renderStudioTags();
 
   const tagInput =
