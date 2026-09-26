@@ -1408,13 +1408,15 @@ function searchVideos(){
 
   searchResults = allVideos.filter(video =>
 
-    (video.title || '').toLowerCase().includes(q) ||
+  (video.title || '').toLowerCase().includes(q) ||
 
-    (video.channel || '').toLowerCase().includes(q) ||
+  (video.channel || '').toLowerCase().includes(q) ||
 
-    (video.description || '').toLowerCase().includes(q)
+  (video.description || '').toLowerCase().includes(q) ||
 
-  );
+  (video.tags || '').toLowerCase().includes(q)
+
+);
 
   document.getElementById('watchPage').classList.add('hidden');
   document.getElementById('homePage').classList.remove('hidden');
