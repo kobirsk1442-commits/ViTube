@@ -3628,6 +3628,23 @@ async function publishStudioVideo(videoId){
 
 
   await saveStudioVideoChanges(videoId);
+ const { error: publishTimeError } =
+  await supabaseClient
+    .from('videos')
+    .update({
+      published_at: new Date().toISOString()
+    })
+    .eq('id', videoId)
+    .eq('owner_id', currentUser.id);
+
+if(publishTimeError){
+
+  console.error(
+    'Publish time update error:',
+    publishTimeError
+  );
+
+}
 
 }
 
