@@ -2632,112 +2632,202 @@ async function loadStudioContentVideos(){
 
     return;
   }
+list.innerHTML = data.map(video => `
+  <div style="
+    display:flex;
+    gap:18px;
+    background:#fff;
+    padding:14px;
+    margin-bottom:12px;
+    border-radius:14px;
+    border:1px solid #e5e5e5;
+    align-items:center;
+    box-shadow:0 2px 8px rgba(0,0,0,0.05);
+  ">
 
-  list.innerHTML = data.map(video => `
-
+    <!-- Thumbnail -->
     <div style="
-      display:flex;
-      gap:18px;
-      background:#fff;
-      padding:15px;
-      margin-bottom:15px;
-      border-radius:12px;
-      box-shadow:0 2px 8px rgba(0,0,0,.08);
-      align-items:center;
+      width:220px;
+      aspect-ratio:16/9;
+      background:#eee;
+      border-radius:10px;
+      overflow:hidden;
+      flex-shrink:0;
+    ">
+      ${
+        video.thumbnail_url
+        ? `
+          <img
+            src="${escapeHtml(video.thumbnail_url)}"
+            style="
+              width:100%;
+              height:100%;
+              object-fit:cover;
+              display:block;
+            "
+          >
+        `
+        : `
+          <div style="
+            width:100%;
+            height:100%;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:40px;
+          ">
+            🎬
+          </div>
+        `
+      }
+    </div>
+
+    <!-- Video information -->
+    <div style="
+      flex:1;
+      min-width:0;
     ">
 
       <div style="
-        width:220px;
-        aspect-ratio:16/9;
-        background:#eee;
-        border-radius:8px;
-        overflow:hidden;
-        flex-shrink:0;
+        font-size:18px;
+        font-weight:700;
+        margin-bottom:7px;
+        color:#111;
       ">
+        ${escapeHtml(video.title || 'Untitled video')}
+      </div>
 
+      <div style="
+        color:#666;
+        font-size:14px;
+        margin-bottom:10px;
+      ">
+        ${escapeHtml(String(video.views || 0))} views
+        ·
+        ${getRelativeTime(video.created_at)}
+      </div>
+
+      <!-- Visibility -->
+      <span style="
+        display:inline-block;
+        padding:6px 11px;
+        border-radius:20px;
+        background:${
+          video.visibility === 'public'
+          ? '#dcfce7'
+          : video.visibility === 'unlisted'
+          ? '#e5e7eb'
+          : '#fee2e2'
+        };
+        color:${
+          video.visibility === 'public'
+          ? '#15803d'
+          : video.visibility === 'unlisted'
+          ? '#374151'
+          : '#b91c1c'
+        };
+        font-size:13px;
+        font-weight:600;
+      ">
         ${
-          video.thumbnail_url
-          ? `
-            <img
-              src="${escapeHtml(video.thumbnail_url)}"
-              style="
-                width:100%;
-                height:100%;
-                object-fit:cover;
-              "
-            >
-          `
-          :
-          `
-            <div style="
-              width:100%;
-              height:100%;
-              display:flex;
-              align-items:center;
-              justify-content:center;
-              font-size:40px;
-            ">
-              🎬
-            </div>
-          `
+          video.visibility === 'public'
+          ? '🌐 Public'
+          : video.visibility === 'unlisted'
+          ? '🔒 Unlisted'
+          : '🔒 Private'
         }
-
-      </div>
-
-      <div style="flex:1;">
-
-        <div style="
-          font-size:18px;
-          font-weight:700;
-          margin-bottom:8px;
-        ">
-          ${escapeHtml(video.title || 'Untitled video')}
-        </div>
-
-        <div style="
-          color:#666;
-          font-size:14px;
-          margin-bottom:8px;
-        ">
-          ${escapeHtml(String(video.views || 0))} views
-          · ${getRelativeTime(video.created_at)}
-        </div>
-
-        <div style="
-          display:inline-block;
-          padding:5px 10px;
-          border-radius:6px;
-          background:#eee;
-          font-size:13px;
-          font-weight:600;
-        ">
-          ${escapeHtml(video.visibility || 'private')}
-        </div>
-
-        <div style="margin-top:12px;">
-
-  <button
-    onclick="openStudioVideoEditor('${video.id}')"
-    style="
-      border:0;
-      background:#222;
-      color:#fff;
-      padding:9px 16px;
-      border-radius:7px;
-      font-size:14px;
-      font-weight:600;
-      cursor:pointer;
-    "
-  >
-    ✏️ Edit
-  </button>
-
-</div>
-      </div>
+      </span>
 
     </div>
 
-  `).join('');
+    <!-- Actions -->
+    <div style="
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-shrink:0;
+    ">
+
+      <!-- Edit -->
+      <button
+        type="button"
+        onclick="openStudioVideoEditor('${video.id}')"
+        style="
+          border:0;
+          background:#e8f1ff;
+          color:#0969da;
+          padding:10px 16px;
+          border-radius:8px;
+          font-size:14px;
+          font-weight:600;
+          cursor:pointer;
+        "
+      >
+        ✏️ Edit
+      </button>
+
+      <!-- Delete -->
+      <button
+        type="button"
+        onclick="deleteStudioVideo('${video.id}')"
+        style="
+          border:0;
+          background:#fee2e2;
+          color:#dc2626;
+          padding:10px 16px;
+          border-radius:8px;
+          font-size:14px;
+          font-weight:600;
+          cursor:pointer;
+        "
+      >
+        🗑️ Delete
+      </button>
+
+    </div>
+
+  </div>
+`).join('');
+ 
+  async function deleteStudioVideo(videoId){
+
+  if(!currentUser){
+    openLogin();
+    return;
+  }
+
+  const confirmed =
+    confirm(
+      'Delete this video permanently?\n\nThis action cannot be undone.'
+    );
+
+  if(!confirmed){
+    return;
+  }
+
+  const { error } =
+    await supabaseClient
+      .from('videos')
+      .delete()
+      .eq('id', videoId)
+      .eq('owner_id', currentUser.id);
+
+  if(error){
+
+    console.error(
+      'Delete video error:',
+      error
+    );
+
+    alert('Failed to delete video.');
+
+    return;
+  }
+
+  await loadStudioContentVideos();
+
+  alert('Video deleted successfully.');
+}
 }
  let studioTags = [];
 
