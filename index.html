@@ -1129,7 +1129,7 @@ const channelMap = {};
 
     views: `${video.views || 0} ${Number(video.views || 0) === 1 ? 'view' : 'views'}`,
 
-    time: getRelativeTime(video.created_at),
+    time: getRelativeTime(video.published_at || video.created_at),
 
     description: video.description || '',
 
