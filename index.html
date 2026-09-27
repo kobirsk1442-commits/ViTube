@@ -2789,7 +2789,7 @@ list.innerHTML = data.map(video => `
   </div>
 `).join('');
  
-  async function deleteStudioVideo(videoId){
+  window.deleteStudioVideo = async function(videoId){
 
   if(!currentUser){
     openLogin();
