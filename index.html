@@ -1678,7 +1678,7 @@ async function subscribeChannel(channelId){
 
       if(error){
         console.error(error);
-        alert('Unable to subscribe.');
+        alert('Unable to subscribe: ' + (error.message || 'Unknown error'));
         return;
       }
 
