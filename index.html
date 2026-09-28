@@ -1040,8 +1040,12 @@ function renderHome(list = [...databaseVideos, ...demoVideos]){
       <div class="video-info">
 
         <div class="channel-mini">
-          ${video.channel ? video.channel.charAt(0) : 'V'}
-        </div>
+  ${
+    video.avatar_url
+      ? `<img src="${video.avatar_url}" alt="${escapeHtml(video.channel || 'Channel')}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`
+      : (video.channel ? video.channel.charAt(0) : 'V')
+  }
+</div>
 
         <div>
 
