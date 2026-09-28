@@ -1272,11 +1272,17 @@ if(video.id.startsWith('db_') && supabaseClient){
      <strong>${escapeHtml(video.channel)}</strong>
 
    </div>
+   <span
+  id="subscriberCount"
+  style="color:#666;font-size:13px;"
+>
+  0 subscribers
+</span>
 
    <button
     id="subscribeBtn"
     class="subscribe"
-    onclick="subscribeChannel('${video.channel}')">
+    onclick="subscribeChannel('${video.channel_id}')"
     Subscribe
    </button>
 
@@ -1333,6 +1339,7 @@ if(video.id.startsWith('db_') && supabaseClient){
  </div>
 
  `;
+ await loadSubscriptionState(video.channel_id);
 
  renderRecommended();
 
@@ -1590,156 +1597,352 @@ function startVoiceSearch(){
    SUBSCRIBE
    ================================ */
 let selectedNotification = 'All notifications';
-async function subscribeChannel(channel){
+async function subscribeChannel(channelId){
 
   if(!currentUser){
     openLogin();
     return;
   }
 
+  if(!supabaseClient || !channelId){
+    alert('Channel information is not available.');
+    return;
+  }
+
   const button =
     document.getElementById('subscribeBtn');
 
-  if(button){
+  try{
 
-    button.textContent = 'Subscribed';
+    const { data: existing, error: checkError } =
+      await supabaseClient
+        .from('channel_followers')
+        .select('channel_id')
+        .eq('channel_id', channelId)
+        .eq('follower_id', currentUser.id)
+        .maybeSingle();
 
-    button.classList.add('subscribed');
+    if(checkError){
+      console.error(checkError);
+      alert('Unable to check subscription.');
+      return;
+    }
 
-    let bell =
+    /* UNSUBSCRIBE */
+    if(existing){
+
+      const { error } =
+        await supabaseClient
+          .from('channel_followers')
+          .delete()
+          .eq('channel_id', channelId)
+          .eq('follower_id', currentUser.id);
+
+      if(error){
+        console.error(error);
+        alert('Unable to unsubscribe.');
+        return;
+      }
+
+      if(button){
+        button.textContent = 'Subscribe';
+        button.classList.remove('subscribed');
+      }
+
+      const bell =
+        document.getElementById('notificationBell');
+
+      if(bell){
+        bell.remove();
+      }
+
+      const menu =
+        document.getElementById('notificationMenu');
+
+      if(menu){
+        menu.remove();
+      }
+
+    }
+
+    /* SUBSCRIBE */
+    else{
+
+      const { error } =
+        await supabaseClient
+          .from('channel_followers')
+          .insert({
+            channel_id: channelId,
+            follower_id: currentUser.id
+          });
+
+      if(error){
+        console.error(error);
+        alert('Unable to subscribe.');
+        return;
+      }
+
+      if(button){
+        button.textContent = 'Subscribed';
+        button.classList.add('subscribed');
+      }
+
+      createNotificationBell(channelId);
+    }
+
+    await updateSubscriberCount(channelId);
+
+  }catch(error){
+
+    console.error(error);
+    alert('Something went wrong.');
+
+  }
+}
+
+
+async function updateSubscriberCount(channelId){
+
+  if(!supabaseClient || !channelId){
+    return;
+  }
+
+  const { count, error } =
+    await supabaseClient
+      .from('channel_followers')
+      .select('*', {
+        count:'exact',
+        head:true
+      })
+      .eq('channel_id', channelId);
+
+  if(error){
+    console.error(error);
+    return;
+  }
+
+  const countElement =
+    document.getElementById('subscriberCount');
+
+  if(countElement){
+
+    const total = count || 0;
+
+    countElement.textContent =
+      `${total} subscriber${total === 1 ? '' : 's'}`;
+
+  }
+}
+
+
+function createNotificationBell(channelId){
+
+  let bell =
+    document.getElementById('notificationBell');
+
+  if(bell){
+    return;
+  }
+
+  const button =
+    document.getElementById('subscribeBtn');
+
+  if(!button){
+    return;
+  }
+
+  bell =
+    document.createElement('button');
+
+  bell.id = 'notificationBell';
+  bell.type = 'button';
+  bell.textContent = '🔔';
+
+  bell.style.cssText = `
+    margin-left:8px;
+    padding:8px 12px;
+    border:0;
+    border-radius:20px;
+    background:#f1f1f1;
+    cursor:pointer;
+    font-size:18px;
+  `;
+
+  button.insertAdjacentElement(
+    'afterend',
+    bell
+  );
+
+  bell.onclick = function(){
+
+    let menu =
+      document.getElementById('notificationMenu');
+
+    if(menu){
+      menu.remove();
+      return;
+    }
+
+    menu =
+      document.createElement('div');
+
+    menu.id = 'notificationMenu';
+
+    menu.style.cssText = `
+      position:fixed;
+      background:#fff;
+      border:1px solid #ddd;
+      border-radius:10px;
+      box-shadow:0 4px 15px #0003;
+      padding:8px;
+      z-index:99999;
+      min-width:220px;
+    `;
+
+    menu.innerHTML = `
+
+      <div style="
+        padding:10px;
+        font-weight:bold;
+        border-bottom:1px solid #eee;
+      ">
+        Notifications
+      </div>
+
+      <button
+        onclick="selectNotification('All notifications')"
+        style="
+          width:100%;
+          padding:11px;
+          border:0;
+          background:#fff;
+          text-align:left;
+          cursor:pointer;
+        "
+      >
+        🔔 All notifications
+      </button>
+
+      <button
+        onclick="selectNotification('Personalized')"
+        style="
+          width:100%;
+          padding:11px;
+          border:0;
+          background:#fff;
+          text-align:left;
+          cursor:pointer;
+        "
+      >
+        🛎️ Personalized
+      </button>
+
+      <button
+        onclick="selectNotification('None')"
+        style="
+          width:100%;
+          padding:11px;
+          border:0;
+          background:#fff;
+          text-align:left;
+          cursor:pointer;
+        "
+      >
+        🔕 None
+      </button>
+
+      <button
+        onclick="subscribeChannel('${channelId}')"
+        style="
+          width:100%;
+          padding:11px;
+          border:0;
+          background:#fff;
+          text-align:left;
+          cursor:pointer;
+          color:#e60023;
+          font-weight:bold;
+          border-top:1px solid #eee;
+        "
+      >
+        🚫 Unsubscribe
+      </button>
+
+    `;
+
+    document.body.appendChild(menu);
+
+    const rect =
+      bell.getBoundingClientRect();
+
+    menu.style.top =
+      (rect.bottom + 8) + 'px';
+
+    menu.style.left =
+      Math.max(
+        10,
+        rect.right - 220
+      ) + 'px';
+
+  };
+}
+
+
+async function loadSubscriptionState(channelId){
+
+  if(!supabaseClient || !channelId){
+    return;
+  }
+
+  const button =
+    document.getElementById('subscribeBtn');
+
+  /* Always load subscriber count */
+  await updateSubscriberCount(channelId);
+
+  /* User not logged in */
+  if(!currentUser){
+    return;
+  }
+
+  const { data, error } =
+    await supabaseClient
+      .from('channel_followers')
+      .select('channel_id')
+      .eq('channel_id', channelId)
+      .eq('follower_id', currentUser.id)
+      .maybeSingle();
+
+  if(error){
+    console.error(error);
+    return;
+  }
+
+  if(data){
+
+    if(button){
+      button.textContent = 'Subscribed';
+      button.classList.add('subscribed');
+    }
+
+    createNotificationBell(channelId);
+
+  }else{
+
+    if(button){
+      button.textContent = 'Subscribe';
+      button.classList.remove('subscribed');
+    }
+
+    const bell =
       document.getElementById('notificationBell');
 
-    if(!bell){
-
-      bell = document.createElement('button');
-
-      bell.id = 'notificationBell';
-
-      bell.type = 'button';
-
-      bell.textContent = '🔔';
-
-      bell.style.cssText = `
-        margin-left:8px;
-        padding:8px 12px;
-        border:0;
-        border-radius:20px;
-        background:#f1f1f1;
-        cursor:pointer;
-        font-size:18px;
-      `;
-
-      button.insertAdjacentElement(
-        'afterend',
-        bell
-      );
-
-      bell.onclick = function(){
-
-        let menu =
-          document.getElementById(
-            'notificationMenu'
-          );
-
-        if(menu){
-          menu.remove();
-          return;
-        }
-
-        menu = document.createElement('div');
-
-        menu.id = 'notificationMenu';
-
-        menu.style.cssText = `
-          position:fixed;
-          background:#fff;
-          border:1px solid #ddd;
-          border-radius:10px;
-          box-shadow:0 4px 15px #0003;
-          padding:8px;
-          z-index:99999;
-          min-width:190px;
-        `;
-
-        menu.innerHTML = `
-  <div style="
-    padding:10px;
-    font-weight:bold;
-    border-bottom:1px solid #eee;
-  ">
-    Notifications
-  </div>
-
-  <button
-    onclick="selectNotification('All notifications')"
-    style="
-      width:100%;
-      padding:11px;
-      border:0;
-      background:#fff;
-      text-align:left;
-      cursor:pointer;
-      font-size:15px;
-    "
-  >
-    🔔 All notifications
-    <span style="float:right;">
-      ${selectedNotification === 'All notifications' ? '✓' : ''}
-    </span>
-  </button>
-
-  <button
-    onclick="selectNotification('Personalized')"
-    style="
-      width:100%;
-      padding:11px;
-      border:0;
-      background:#fff;
-      text-align:left;
-      cursor:pointer;
-      font-size:15px;
-    "
-  >
-    🛎️ Personalized
-    <span style="float:right;">
-      ${selectedNotification === 'Personalized' ? '✓' : ''}
-    </span>
-  </button>
-
-  <button
-    onclick="selectNotification('None')"
-    style="
-      width:100%;
-      padding:11px;
-      border:0;
-      background:#fff;
-      text-align:left;
-      cursor:pointer;
-      font-size:15px;
-    "
-  >
-    🔕 None
-    <span style="float:right;">
-      ${selectedNotification === 'None' ? '✓' : ''}
-    </span>
-  </button>
-`;
-document.body.appendChild(menu);
-        const rect =
-          bell.getBoundingClientRect();
-
-        menu.style.top =
-          (rect.bottom + 8) + 'px';
-
-        menu.style.left =
-          Math.max(
-            10,
-            rect.right - 190
-          ) + 'px';
-      };
+    if(bell){
+      bell.remove();
     }
   }
 }
+
 function selectNotification(type){
 selectedNotification = type;
   const bell =
