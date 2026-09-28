@@ -1119,7 +1119,7 @@ function renderHome(list = [...databaseVideos, ...demoVideos]){
   }
 const { data: channels } = await supabaseClient
   .from('channels')
-  .select('owner_id,name,handle,avatar_url');
+  .select('id,owner_id,name,handle,avatar_url');
 
 const channelMap = {};
 const channelAvatarMap = {};
@@ -1135,6 +1135,14 @@ const channelAvatarMap = {};
   databaseVideos = (data || []).map(video => ({
 
     id: 'db_' + video.id,
+   owner_id: video.owner_id,
+
+channel_id:
+  (channels || [])
+    .find(function(channel){
+      return channel.owner_id === video.owner_id;
+    })
+    ?.id || '',
 
     title: video.title || 'Untitled video',
 
