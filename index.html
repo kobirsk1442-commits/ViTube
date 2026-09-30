@@ -1515,59 +1515,87 @@ async function loadChannelVideos(channelId){
 
     if(!grid) return;
 
-    const { data, error } = await supabaseClient
-        .from('videos')
-        .select('*')
-        .eq('channel_id', channelId)
-        .order('created_at', { ascending:false });
+    try{
 
-    if(error){
-        console.error(error);
+        const { data: channel, error: channelError } =
+            await supabaseClient
+                .from('channels')
+                .select('owner_id')
+                .eq('id', channelId)
+                .maybeSingle();
+
+        if(channelError){
+            console.error('Channel error:', channelError);
+            grid.innerHTML = '<p>Unable to load channel.</p>';
+            return;
+        }
+
+        if(!channel){
+            grid.innerHTML = '<p>Channel not found.</p>';
+            return;
+        }
+
+        const { data, error } =
+            await supabaseClient
+                .from('videos')
+                .select('*')
+                .eq('owner_id', channel.owner_id)
+                .order('created_at', { ascending:false });
+
+        if(error){
+            console.error('Video loading error:', error);
+            grid.innerHTML = '<p>Unable to load videos.</p>';
+            return;
+        }
+
+        if(!data || data.length === 0){
+            grid.innerHTML = '<p>This channel has no videos yet.</p>';
+            return;
+        }
+
+        grid.innerHTML = data.map(video => `
+
+            <article
+                class="video-card"
+                onclick="openDemoWatch('${video.id}')"
+                style="cursor:pointer;"
+            >
+
+                <div class="thumb">
+
+                    ${
+                        video.thumbnail_url
+                        ? `<img
+                            src="${video.thumbnail_url}"
+                            style="width:100%;height:100%;object-fit:cover;"
+                           >`
+                        : `<div>${video.icon || '▶️'}</div>`
+                    }
+
+                </div>
+
+                <div class="video-info">
+
+                    <div class="video-title">
+                        ${escapeHtml(video.title || '')}
+                    </div>
+
+                    <div class="video-meta">
+                        ${escapeHtml(video.views || 0)} views
+                    </div>
+
+                </div>
+
+            </article>
+
+        `).join('');
+
+    }catch(error){
+
+        console.error('Channel videos error:', error);
+
         grid.innerHTML = '<p>Unable to load videos.</p>';
-        return;
     }
-
-    if(!data || data.length === 0){
-        grid.innerHTML = '<p>This channel has no videos yet.</p>';
-        return;
-    }
-
-    grid.innerHTML = data.map(video => `
-
-        <article
-            class="video-card"
-            onclick="openDemoWatch('${video.id}')"
-            style="cursor:pointer;"
-        >
-
-            <div class="thumb">
-
-                ${
-                    video.thumbnail_url
-                    ? `<img
-                        src="${video.thumbnail_url}"
-                        style="width:100%;height:100%;object-fit:cover;"
-                       >`
-                    : `<div>${video.icon || '▶️'}</div>`
-                }
-
-            </div>
-
-            <div class="video-info">
-
-                <div class="video-title">
-                    ${escapeHtml(video.title || '')}
-                </div>
-
-                <div class="video-meta">
-                    ${escapeHtml(video.views || 0)} views
-                </div>
-
-            </div>
-
-        </article>
-
-    `).join('');
 }
  
 function toggleDescription(){
