@@ -1349,6 +1349,226 @@ if(video.id.startsWith('db_') && supabaseClient){
 
  window.scrollTo(0,0);
 }
+
+ /* ================================
+   CHANNEL PAGE
+================================ */
+
+async function openChannelPage(channelId){
+
+    if(!channelId){
+        alert('Channel information is not available.');
+        return;
+    }
+
+    const channel = await supabaseClient
+        .from('channels')
+        .select('*')
+        .eq('id', channelId)
+        .maybeSingle();
+
+    if(channel.error || !channel.data){
+        alert('Channel not found.');
+        return;
+    }
+
+    const ch = channel.data;
+
+    document.getElementById('homePage').classList.add('hidden');
+    document.getElementById('watchPage').classList.add('hidden');
+
+    const content = document.getElementById('watchContent');
+
+    content.innerHTML = `
+        <div class="channel-page">
+
+            <button
+                onclick="showHome()"
+                style="margin-bottom:15px;"
+            >
+                ← Back
+            </button>
+
+            <div class="channel-banner"
+                 style="
+                    width:100%;
+                    height:180px;
+                    background:#ddd;
+                    border-radius:12px;
+                    overflow:hidden;
+                 ">
+
+                ${
+                    ch.banner_url
+                    ? `<img
+                        src="${ch.banner_url}"
+                        style="width:100%;height:100%;object-fit:cover;"
+                       >`
+                    : ''
+                }
+
+            </div>
+
+            <div style="padding:20px 10px;">
+
+                <div style="display:flex;align-items:center;gap:15px;">
+
+                    <div style="
+                        width:90px;
+                        height:90px;
+                        border-radius:50%;
+                        overflow:hidden;
+                        background:#ddd;
+                        flex-shrink:0;
+                    ">
+
+                        ${
+                            ch.avatar_url
+                            ? `<img
+                                src="${ch.avatar_url}"
+                                style="width:100%;height:100%;object-fit:cover;"
+                               >`
+                            : `<div style="
+                                width:100%;
+                                height:100%;
+                                display:flex;
+                                align-items:center;
+                                justify-content:center;
+                                font-size:35px;
+                                font-weight:bold;
+                            ">${(ch.name || 'V').charAt(0)}</div>`
+                        }
+
+                    </div>
+
+                    <div>
+
+                        <h1 style="margin:0;">
+                            ${escapeHtml(ch.name || 'Channel')}
+                        </h1>
+
+                        <div style="color:#666;margin-top:5px;">
+                            @${escapeHtml(ch.handle || '')}
+                        </div>
+
+                        <div id="channelSubscriberTotal"
+                             style="color:#666;margin-top:5px;">
+                            Loading subscribers...
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <button
+                    class="subscribe"
+                    onclick="subscribeChannel('${channelId}')"
+                    style="margin-top:15px;"
+                >
+                    Subscribe
+                </button>
+
+            </div>
+
+            <hr>
+
+            <h2>Videos</h2>
+
+            <div id="channelVideos"
+                 style="
+                    display:grid;
+                    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+                    gap:20px;
+                 ">
+                Loading videos...
+            </div>
+
+        </div>
+    `;
+
+    await loadChannelVideos(channelId);
+
+    const { count } = await supabaseClient
+        .from('channel_followers')
+        .select('*', { count:'exact', head:true })
+        .eq('channel_id', channelId);
+
+    const subscriberElement =
+        document.getElementById('channelSubscriberTotal');
+
+    if(subscriberElement){
+        subscriberElement.textContent =
+            `${count || 0} subscribers`;
+    }
+
+    window.scrollTo(0,0);
+}
+
+
+/* ================================
+   CHANNEL VIDEOS
+================================ */
+
+async function loadChannelVideos(channelId){
+
+    const grid = document.getElementById('channelVideos');
+
+    if(!grid) return;
+
+    const { data, error } = await supabaseClient
+        .from('videos')
+        .select('*')
+        .eq('channel_id', channelId)
+        .order('created_at', { ascending:false });
+
+    if(error){
+        console.error(error);
+        grid.innerHTML = '<p>Unable to load videos.</p>';
+        return;
+    }
+
+    if(!data || data.length === 0){
+        grid.innerHTML = '<p>This channel has no videos yet.</p>';
+        return;
+    }
+
+    grid.innerHTML = data.map(video => `
+
+        <article
+            class="video-card"
+            onclick="openDemoWatch('${video.id}')"
+            style="cursor:pointer;"
+        >
+
+            <div class="thumb">
+
+                ${
+                    video.thumbnail_url
+                    ? `<img
+                        src="${video.thumbnail_url}"
+                        style="width:100%;height:100%;object-fit:cover;"
+                       >`
+                    : `<div>${video.icon || '▶️'}</div>`
+                }
+
+            </div>
+
+            <div class="video-info">
+
+                <div class="video-title">
+                    ${escapeHtml(video.title || '')}
+                </div>
+
+                <div class="video-meta">
+                    ${escapeHtml(video.views || 0)} views
+                </div>
+
+            </div>
+
+        </article>
+
+    `).join('');
+}
  
 function toggleDescription(){
 
