@@ -1257,7 +1257,11 @@ if(video.id.startsWith('db_') && supabaseClient){
 
 </div>
 
- <div class="channel-row">
+ <div
+    class="channel-row"
+    onclick="openChannelPage('${video.channel_id}')"
+    style="cursor:pointer;"
+>
 
    <div class="channel-left">
 
