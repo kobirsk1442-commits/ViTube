@@ -509,7 +509,7 @@ button{cursor:pointer}
 <div class="header-right">
 <button class="icon-btn" onclick="openUpload()">＋</button>
 <button class="icon-btn" onclick="showNotifications()">🔔</button>
-<button class="avatar" id="headerAvatar" onclick="toggleProfileMenu()">G</button>
+<button class="avatar" id="headerAvatar" onclick="event.stopPropagation(); toggleProfileMenu()">G</button>
 </div>
 
 <div class="profile-menu" id="profileMenu">
@@ -5753,7 +5753,21 @@ function closeProfileMenu(){
  }
 
 }
+document.addEventListener('click', function(event){
 
+    const menu = document.getElementById('profileMenu');
+    const avatar = document.getElementById('headerAvatar');
+
+    if(!menu || !avatar) return;
+
+    if(
+        !menu.contains(event.target) &&
+        !avatar.contains(event.target)
+    ){
+        closeProfileMenu();
+    }
+
+});
 
 /* ================================
    HEADER
