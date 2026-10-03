@@ -5753,23 +5753,32 @@ function closeProfileMenu(){
  }
 
 }
+
 document.addEventListener('click', function(event){
 
     const menu = document.getElementById('profileMenu');
     const avatar = document.getElementById('headerAvatar');
-    const notificationMenu = document.getElementById('notificationMenu');
 
     if(!menu || !avatar) return;
 
     if(
+        event.target.closest('#subscribeBtn') ||
+        event.target.closest('#notificationBell') ||
+        event.target.closest('#notificationMenu') ||
+        event.target.closest('#profileMenu')
+    ){
+        return;
+    }
+
+    if(
         !menu.contains(event.target) &&
-        !avatar.contains(event.target) &&
-        !(notificationMenu && notificationMenu.contains(event.target))
+        !avatar.contains(event.target)
     ){
         closeProfileMenu();
     }
 
 });
+
 
 /* ================================
    HEADER
