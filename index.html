@@ -2025,7 +2025,8 @@ function createNotificationBell(channelId){
     bell
   );
 
-  bell.onclick = function(){
+  bell.onclick = function(event){
+    event.stopPropagation();
 
     let menu =
       document.getElementById('notificationMenu');
