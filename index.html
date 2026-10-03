@@ -5753,7 +5753,6 @@ function closeProfileMenu(){
  }
 
 }
-
 document.addEventListener('click', function(event){
 
     const menu = document.getElementById('profileMenu');
@@ -5761,11 +5760,19 @@ document.addEventListener('click', function(event){
 
     if(!menu || !avatar) return;
 
+    const clickedSubscribe =
+        event.target.closest('#subscribeBtn');
+
+    const clickedNotification =
+        event.target.closest('#notificationBell');
+
+    const clickedNotificationMenu =
+        event.target.closest('#notificationMenu');
+
     if(
-        event.target.closest('#subscribeBtn') ||
-        event.target.closest('#notificationBell') ||
-        event.target.closest('#notificationMenu') ||
-        event.target.closest('#profileMenu')
+        clickedSubscribe ||
+        clickedNotification ||
+        clickedNotificationMenu
     ){
         return;
     }
