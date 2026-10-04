@@ -5762,7 +5762,7 @@ document.addEventListener('click', function(event){
     if(!menu || !avatar) return;
 
     const clickedSubscribe =
-        event.target.closest('#subscribeBtn, .subscribe');
+        event.target.closest('.subscribe, #subscribeBtn');
 
     const clickedNotification =
         event.target.closest('#notificationBell');
