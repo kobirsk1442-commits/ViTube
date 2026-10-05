@@ -5762,7 +5762,8 @@ document.addEventListener('click', function(event){
     if(!menu || !avatar) return;
 
     const clickedSubscribe =
-        event.target.closest('.subscribe, #subscribeBtn');
+    event.target.closest('.subscribe');
+        
 
     const clickedNotification =
         event.target.closest('#notificationBell');
@@ -5954,7 +5955,8 @@ document.addEventListener('click',function(event){
     const avatar = document.getElementById('headerAvatar');
 
     const clickedSubscribe =
-        event.target.closest('#subscribeBtn');
+    event.target.closest('.subscribe');
+        
 
     const clickedNotification =
         event.target.closest('#notificationBell');
