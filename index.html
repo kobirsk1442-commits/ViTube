@@ -5950,20 +5950,34 @@ loadDatabaseVideos();
 
 document.addEventListener('click',function(event){
 
- const menu=document.getElementById('profileMenu');
+    const menu = document.getElementById('profileMenu');
+    const avatar = document.getElementById('headerAvatar');
 
- const avatar=document.getElementById('headerAvatar');
+    const clickedSubscribe =
+        event.target.closest('#subscribeBtn');
 
- if(
-  menu &&
-  avatar &&
-  !menu.contains(event.target) &&
-  !avatar.contains(event.target)
- ){
+    const clickedNotification =
+        event.target.closest('#notificationBell');
 
-  menu.style.display='none';
+    const clickedNotificationMenu =
+        event.target.closest('#notificationMenu');
 
- }
+    if(
+        clickedSubscribe ||
+        clickedNotification ||
+        clickedNotificationMenu
+    ){
+        return;
+    }
+
+    if(
+        menu &&
+        avatar &&
+        !menu.contains(event.target) &&
+        !avatar.contains(event.target)
+    ){
+        menu.style.display = 'none';
+    }
 
 });
 
