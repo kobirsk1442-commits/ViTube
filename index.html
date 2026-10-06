@@ -1462,7 +1462,7 @@ async function openChannelPage(channelId){
 
                 <button
                     class="subscribe"
-                    onclick="subscribeChannel('${channelId}')"
+                  onclick="event.stopPropagation(); subscribeChannel('${channelId}')"
                     style="margin-top:15px;"
                 >
                     Subscribe
