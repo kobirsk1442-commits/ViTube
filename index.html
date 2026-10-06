@@ -1182,6 +1182,28 @@ icon: '🎬',
    WATCH PAGE
    ================================ */
 
+ async function openChannelVideo(videoId){
+
+    const { data: video, error } = await supabaseClient
+        .from('videos')
+        .select('id,title,description,video_url,thumbnail_url,views,created_at,owner_id')
+        .eq('id', videoId)
+        .single();
+
+    if(error || !video){
+        console.error('Channel video load error:', error);
+        return;
+    }
+
+    if(!databaseVideos.some(v => v.id === 'db_' + video.id)){
+        databaseVideos.push({
+            ...video,
+            id: 'db_' + video.id
+        });
+    }
+
+    await openDemoWatch('db_' + video.id);
+}
 async function openDemoWatch(id){
 
  const video = [...databaseVideos, ...demoVideos].find(v => v.id === id);
@@ -2715,7 +2737,7 @@ if(videoError){
     channelVideoGrid.innerHTML = channelVideos.map(video => `
       <div
         style="cursor:pointer;"
-        onclick="openDemoWatch('db_${video.id}')"
+        onclick="openChannelVideo('${video.id}')"
       >
 
         <div style="
