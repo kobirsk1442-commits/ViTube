@@ -1286,7 +1286,7 @@ if(video.id.startsWith('db_') && supabaseClient){
    <button
     id="subscribeBtn"
     class="subscribe"
-    onclick="subscribeChannel('${video.channel_id}')"
+    onclick="event.stopPropagation(); subscribeChannel('${video.channel_id}')"
     Subscribe
    </button>
 
