@@ -1181,29 +1181,48 @@ icon: '🎬',
 /* ================================
    WATCH PAGE
    ================================ */
+async function openChannelVideo(videoId){
 
- async function openChannelVideo(videoId){
+    if(!supabaseClient){
+        console.error('Supabase is not available.');
+        return;
+    }
 
     const { data: video, error } = await supabaseClient
         .from('videos')
-        .select('id,title,description,video_url,thumbnail_url,views,created_at,owner_id')
+        .select('*')
         .eq('id', videoId)
         .single();
 
-    if(error || !video){
+    if(error){
         console.error('Channel video load error:', error);
         return;
     }
 
-    if(!databaseVideos.some(v => v.id === 'db_' + video.id)){
-        databaseVideos.push({
-            ...video,
-            id: 'db_' + video.id
-        });
+    if(!video){
+        console.error('Video not found:', videoId);
+        return;
     }
 
-    await openDemoWatch('db_' + video.id);
+    const watchVideo = {
+        ...video,
+        id: 'db_' + video.id
+    };
+
+    const existingIndex =
+        databaseVideos.findIndex(
+            v => v.id === watchVideo.id
+        );
+
+    if(existingIndex >= 0){
+        databaseVideos[existingIndex] = watchVideo;
+    }else{
+        databaseVideos.push(watchVideo);
+    }
+
+    await openDemoWatch(watchVideo.id);
 }
+ 
 async function openDemoWatch(id){
 
  const video = [...databaseVideos, ...demoVideos].find(v => v.id === id);
