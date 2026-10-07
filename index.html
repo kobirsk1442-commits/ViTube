@@ -1219,6 +1219,7 @@ async function openChannelVideo(videoId){
     }else{
         databaseVideos.push(watchVideo);
     }
+ document.getElementById('channelPageModal').style.display = 'none';
 
     await openDemoWatch(watchVideo.id);
 }
