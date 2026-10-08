@@ -2758,7 +2758,7 @@ if(videoError){
     channelVideoGrid.innerHTML = channelVideos.map(video => `
       <div
         style="cursor:pointer;"
-        onclick="event.stopPropagation(); openDemoWatch('db_${video.id}')"
+        onclick="event.stopPropagation(); openChannelVideo('${video.id}')"
       >
 
         <div style="
