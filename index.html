@@ -1223,7 +1223,22 @@ async function openChannelVideo(videoId){
 
     await openDemoWatch(watchVideo.id);
 }
- 
+
+ function goBackFromWatch() {
+    if (window.previousChannelPageHTML) {
+        const content = document.getElementById('watchContent');
+
+        content.innerHTML = window.previousChannelPageHTML;
+
+        document.getElementById('homePage').classList.add('hidden');
+        document.getElementById('watchPage').classList.remove('hidden');
+
+        window.previousChannelPageHTML = null;
+        return;
+    }
+
+    goHome();
+}
 async function openDemoWatch(id){
 
  const video = [...databaseVideos, ...demoVideos].find(v => v.id === id);
