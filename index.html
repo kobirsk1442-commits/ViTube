@@ -2757,9 +2757,9 @@ if(videoError){
 
     channelVideoGrid.innerHTML = channelVideos.map(video => `
       <div
-        style="cursor:pointer;"
-        onclick="alert('VIDEO CLICKED')"
-      >
+  data-channel-video-id="${video.id}"
+  style="cursor:pointer;"
+>
 
         <div style="
           width:100%;
@@ -2804,6 +2804,16 @@ if(videoError){
 
       </div>
     `).join('');
+   
+   channelVideoGrid.onclick = function(event) {
+  const card = event.target.closest('[data-channel-video-id]');
+
+  if (!card) return;
+
+  const videoId = card.getAttribute('data-channel-video-id');
+
+  openChannelVideo(videoId);
+};
 
   }
 }
