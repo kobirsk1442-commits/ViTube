@@ -1251,7 +1251,12 @@ if(video.id.startsWith('db_') && supabaseClient){
  document.getElementById('homePage').classList.add('hidden');
  document.getElementById('watchPage').classList.remove('hidden');
 
- const content = document.getElementById('watchContent');
+ if (
+    !document.getElementById('watchPage').classList.contains('hidden') &&
+    content.querySelector('.channel-page')
+) {
+    window.previousChannelPageHTML = content.innerHTML;
+}
 
  content.innerHTML = `
 
