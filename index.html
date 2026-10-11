@@ -2300,66 +2300,142 @@ selectedNotification = type;
    LIKE
    ================================ */
 
-function likeVideo(){
+async function setVideoReaction(isLike) {
+    if (!currentUser) {
+        openLogin();
+        return;
+    }
 
-  if(!currentUser){
-    openLogin();
-    return;
-  }
+    if (!supabaseClient || !currentWatchVideo) {
+        alert('Video not found.');
+        return;
+    }
 
-  const likeBtn = document.querySelector('.actions button[onclick="likeVideo()"]');
-  const dislikeBtn = document.querySelector('.actions button[onclick="dislikeVideo()"]');
+    const videoId = String(currentWatchVideo.id).replace(/^db_/, '');
+    const userId = currentUser.id;
 
-  if(!likeBtn || !dislikeBtn) return;
+    // Only save reactions for uploaded videos with UUIDs
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(videoId)) {
+        alert('Please use an uploaded video.');
+        return;
+    }
 
-  if(likeBtn.dataset.liked === 'true'){
+    const likeBtn = document.querySelector(
+        '.actions button[onclick="likeVideo()"]'
+    );
 
-    likeBtn.dataset.liked = 'false';
-    likeBtn.classList.remove('active');
+    const dislikeBtn = document.querySelector(
+        '.actions button[onclick="dislikeVideo()"]'
+    );
 
-  }else{
+    try {
+        // Find this user's existing reaction
+        const { data: existing, error: readError } =
+            await supabaseClient
+                .from('video_likes')
+                .select('is_like')
+                .eq('video_id', videoId)
+                .eq('user_id', userId)
+                .maybeSingle();
 
-    likeBtn.dataset.liked = 'true';
-    likeBtn.classList.add('active');
+        if (readError) throw readError;
 
-    dislikeBtn.dataset.disliked = 'false';
-    dislikeBtn.classList.remove('active');
+        // Clicking the same reaction removes it
+        if (existing && existing.is_like === isLike) {
+            const { error } = await supabaseClient
+                .from('video_likes')
+                .delete()
+                .eq('video_id', videoId)
+                .eq('user_id', userId);
 
-  }
+            if (error) throw error;
+        }
 
+        // Switching from Like to Dislike or Dislike to Like
+        else if (existing) {
+            const { error } = await supabaseClient
+                .from('video_likes')
+                .update({ is_like: isLike })
+                .eq('video_id', videoId)
+                .eq('user_id', userId);
+
+            if (error) throw error;
+        }
+
+        // First reaction
+        else {
+            const { error } = await supabaseClient
+                .from('video_likes')
+                .insert({
+                    video_id: videoId,
+                    user_id: userId,
+                    is_like: isLike
+                });
+
+            if (error) throw error;
+        }
+
+        // Read the final reaction
+        const { data: reaction, error: reactionError } =
+            await supabaseClient
+                .from('video_likes')
+                .select('is_like')
+                .eq('video_id', videoId)
+                .eq('user_id', userId)
+                .maybeSingle();
+
+        if (reactionError) throw reactionError;
+
+        const liked = !!reaction && reaction.is_like === true;
+        const disliked = !!reaction && reaction.is_like === false;
+
+        if (likeBtn) {
+            likeBtn.classList.toggle('active', liked);
+            likeBtn.dataset.liked = String(liked);
+        }
+
+        if (dislikeBtn) {
+            dislikeBtn.classList.toggle('active', disliked);
+            dislikeBtn.dataset.disliked = String(disliked);
+        }
+
+        // Update the single visible Like count
+        await updateVideoLikeCount(videoId);
+
+    } catch (error) {
+        console.error('Video reaction error:', error);
+        alert(
+            'Could not save your reaction. Please check Supabase permissions.'
+        );
+    }
 }
 
+async function likeVideo() {
+    await setVideoReaction(true);
+}
 
-/* ================================
-   DISLIKE
-   ================================ */
-function dislikeVideo(){
+async function dislikeVideo() {
+    await setVideoReaction(false);
+}
 
-  if(!currentUser){
-    openLogin();
-    return;
-  }
+async function updateVideoLikeCount(videoId) {
+    if (!supabaseClient) return;
 
-  const likeBtn = document.querySelector('.actions button[onclick="likeVideo()"]');
-  const dislikeBtn = document.querySelector('.actions button[onclick="dislikeVideo()"]');
+    const countElement = document.getElementById('videoLikeCount');
+    if (!countElement) return;
 
-  if(!likeBtn || !dislikeBtn) return;
+    const { count, error } = await supabaseClient
+        .from('video_likes')
+        .select('*', { count: 'exact', head: true })
+        .eq('video_id', videoId)
+        .eq('is_like', true);
 
-  if(dislikeBtn.dataset.disliked === 'true'){
+    if (error) {
+        console.error('Like count error:', error);
+        return;
+    }
 
-    dislikeBtn.dataset.disliked = 'false';
-    dislikeBtn.classList.remove('active');
-
-  }else{
-
-    dislikeBtn.dataset.disliked = 'true';
-    dislikeBtn.classList.add('active');
-
-    likeBtn.dataset.liked = 'false';
-    likeBtn.classList.remove('active');
-
-  }
-
+    countElement.textContent = count || 0;
 }
 
 /* ================================
