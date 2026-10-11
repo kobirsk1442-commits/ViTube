@@ -1408,7 +1408,12 @@ document.getElementById('watchPage').classList.remove('hidden');
 
  `;
  await loadSubscriptionState(video.channel_id);
-
+ 
+if (String(video.id).startsWith('db_')) {
+    await updateVideoLikeCount(
+        String(video.id).replace(/^db_/, '')
+    );
+}
  renderRecommended();
 
  window.scrollTo(0,0);
