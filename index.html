@@ -513,12 +513,15 @@ button{cursor:pointer}
 </div>
 
 <div class="profile-menu" id="profileMenu">
+<button id="profileSignIn" onclick="openLogin()">🔐 Sign in</button>
+<div id="profileAccountOptions">
 <button onclick="openAccount()">👤 Account</button>
-<button onclick="openUpload()">⬆️ Upload Video</button>
+<button onclick="openUpload()">📤 Upload Video</button>
 <button onclick="openChannel()">📺 Your Channel</button>
 <button onclick="openViTubeStudio()">🎬 ViTube Studio</button>
 <button onclick="showNotifications()">🔔 Notifications</button>
 <button onclick="signOutUser()">🚪 Sign out</button>
+</div>
 </div>
 
 </header>
@@ -5925,16 +5928,23 @@ function toggleSidebar(){
    PROFILE MENU
    ================================ */
 
-function toggleProfileMenu(){
+function toggleProfileMenu() {
+    const menu = document.getElementById('profileMenu');
+    const signIn = document.getElementById('profileSignIn');
+    const accountOptions = document.getElementById('profileAccountOptions');
 
- const menu =
- document.getElementById('profileMenu');
+    if (!menu || !signIn || !accountOptions) return;
 
- menu.style.display =
- menu.style.display === 'block'
- ? 'none'
- : 'block';
+    if (currentUser) {
+        signIn.style.display = 'none';
+        accountOptions.style.display = 'block';
+    } else {
+        signIn.style.display = 'block';
+        accountOptions.style.display = 'none';
+    }
 
+    menu.style.display =
+        menu.style.display === 'block' ? 'none' : 'block';
 }
 
 function closeProfileMenu(){
