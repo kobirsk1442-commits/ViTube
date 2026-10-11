@@ -1953,6 +1953,7 @@ async function subscribeChannel(channelId){
 
     if(checkError){
       console.error(checkError);
+     alert(checkError.message);
       alert('Unable to check subscription.');
       return;
     }
