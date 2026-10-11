@@ -1408,11 +1408,11 @@ document.getElementById('watchPage').classList.remove('hidden');
 
  `;
  await loadSubscriptionState(video.channel_id);
- 
-if (String(video.id).startsWith('db_')) {
-    await updateVideoLikeCount(
-        String(video.id).replace(/^db_/, '')
-    );
+ if (String(video.id).startsWith('db_')) {
+    const videoId = String(video.id).replace(/^db_/, '');
+
+    await updateVideoLikeCount(videoId);
+    await loadVideoReaction(videoId);
 }
  renderRecommended();
 
@@ -2441,6 +2441,41 @@ async function updateVideoLikeCount(videoId) {
     }
 
     countElement.textContent = count || 0;
+}
+ async function loadVideoReaction(videoId) {
+    if (!currentUser || !supabaseClient) return;
+
+    const { data, error } = await supabaseClient
+        .from('video_likes')
+        .select('is_like')
+        .eq('video_id', videoId)
+        .eq('user_id', currentUser.id)
+        .maybeSingle();
+
+    if (error) {
+        console.error('Load reaction error:', error);
+        return;
+    }
+
+    const likeBtn = document.querySelector(
+        '.actions button[onclick="likeVideo()"]'
+    );
+
+    const dislikeBtn = document.querySelector(
+        '.actions button[onclick="dislikeVideo()"]'
+    );
+
+    if (likeBtn) {
+        const liked = !!data && data.is_like === true;
+        likeBtn.classList.toggle('active', liked);
+        likeBtn.dataset.liked = String(liked);
+    }
+
+    if (dislikeBtn) {
+        const disliked = !!data && data.is_like === false;
+        dislikeBtn.classList.toggle('active', disliked);
+        dislikeBtn.dataset.disliked = String(disliked);
+    }
 }
 
 /* ================================
