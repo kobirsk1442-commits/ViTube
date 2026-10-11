@@ -1932,11 +1932,15 @@ async function subscribeChannel(channelId){
     openLogin();
     return;
   }
-
-  if(!supabaseClient || !channelId){
-    alert('Channel information is not available.');
+ if (
+    !supabaseClient ||
+    !channelId ||
+    channelId === 'null' ||
+    channelId === 'undefined'
+) {
+    alert('Invalid channel ID. Cannot subscribe.');
     return;
-  }
+ }
 
   const button =
     document.getElementById('subscribeBtn');
