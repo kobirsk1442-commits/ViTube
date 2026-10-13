@@ -5837,11 +5837,24 @@ if(thumbnailToUpload){
     thumbnailPublic.publicUrl;
 
 }
+   const { data: channel, error: channelError } = await supabaseClient
+    .from('channels')
+    .select('id')
+    .eq('owner_id', currentUser.id)
+    .maybeSingle();
+
+if (channelError) throw channelError;
+
+if (!channel) {
+    alert('Please create your channel before uploading a video.');
+    return;
+}
 const { error: dbError } = await supabaseClient
   .from('videos')
   .insert({
     owner_id: currentUser.id,
-    title: title,
+channel_id: channel.id,
+title: title,
     description: description,
     video_url: data.publicUrl,
    thumbnail_url: thumbnailUrl,
