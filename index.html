@@ -1207,6 +1207,24 @@ async function openChannelVideo(videoId){
         return;
     }
 
+ if (!video.channel_id && video.owner_id) {
+    const { data: channel, error: channelError } = await supabaseClient
+        .from('channels')
+        .select('id')
+        .eq('owner_id', video.owner_id)
+        .maybeSingle();
+
+    if (channelError) {
+        console.error('Channel lookup error:', channelError);
+        alert('Unable to load channel information.');
+        return;
+    }
+
+    if (channel) {
+        video.channel_id = channel.id;
+    }
+}
+ 
     const watchVideo = {
         ...video,
         id: 'db_' + video.id
