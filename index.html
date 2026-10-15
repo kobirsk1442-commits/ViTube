@@ -1223,6 +1223,23 @@ async function openChannelVideo(videoId){
     }
 }
  
+if (video.channel_id) {
+    const { data: channelInfo, error: channelInfoError } = await supabaseClient
+        .from('channels')
+        .select('name, avatar_url')
+        .eq('id', video.channel_id)
+        .maybeSingle();
+
+    if (channelInfoError) {
+        console.error('Channel info error:', channelInfoError);
+    }
+
+    if (channelInfo) {
+        video.channel = channelInfo.name || 'ViTube User';
+        video.avatar_url = channelInfo.avatar_url || '';
+    }
+}
+
     const watchVideo = {
         ...video,
         id: 'db_' + video.id
