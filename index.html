@@ -1149,7 +1149,7 @@ channel_id:
 
     title: video.title || 'Untitled video',
 
-    channel: channelMap[video.owner_id] || 'Kobir sk',
+    channel: channelMap[video.owner_id] || video.channel_name || video.channel || 'ViTube User',
 handle:
   (channels || [])
     .find(function(channel){
