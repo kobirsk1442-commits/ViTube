@@ -1244,6 +1244,10 @@ if (video.channel_id) {
         ...video,
         id: 'db_' + video.id
     };
+ 
+
+watchVideo.channel = watchVideo.channel || 'ViTube User';
+watchVideo.avatar_url = watchVideo.avatar_url || '';
 
     const existingIndex =
         databaseVideos.findIndex(
