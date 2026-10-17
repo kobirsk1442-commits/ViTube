@@ -1111,7 +1111,7 @@ function renderHome(list = [...databaseVideos, ...demoVideos]){
 
   const { data, error } = await supabaseClient
     .from('videos')
-   .select('id,owner_id,title,description,video_url,thumbnail_url,views,created_at,published_at')
+   .select('id,owner_id,title,description,video_url,thumbnail_url,views,created_at,published_at,language')
     .eq('visibility', 'public')
 .order('created_at', { ascending:false });
   if(error){
