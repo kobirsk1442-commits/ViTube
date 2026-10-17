@@ -1770,46 +1770,71 @@ function toggleDescription(){
 
 function renderRecommended(){
 
- const grid = document.getElementById('recommendedGrid');
+  const grid = document.getElementById('recommendedGrid');
 
- if(!grid) return;
+  if(!grid) return;
 
- grid.innerHTML = demoVideos
- .filter(v => !currentWatchVideo || v.id !== currentWatchVideo.id)
- .map(video => `
+  const allVideos = [
+    ...databaseVideos,
+    ...demoVideos
+  ];
 
- <article class="video-card"
- onclick="openDemoWatch('${video.id}')">
+  const seenIds = new Set();
 
-   <div class="thumb">
-     <div>${video.icon}</div>
-   </div>
+  const recommendedVideos = allVideos.filter(video => {
+    if(!video || !video.id) return false;
 
-   <div class="video-info">
+    if(currentWatchVideo && video.id === currentWatchVideo.id) {
+      return false;
+    }
 
-     <div class="channel-mini">
-       ${video.channel.charAt(0)}
-     </div>
+    if(seenIds.has(video.id)) return false;
 
-     <div>
+    seenIds.add(video.id);
+    return true;
+  });
 
-       <div class="video-title">
-         ${escapeHtml(video.title)}
-       </div>
+  grid.innerHTML = recommendedVideos
+    .map(video => `
 
-       <div class="video-meta">
-         ${escapeHtml(video.channel)}
-         <br>
-         ${escapeHtml(video.views)}
-       </div>
+      <article class="video-card"
+        onclick="openDemoWatch('${video.id}')">
 
-     </div>
+        <div class="thumb">
+          ${
+            video.thumbnail_url
+              ? `<img src="${escapeHtml(video.thumbnail_url)}"
+                   alt=""
+                   style="width:100%;height:100%;object-fit:cover;">`
+              : `<div>${escapeHtml(video.icon || '▶️')}</div>`
+          }
+        </div>
 
-   </div>
+        <div class="video-info">
 
- </article>
+          <div class="channel-mini">
+            ${escapeHtml((video.channel || 'ViTube User').charAt(0))}
+          </div>
 
- `).join('');
+          <div>
+
+            <div class="video-title">
+              ${escapeHtml(video.title || 'Untitled video')}
+            </div>
+
+            <div class="video-meta">
+              ${escapeHtml(video.channel || 'ViTube User')}
+              <br>
+              ${escapeHtml(String(video.views || '0 views'))}
+            </div>
+
+          </div>
+
+        </div>
+
+      </article>
+
+    `).join('');
 }
 
 
