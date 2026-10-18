@@ -5744,6 +5744,17 @@ thumbnailInput.addEventListener('change', function(){
   });
 
 }
+
+function detectVideoLanguage(title, description) {
+  const text = `${title || ''} ${description || ''}`;
+
+  if (/[\u0980-\u09FF]/.test(text)) return 'bn';
+  if (/[\u0900-\u097F]/.test(text)) return 'hi';
+  if (/[a-zA-Z]/.test(text)) return 'en';
+
+  return 'unknown';
+}
+ 
 async function publishVideo(){
   if(!currentUser){
     openLogin();
@@ -5953,6 +5964,7 @@ const { error: dbError } = await supabaseClient
 channel_id: channel.id,
 title: title,
     description: description,
+   language: detectVideoLanguage(title, description),
     video_url: data.publicUrl,
    thumbnail_url: thumbnailUrl,
     visibility: visibility
