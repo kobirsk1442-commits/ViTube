@@ -5745,15 +5745,30 @@ thumbnailInput.addEventListener('change', function(){
 
 }
 
-function detectVideoLanguage(title, description) {
-  const text = `${title || ''} ${description || ''}`;
 
-  if (/[\u0980-\u09FF]/.test(text)) return 'bn';
-  if (/[\u0900-\u097F]/.test(text)) return 'hi';
-  if (/[a-zA-Z]/.test(text)) return 'en';
+async function detectVideoLanguage(title, description) {
+  const text = `${title || ''} ${description || ''}`.trim();
 
-  return 'unknown';
+  if (text.length < 10) return 'unknown';
+
+  try {
+    const { franc } = await import('https://esm.sh/franc@6.2.0');
+
+    const detected = franc(text);
+
+    if (detected === 'ben') return 'bn';
+    if (detected === 'hin') return 'hi';
+    if (detected === 'eng') return 'en';
+
+    if (detected === 'und') return 'unknown';
+
+    return detected;
+  } catch (error) {
+    console.error('Language detection failed:', error);
+    return 'unknown';
+  }
 }
+
  
 async function publishVideo(){
   if(!currentUser){
@@ -5964,7 +5979,7 @@ const { error: dbError } = await supabaseClient
 channel_id: channel.id,
 title: title,
     description: description,
-   language: detectVideoLanguage(title, description),
+   language: await detectVideoLanguage(title, description),
     video_url: data.publicUrl,
    thumbnail_url: thumbnailUrl,
     visibility: visibility
