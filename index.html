@@ -519,6 +519,7 @@ button{cursor:pointer}
 <button onclick="openUpload()">📤 Upload Video</button>
 <button onclick="openChannel()">📺 Your Channel</button>
 <button onclick="openViTubeStudio()">🎬 ViTube Studio</button>
+<button onclick="openLanguageSettings()">🌐 Preferred Video Language</button>
 <button onclick="showNotifications()">🔔 Notifications</button>
 <button onclick="signOutUser()">🚪 Sign out</button>
 </div>
@@ -6133,6 +6134,58 @@ function closeProfileMenu(){
  }
 
 }
+
+function openLanguageSettings() {
+  const languages = [
+    { code: 'bn', name: 'বাংলা' },
+    { code: 'en', name: 'English' },
+    { code: 'hi', name: 'हिन्दी' },
+    { code: 'pt', name: 'Português' },
+    { code: 'ru', name: 'Русский' },
+    { code: 'ar', name: 'العربية' },
+    { code: 'fr', name: 'Français' },
+    { code: 'es', name: 'Español' },
+    { code: 'de', name: 'Deutsch' },
+    { code: 'ja', name: '日本語' }
+  ];
+
+  const currentLanguage =
+    localStorage.getItem('vitubePreferredLanguage') || 'en';
+
+  const options = languages.map(language =>
+    `<option value="${language.code}" ${
+      language.code === currentLanguage ? 'selected' : ''
+    }>${language.name}</option>`
+  ).join('');
+
+  const choice = prompt(
+    'Choose your preferred video language:\n' +
+    languages.map(language =>
+      `${language.code} - ${language.name}`
+    ).join('\n') +
+    '\n\nEnter language code:',
+    currentLanguage
+  );
+
+  if (choice === null) return;
+
+  const selectedLanguage = languages.find(
+    language => language.code === choice.trim().toLowerCase()
+  );
+
+  if (!selectedLanguage) {
+    alert('Invalid language code. Please try again.');
+    return;
+  }
+
+  localStorage.setItem(
+    'vitubePreferredLanguage',
+    selectedLanguage.code
+  );
+
+  alert('Preferred language saved: ' + selectedLanguage.name);
+}
+ 
 document.addEventListener('click', function(event){
 
     const menu = document.getElementById('profileMenu');
