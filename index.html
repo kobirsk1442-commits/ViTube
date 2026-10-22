@@ -1814,7 +1814,12 @@ const watchedVideoIds = new Set(
   watchHistory.map(item => item.videoId)
 );
   let score = 0;
+  
+const watchedCount = watchedVideoIds.size;
 
+if (watchedCount > 0 && watchedVideoIds.has(video.id)) {
+  score += 5;
+}
   const currentLanguage = currentWatchVideo?.language;
   const videoLanguage = video.language || 'unknown';
 
