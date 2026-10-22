@@ -1806,6 +1806,13 @@ function renderRecommended(){
   const seenIds = new Set();
 
  const getRecommendationScore = (video) => {
+  const watchHistory = JSON.parse(
+  localStorage.getItem('vitubeWatchHistory') || '[]'
+);
+
+const watchedVideoIds = new Set(
+  watchHistory.map(item => item.videoId)
+);
   let score = 0;
 
   const currentLanguage = currentWatchVideo?.language;
