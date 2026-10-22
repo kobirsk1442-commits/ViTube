@@ -1288,6 +1288,29 @@ async function openDemoWatch(id){
 
  currentWatchVideo = video;
  
+ // Save video watch history
+try {
+  const history = JSON.parse(
+    localStorage.getItem('vitubeWatchHistory') || '[]'
+  );
+
+  const updatedHistory = [
+    {
+      videoId: video.id,
+      language: video.language || 'unknown',
+      watchedAt: Date.now()
+    },
+    ...history.filter(item => item.videoId !== video.id)
+  ].slice(0, 100);
+
+  localStorage.setItem(
+    'vitubeWatchHistory',
+    JSON.stringify(updatedHistory)
+  );
+} catch (error) {
+  console.error('Watch history save failed:', error);
+}
+ 
 if (!window.history.state || window.history.state.vitubePage !== 'watch') {
     window.history.pushState(
         { vitubePage: 'watch', videoId: id },
