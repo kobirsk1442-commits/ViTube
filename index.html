@@ -1168,9 +1168,10 @@ icon: '🎬',
     time: getRelativeTime(video.published_at || video.created_at),
 
     description: video.description || '',
-
+   
+language: video.language || 'unknown',
     video_url: video.video_url,
-
+   
     thumbnail_url: video.thumbnail_url || ''
 
   }));
