@@ -1816,7 +1816,33 @@ const watchedVideoIds = new Set(
   watchHistory.map(item => item.videoId)
 );
   let score = 0;
-  
+
+  const watchedTitles = watchHistory
+  .map(item => (item.title || '').toLowerCase())
+  .filter(title => title.length > 0);
+
+const candidateTitle = (video.title || '').toLowerCase();
+
+for (const watchedTitle of watchedTitles) {
+  const words = watchedTitle
+    .split(/[\s\-_,.!?]+/)
+    .filter(word => word.length > 3);
+
+  let matchedWords = 0;
+
+  for (const word of words) {
+    if (candidateTitle.includes(word)) {
+      matchedWords++;
+    }
+  }
+
+  if (words.length > 0) {
+    score += Math.min(
+      (matchedWords / words.length) * 10,
+      10
+    );
+  }
+}
 const watchedCount = watchedVideoIds.size;
 
 if (watchedCount > 0 && watchedVideoIds.has(video.id)) {
