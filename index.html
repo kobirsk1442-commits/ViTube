@@ -1295,11 +1295,13 @@ try {
   );
 
   const updatedHistory = [
-    {
-      videoId: video.id,
-      language: video.language || 'unknown',
-      watchedAt: Date.now()
-    },
+  {
+  videoId: video.id,
+  title: video.title || '',
+  description: video.description || '',
+  language: video.language || 'unknown',
+  watchedAt: Date.now()
+},
     ...history.filter(item => item.videoId !== video.id)
   ].slice(0, 100);
 
