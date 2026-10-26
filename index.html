@@ -1026,7 +1026,10 @@ function getHomeRecommendationScore(video) {
 
     const title = (video.title || '').toLowerCase();
     const description = (video.description || '').toLowerCase();
-
+   
+ const videoTags = Array.isArray(video.tags)
+  ? video.tags.join(' ').toLowerCase()
+  : String(video.tags || '').toLowerCase();
     // Do not prioritize a video already watched
     if (watchedIds.has(String(video.id))) {
       score -= 15;
@@ -1384,6 +1387,7 @@ try {
   title: video.title || '',
   description: video.description || '',
   language: video.language || 'unknown',
+  tags: Array.isArray(video.tags) ? video.tags : [],
   watchedAt: Date.now()
 },
     ...history.filter(item => item.videoId !== video.id)
