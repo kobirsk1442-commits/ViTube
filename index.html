@@ -1097,7 +1097,23 @@ function renderHome(list = [...databaseVideos, ...demoVideos]){
 
     return;
   }
+ 
+// Personalize the regular Home feed using watch history.
+// Keep explicitly supplied search/result lists unchanged.
+if (arguments.length === 0) {
+  const history = JSON.parse(
+    localStorage.getItem('vitubeWatchHistory') || '[]'
+  );
 
+  if (history.length > 0) {
+    list = [...list].sort(
+      (a, b) =>
+        getHomeRecommendationScore(b) -
+        getHomeRecommendationScore(a)
+    );
+  }
+}
+ 
   grid.innerHTML = list.map(video => `
 
     <article class="video-card" onclick="openDemoWatch('${video.id}')">
