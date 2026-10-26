@@ -1011,6 +1011,74 @@ let searchResults = demoVideos;
 /* ================================
    HOME
    ================================ */
+ 
+function getHomeRecommendationScore(video) {
+  let score = 0;
+
+  try {
+    const history = JSON.parse(
+      localStorage.getItem('vitubeWatchHistory') || '[]'
+    );
+
+    const watchedIds = new Set(
+      history.map(item => String(item.videoId))
+    );
+
+    const title = (video.title || '').toLowerCase();
+    const description = (video.description || '').toLowerCase();
+
+    // Do not prioritize a video already watched
+    if (watchedIds.has(String(video.id))) {
+      score -= 15;
+    }
+
+    // Match candidate videos with previously watched titles
+    for (const item of history) {
+      const previousTitle = (item.title || '').toLowerCase();
+
+      const words = previousTitle
+        .split(/[\s\-_,.!?]+/)
+        .filter(word => word.length > 3);
+
+      let matches = 0;
+
+      for (const word of words) {
+        if (title.includes(word) || description.includes(word)) {
+          matches++;
+        }
+      }
+
+      if (words.length > 0) {
+        score += Math.min(
+          (matches / words.length) * 10,
+          10
+        );
+      }
+    }
+
+    // Match the most recently watched language
+    const lastLanguage = history[0]?.language;
+
+    if (
+      lastLanguage &&
+      lastLanguage !== 'unknown' &&
+      video.language === lastLanguage
+    ) {
+      score += 5;
+    }
+
+    // Popularity signal
+    score += Math.min(
+      Number(String(video.views || 0).replace(/[^0-9.]/g, '')) / 100,
+      10
+    );
+
+  } catch (error) {
+    console.error('Home recommendation scoring failed:', error);
+  }
+
+  return score;
+}
 
 function renderHome(list = [...databaseVideos, ...demoVideos]){
 
