@@ -1195,7 +1195,7 @@ if (arguments.length === 0) {
 
   const { data, error } = await supabaseClient
     .from('videos')
-   .select('id,owner_id,title,description,video_url,thumbnail_url,views,created_at,published_at,language')
+   .select('id,owner_id,title,description,tags,video_url,thumbnail_url,views,created_at,published_at,language')
     .eq('visibility', 'public')
 .order('created_at', { ascending:false });
   if(error){
@@ -1252,7 +1252,7 @@ icon: '🎬',
     time: getRelativeTime(video.published_at || video.created_at),
 
     description: video.description || '',
-   
+   tags: video.tags || '',
 language: video.language || 'unknown',
     video_url: video.video_url,
    
