@@ -1058,7 +1058,24 @@ function getHomeRecommendationScore(video) {
         );
       }
     }
+// Match candidate video tags with watched video tags
+const candidateTags = (
+  Array.isArray(video.tags)
+    ? video.tags
+    : String(video.tags || '').split(',')
+).map(tag => String(tag).trim().toLowerCase()).filter(Boolean);
 
+const previousTags = (
+  Array.isArray(item.tags)
+    ? item.tags
+    : String(item.tags || '').split(',')
+).map(tag => String(tag).trim().toLowerCase()).filter(Boolean);
+
+const matchedTags = previousTags.filter(tag =>
+  candidateTags.includes(tag)
+).length;
+
+score += Math.min(matchedTags * 3, 9);
     // Match the most recently watched language
     const lastLanguage = history[0]?.language;
 
